@@ -1,0 +1,304 @@
+﻿
+/*Main Container*/
+.singleScrollingContainer {
+    overflow-y: scroll;
+    width: 100%;
+    height: 100%;
+    scroll-snap-type: y proximity;
+}
+
+/*Portada Principal*/
+.fixedBackground {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-image: url(/media/index/Portada.png);
+    background-blend-mode: darken;
+    background-color: white;
+    transition: .5s ease;
+}
+
+
+/*Project Cover*/
+.project-cover {
+    width: 100%;
+    height: 90%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    scroll-snap-align: center;
+}
+
+
+/*Encabezado de Proyecto*/
+.projectHeader {
+    text-align: center;
+    vv: 100px;
+    top: 15px;
+    position: fixed;
+    width: 100%;
+    height: 25%;
+    z-index: 10;
+    color: white;
+    font-size: 90px;
+}
+
+    .projectHeader:hover {
+        /*font-size: 110px;*/
+    }
+
+    .projectHeader:hover ~ .horizontalModule > .paneInteraction {
+        /*opacity: 0.9;*/
+    }
+
+/*Logotipo*/
+.logo {
+    position: absolute;
+    text-align: end;
+    text-align: left;
+    right: 50px;
+    bottom: 50px;
+    z-index: 5;
+}
+
+/*Informacion Principal de Proyecto*/
+.projectInfo {
+    bottom: 70px;
+    left:5%;
+    position: fixed;
+    font-size: 30px;
+    color: white;
+    z-index: 3;
+    width:60%;
+}
+
+/*Animacion de Informacion de Proyecto*/
+.hideContentHeader {
+    margin-top: 0;
+    opacity: 0;
+    transition: 0.4s;
+}
+
+.showContentHeader {
+    margin-top: 30px;
+    display: normal;
+    opacity: 1;
+    transition: 0.8s;
+}
+
+.hideContentInfo {
+    /*forwards mantiene el ultimo estado en la animacion*/
+    animation: fadeOut 1s forwards;
+}
+
+.showContentInfo {
+    margin-top: 30px;
+    display: normal;
+    /*forwards mantiene el ultimo estado en la animacion*/
+    animation: fadeIn 2s forwards;
+}
+
+@keyframes fadeIn {
+    0%, 30% {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: initial;
+    }
+}
+
+@keyframes fadeOut {
+    0% {
+        transform: initial;
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-200px);
+    }
+}
+
+.bounceContentInfo{
+    animation: bounce 2s forwards;
+}
+@keyframes bounce{
+    0% {
+        opacity:0;
+        transform: initial;
+    }
+    20% {
+        opacity: 1;
+    }
+    50% {
+       
+        transform: translateY(-20px);
+    }
+    100% {
+        transform: initial;
+    }
+}
+
+/*Hilo Horizontal con Informacion de Proyectos*/
+.horizontalContainer {
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+
+.horizontalRail {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    height: calc(100% + 20px); /*50px es para tapar la barra scroll horizontal*/
+    scroll-snap-type: x proximity;
+    
+}
+
+.imageRibbon {
+    transition: all .5s ease;
+}
+
+.horizontalModule {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    /*    line-height: 150px;*/
+    vertical-align: middle;
+    scroll-snap-align: center;
+    /*transition: .5s ease;*/
+}
+
+/*Efectos Comunes*/
+.blur {
+    filter: blur(2px);
+}
+
+.noBlur {
+    filter: blur(0px);
+}
+
+.paneInteraction {
+    background-image: linear-gradient(to bottom, rgba(0,0,0,1), transparent, rgba(0,0,0,1));
+    /*opacity: .2;*/
+    /*background-color: yellow;*/
+    display: grid;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    grid-template-columns: auto auto;
+    opacity: 0.9;
+    transition: all .5s ease;
+}
+
+    .paneInteraction:hover {
+        /*opacity:0.1;*/
+        /*opacity: 0.9;*/
+    }
+
+
+.rollBack {
+    position: relative;
+    background-color: white;
+    background-blend-mode: luminosity;
+    width: 2%;
+    height: 30%;
+    z-index: 10;
+    justify-self: left;
+    cursor: grab;
+    opacity: 0.5;
+    margin: 1%;
+    border-radius: 10px;
+    /*border: dashed;
+        border-color: green;*/
+}
+
+.rollFront {
+    background-color: white;
+    background-blend-mode: luminosity;
+    width: 2%;
+    height: 30%;
+    z-index: 10;
+    justify-self: right;
+    cursor: grab;
+    opacity: 0.5;
+    margin: 1%;
+    border-radius: 10px;
+    /*border: dotted;*/
+    /*border-color: red;*/
+}
+
+.freeZone {
+    position:absolute;
+/*    background-color:green;*/
+    z-index: 5;
+    height:70%;
+    width:100%;
+    top: 20%;
+}
+
+.moduleComments {
+    position: absolute;
+    white-space: normal;
+    bottom: 30px;
+    right: 10px;
+    font-size: large;
+    text-align: left;
+    color: white;
+    width: 30%;
+}
+
+.noDisplay {
+    display: none;
+}
+
+
+
+/*tag for show videos https://stackoverflow.com/questions/42600154/html5-video-background-in-div-need-help-resizing-to-window-size*/
+#videoBg 
+{
+    position:fixed;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    overflow:hidden;
+    z-index:-2;
+}
+
+#videoBg > video{
+    position:absolute; 
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+}
+
+
+@media (min-aspect-ratio: 16/9) {
+    #videoBg > video {
+        height:300%;
+        top: -100%;
+    }
+}
+@media (max-aspect-ratio: 16/9) {
+    #videoBg > video {
+        height: 300%;
+        top: -100%;
+    }
+}
+@supports (object-fit: cover) {
+    #videoBg > video {
+        top:0; left:0; width:100%; height:100%; object-fit:cover;
+    }
+}

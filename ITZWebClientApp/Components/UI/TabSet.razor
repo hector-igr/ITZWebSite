@@ -1,0 +1,56 @@
+@using Interfaces.UI;
+
+<style>
+    .tab-stackedByTwo{
+        display:grid;
+        grid-template-rows: 40px auto;
+        height:100%;
+    }
+</style>
+
+<div class="tab-stackedByTwo">
+    <CascadingValue Value="this">
+        <ul class="nav nav-pills nav-justified">
+            @ChildContent
+        </ul>
+    </CascadingValue>
+
+    <div class="tab-content">
+        @ActiveTab?.ChildContent
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public ITab ActiveTab { get; set; }
+
+    public void AddTab(ITab tab)
+    {
+        if (ActiveTab == null)
+        {
+            SetActivateTab(tab);
+        }
+    }
+
+    public void RemoveTab(ITab tab)
+    {
+        if (ActiveTab == tab)
+        {
+            SetActivateTab(null);
+        }
+    }
+
+    public void SetActivateTab(ITab tab)
+    {
+        if (ActiveTab != tab)
+        {
+            ActiveTab = tab;
+            StateHasChanged();
+        }
+    }
+
+}

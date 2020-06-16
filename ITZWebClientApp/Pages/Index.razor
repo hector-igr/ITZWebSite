@@ -1,0 +1,169 @@
+﻿@page "/"
+
+@using ForgeLibs.Data;
+@using ForgeLibs.Models;
+@using ITZWebClientApp.Infraestructure.Data;
+
+@inject IForgeModelRepository repo;
+@inject IJSRuntime js;
+
+<link href="/css/slideshow_cv.css" rel="stylesheet" />
+<div id="logo" class="logo" style="content:attr(data-myInfo)" data-myInfo="A WIWI">
+    iTz
+</div>
+
+<div id="myDiv" class="singleScrollingContainer fixedBackground">
+    @* SHOW FIRST COVER *@
+    <div class="fixedBackground"></div>
+
+    @* PROJECT MEDIA CONTAINERS *@
+    @for (int i = 0; i < Projects.Length; i++)
+    {
+        Project project = Projects[i];
+        MediaMetadata[] metadata = ImageCovers.Where(x => x.ProjectId == project.Id).ToArray();
+        if (metadata.Length == 0)
+        {
+            continue; //no media! next project
+        }
+
+        //get project cover
+        MediaMetadata coverMetadata = metadata.FirstOrDefault(x => x.Keywords != null && x.Keywords.Contains("Portada")) ?? metadata.FirstOrDefault();
+        metadata = metadata.Where(x => x.Id != coverMetadata?.Id).ToArray();
+        project.CoverImageName = coverMetadata.FileName;
+        
+        @if (i != 0)
+        {
+
+        }
+        @*<div class="imageRibbon" style="height:6%"></div>*@
+
+        string coverImage = project.CoverImageName;
+        @if (coverMetadata.MediaType == "Video") //if cover is video dont use bacground image
+        {
+            coverImage = "";
+        }
+
+        //RAILING CONTAINER
+        <div class="project-cover noBlur" id="@project.Id" style="background-image: url('@(coverMetadata.URL)')">
+        @*<div class="project-cover noBlur" id="@project.Id" style="background-image: url('/media/projects/@(coverImage)')"> USE FOR STORAGE MEDIA AND CHANGE ALL BACKGROUND STYLES*@ 
+            <div class="horizontalContainer">
+                <div class="horizontalRail">
+                    <div class="projectHeader hideContentHeader">@project.Name</div>
+                    <div class="projectInfo hideContentInfo">@project.Description</div>
+
+                    @*@if (coverMetadata.MediaType == "Video")
+                        {
+                            <video autoplay muted controls loop style="position:absolute; bottom:0; right:0; min-height:100%; min-width:100%; max-width:100%;">
+                                <source src="/media/projects/@coverMetadata.FileName" type="audio/mp4" /> />
+                            </video>
+                        }
+                        <div class="horizontalModule">
+                            <div class="gridTwoCols">
+                                <div class="rollBack"></div>
+                                <div class="rollFront"></div>
+                            </div>
+                        </div>
+                    *@
+
+                    @* FIRST IMAGE OR VIDEO TO SHOW FOR THE PROJECT *@
+                    @{
+                        string preferedColor = coverMetadata.PredominantColors?.FirstOrDefault() ?? "0,0,0";
+                        <div class="horizontalModule firstModule" backColor="@(preferedColor)"> @* BACKCOLOR IS CHANGED USING JS *@
+                            @if (coverMetadata.MediaType == "Video")
+                            {
+                                <div id="videoBg">
+                                    @*//style="position:absolute; bottom:0; left:0; min-width:100%; min-height:100%; z-index:-3"*@
+                                    <video muted loop>
+                                        <source src="@coverMetadata.URL" type="audio/mp4" /> />
+                                    </video>
+                                </div>
+                            }
+
+                            <div class="paneInteraction">
+                                @if (metadata.Length > 0)
+                                {
+                                    <div class="rollBack"></div>
+                                    <div class="rollFront"></div>
+                                }
+                                <div class="freeZone"></div>
+                            </div>
+
+                            <div class="moduleComments noDisplay">
+                                <p>@project.Description</p>
+                            </div>
+                        </div>
+                    }
+
+                    @* HORIZONTAL RAILING WHEN THERE IS MORE IMAGE RELATED TO THE SAME PROJECT *@
+                    @foreach (MediaMetadata media in metadata)
+                    {
+                        string backgroundUrl = media.MediaType == "Video" ? "" : $"background-image: url('{@media.URL}')";
+                        <div class="horizontalModule" style=@backgroundUrl>
+                            @if (media.MediaType == "Video")
+                            {
+                                @*<video muted loop style="position:fixed; bottom:0; left:0; min-width:100%; min-height:100%;">
+                                        <source src="/media/projects/@media.FileName" type="audio/mp4" /> />
+                                    </video>*@
+                            }
+
+                            <div class="paneInteraction">
+                                @if (metadata.Length > 0)
+                                {
+                                    <div class="rollBack"></div>
+                                    <div class="rollFront"></div>
+                                }
+                                <div class="freeZone"></div>
+                            </div>
+
+                            <div class="moduleComments noDisplay">
+                                <p>@media.Headline</p>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(media.Description))
+                            {
+                                <div class="moduleComments noDisplay">
+                                    <p>@project.Description</p>
+                                </div>
+                            }
+                            @*<div class="moduleComments">
+                                    <h3>sadsadsadas</h3>
+                                    <p>sadsa asd asdas dsadas</p>
+                                </div>*@
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (i != ImageCovers.Length - 1)
+        {
+            @*<div class="imageRibbon" style="height:6%"></div>*@
+        }
+    }
+
+    @* SHOW LAST COVER *@
+    <div class="fixedBackground"> </div>
+</div>
+
+
+@code{
+
+
+    MediaMetadata[] ImageCovers { get; set; } = new MediaMetadata[0];
+    Project[] Projects { get; set; } = new Project[0];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await repo.GetDataAsync();
+
+        this.ImageCovers = repo.ImageInfo.ToArray();
+        Console.WriteLine("Image Covers " + ImageCovers.Length);
+        this.Projects = repo.Projects./*Where(x=> x.Importance == 1).*/Where(x => ImageCovers.Count(y => y.ProjectId == x.Id) > 0).OrderByDescending(x => x.Id).ToArray();
+        Console.WriteLine("Projects " + Projects.Length);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await Interop.Utils_DOM.RegisterOnIni(js);
+    }
+}

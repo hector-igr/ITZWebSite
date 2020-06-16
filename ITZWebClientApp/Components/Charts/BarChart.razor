@@ -1,0 +1,94 @@
+﻿@using ForgeLibs.Data
+@using ForgeLibs.ViewModels
+@using ForgeLibs.Models.Forge
+@using ITZWebClientApp.Interfaces;
+
+@inject IJSRuntime JSRuntime
+@inject HttpClient http;
+@inject OmniClassRepository omni;
+
+<div class="chart-container">
+    <canvas id="@Id"></canvas>
+</div>
+
+@code {
+
+[Parameter]
+public string Id { get; set; }
+
+[Parameter]
+public string ChartName { get; set; }
+
+[Parameter]
+public string Category { get; set; }
+
+[Parameter]
+public string Property { get; set; }
+
+[Parameter]
+public string PropertyGroup { get; set; }
+
+[CascadingParameter]
+public ITZWebClientApp.Pages.ForgeDomain forgeDomain { get; set; }
+
+bool loadedChart = false;
+string lastGroup;
+string lastProperty;
+
+protected override void OnInitialized()
+{
+    Console.WriteLine("BarChart.OnIni()");
+    loadedChart = false;
+    lastProperty = "";
+    lastGroup = "";
+}
+
+protected override async Task OnParametersSetAsync()
+{
+    Console.WriteLine($"BarChart.OnParametersSetAsync() : {loadedChart}");
+    await UpdateChart();
+}
+
+protected override async Task OnAfterRenderAsync(bool firstRender)
+{
+    Console.WriteLine($"BarChart.OnAfterRenderAsync() : {loadedChart}");
+    await LoadBarChart();
+    await UpdateChart();
+}
+
+public async Task LoadBarChart()
+{
+    if(loadedChart == false && forgeDomain != null)
+    {
+        Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
+        loadedChart = await chartJs.LoadBarChart(Id, ChartName, forgeDomain);
+    }
+}
+
+public async Task UpdateChart()
+{
+    if (loadedChart && !string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(Property)
+            && (lastProperty != Property || lastGroup != PropertyGroup))
+    {
+        ChangeChartData(ChartName, omni, forgeDomain.ForgeElems, Category,
+            Property, PropertyGroup);
+        lastGroup = PropertyGroup; lastProperty = Property;
+    }
+}
+
+public void ChangeChartData(string chartName, OmniClassRepository omni,
+    IEnumerable<ForgeElement> forgeElements, string category, string property, string groupProp)
+{
+    string data = ForgeElementTableVM
+        .GetBarChart(omni, forgeElements, category, property, groupProp);
+
+    Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
+    chartjs.UpdateBarData(ChartName, data);
+}
+
+protected override bool ShouldRender()
+{
+    return !loadedChart;
+}
+
+}

@@ -1,0 +1,206 @@
+﻿@page "/forgeNEW/{ProjectId:int}"
+
+
+@using ITZWebClientApp.Components
+@using ForgeLibs;
+@using ForgeLibs.Models.Forge;
+@using ForgeLibs.Data;
+@using ITZWebClientApp.Infraestructure.Data;
+@using System.IO;
+@using ITZWebClientApp.Infraestructure;
+
+
+
+@inject HttpClient http
+@inject IJSRuntime JSRuntime
+@inject OmniClassRepository omni
+@inject IForgeModelRepository repo;
+
+@*<CascadingValue Value="this">
+    <QueryByCategoriesForm query="@query" 
+                           OnCategoryChanged="@OnCategoryChanged" 
+                           ProjectName="@projectName"
+                           OnPropertyChanged="@OnPropertyChanged" 
+                           OnGroupPropertyChanged="@OnPropertyGroupChanged"
+                           SelectedIds="@selectionModel.IdsStr"
+                           OnSelectIds="@(x=> forgeViewer.IsolateElements(x))"></QueryByCategoriesForm>
+
+    <div class="row" style="background-color:yellow; height:100%; padding:10px">
+        <div class="col" style="background-color:burlywood; width:75%">
+            <ForgeViewer ViewerId="view1" 
+                         AccessToken="@ModelAccessToken" 
+                         ProjectUrn64="@ModelUrn64" 
+                         @ref="forgeViewer" 
+                         OnChangeSelection="@(x=> {
+                                                  selectionModel.IdsStr = string.Join(",", x);
+                                                  lastItemSelected = ForgeElems.FirstOrDefault(y => y.ObjectId == x[0]);
+                                                  if(lastItemSelected != null)
+                                                  {
+                                                      lastItemSelected.GetChildren(ForgeElems);
+                                                      lastItemSelected.GetParent(ForgeElems);
+                                                  }
+                                              })"/>
+        </div>
+        <div class="col" style="background-color:aqua; width:25%; max-width:600px">
+            <div class="row h-25" style="background-color:goldenrod; height:100%; padding:10px">
+                <BarChart ChartName="Grafica" Category="@category" Property="@property" PropertyGroup="@group"></BarChart>
+            </div>
+            <div class="row h-75" >
+                <div style="overflow:auto">
+                    @if (ForgeElems.Count() > 0)
+                    {
+                        <ForgeElementTable Category="@category" ForgeElements="@ForgeElems"
+                                           OnItemSelected="@(x=> forgeViewer.IsolateElements(new int[] { x }))"></ForgeElementTable>
+                    }
+                    @if (lastItemSelected != null)
+                    {
+                        lastItemSelected.LoadGroups(omni);
+                        lastItemSelected.LoadProperties(omni);
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+</CascadingValue>*@
+
+<div id="myGoldenLayout" class="row" style="background-color:darkslateblue; height:100%; margin:25px">
+    
+</div>
+
+@functions {
+
+
+    class SelectionModel
+    {
+        private string _idsStr;
+        public string IdsStr
+        {
+            get
+            {
+                return _idsStr;
+            }
+            set
+            {
+                //Ids = value.Split(',').ToList().Select(x=> Convert.ToInt32(x))
+                //    .ToArray();
+                _idsStr = value;
+            }
+        }
+
+        public int[] Ids { get; set; }
+    }
+
+    public QueryByCategories query { get; set; } = new QueryByCategories();
+
+    public IEnumerable<ForgeElement> ForgeElems = new ForgeElement[0];
+
+    [CascadingParameter]
+    MainLayout layout { get; set; }
+    [Parameter]
+    public int ProjectId { get; set; }
+    [Parameter]
+    public ForgeModel model { get; set; }
+
+    private string category { get; set; }
+    private string property { get; set; }
+    private string group { get; set; }
+    private string projectName { get; set; }
+
+    private string selectedIDs = "";
+    private static SelectionModel selectionModel = new SelectionModel();
+
+    private string ModelUrn64 { get; set; }
+    private string ModelAccessToken { get; set; }
+
+    private List<string> Categories { get; set; }
+    private string[] Properties { get; set; }
+
+    private void OnCategoryChanged(string str)
+    {
+        category = str;
+    }
+
+    private void OnPropertyChanged(string str)
+    {
+        property = str;
+    }
+
+    private void OnPropertyGroupChanged(string str)
+    {
+        group = str;
+    }
+
+    public string MyProperty { get; set; } = "OK";
+    [JSInvokable]
+    public void OnGraphBarSelection2(string label, string rgb, int[] ids)
+    {
+        Console.WriteLine("ForgeDomain.OnGraphBarSelection2()");
+        string str = string.Join(",", ids);
+        MyProperty = $"{label} - {str}";
+        forgeViewer.IsolateElements(ids);
+        forgeViewer.ChangeColorElements(ids, rgb);
+    }
+
+    private ForgeViewer forgeViewer;
+
+    private ForgeElement lastItemSelected;
+
+    int iniCount = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ForgeDomain.OnInitAsync()" + iniCount);
+
+        if(iniCount == 0)
+        {
+            projectName = repo.Projects.FirstOrDefault(x => x.Id == ProjectId).Name;
+            model = await repo.GetForgeModelAsync(ProjectId);
+            //await omni.LoadFileAsync();
+          Interop.GoldenLayoutInterop gLayout = new Interop.GoldenLayoutInterop(JSRuntime);
+            await gLayout.LoadGoldenLayout("myGoldenLayout");  
+            //await LoadForgeModelAuthInfo(model.ObjectId);
+        }
+        Console.WriteLine("ForgeDomain.OnInitAsync() ENDs" + iniCount);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine("ForgeDomain.OnAfterRenderAsync()" + iniCount);
+        if (iniCount == 0)
+        {
+            
+            //await LoadModelData(model);
+            iniCount++;
+        }
+        Console.WriteLine("ForgeDomain.OnAfterRenderAsync() ENDs" + iniCount);
+    }
+
+    public async Task LoadForgeModelAuthInfo(string objectId)
+    {
+        Console.WriteLine($"ForgeDomain.LoadForgeModelAuthInfo() : {objectId}");
+        ModelUrn64 = ForgeUtils.Base64Encode(objectId);
+        ForgeAuth auth = await http.GetJsonAsync<ForgeAuth>("https://localhost:44383/api/auth");
+        ModelAccessToken = auth.Access_Token;
+        //Console.WriteLine("modelUrn64 : " + ModelUrn64);
+        //Console.WriteLine("modelAccessToken : " + ModelAccessToken);
+    }
+
+    public async Task LoadModelData(ForgeModel model)
+    {
+        Console.WriteLine("ForgeDomain.LoadModelData() ....");
+        model = await repo.GetForgeModelAsync(ProjectId);
+        //Console.WriteLine(model.ObjectKey);
+        var fileName = model.ObjectKey + "Translate.txt";
+        //Console.WriteLine(fileName);
+        string json = await http.GetStringAsync("models_metadata/" + fileName);
+        Console.WriteLine("     : Construct ForgeElements");
+        ForgeElems = ForgeElement.ParseForgeElements(json);
+        Console.WriteLine("     : Construct ForgeElements : Count "+ ForgeElems.Count());
+        Categories = ForgeElems.Select(x => x.Category)
+            .Where(x=> !string.IsNullOrEmpty(x)).Distinct().OrderBy(x => x).ToList();
+        query.Categories = Categories;
+        Console.WriteLine("..... OK");
+        //StateHasChanged();
+    }
+
+}

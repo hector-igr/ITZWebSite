@@ -1,0 +1,70 @@
+﻿:root{
+    --forge-query-height: 50px;
+}
+
+.row {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.main {
+    /*background-color: green;*/
+    height: calc(100vh - 60px);
+    overflow: auto;
+    /*padding: 10px;*/
+}
+
+.forgeDomain {
+    /*background-color: red;*/
+    height: 100%;
+    width: 100%;
+    padding: 10px;
+
+}
+
+.forgeQuery {
+    /*background-color: crimson;*/
+    height: var(--forge-query-height);
+}
+
+.forgeDesktop {
+    /*background-color: coral;*/
+    height: calc(100% - var(--forge-query-height));
+    width: 100%;
+
+    display:grid;
+    grid-template-columns: auto 500px;
+}
+
+.forgeBlock {
+    /*background-color: aqua;*/
+    padding: 5px;
+    height: 100%;
+}
+
+.forgeViewer {
+    /*background-color: yellow;*/
+    position: relative;
+}
+
+
+.forgeContent {
+    /*background-color: blue;*/
+    height: 100%;
+    width: 25%;
+    max-width: 600px;
+    padding: 10px
+}
+
+.tab-content {
+    background-color: white;
+}
+
+
+.chart-container {
+    background-color: white;
+    padding: 5px;
+    position: relative;
+    height: 90%;
+    width: 99%
+}
