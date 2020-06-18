@@ -1,101 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-namespace
 var HGR_DOM;
 (function (HGR_DOM) {
-    class Util_DOM_Debug {
-        static PrintTreeInfo(element) {
-            let el = element;
-            let elements = [];
-            while (el != null) {
-                elements.push(el);
-                if (el.parentElement !== undefined) {
-                    el = el.parentElement;
-                }
-                else {
-                    break;
-                }
-            }
-            let count = 0;
-            for (var i = elements.length - 1; i >= 0; i--) {
-                //console.log(count, elements[i], elements[i].offsetTop, elements[i].clientHeight);
-                count++;
-            }
-        }
-    }
-    class ScrollingRountines {
-        static ChangeElmentContent(id, content) {
-            const el = document.getElementById(id);
-            if (el) {
-                el.innerHTML = content;
-            }
-        }
-        static ContentVisibilityOnScroll(el) {
-            const position = el.getBoundingClientRect();
-            const top = position.top;
-        }
-        /**
-         * Subscribe children nodes that satisfy the filterClass inside a html parent that its scrollabe
-        toggleing classes
-        */
-        static ChangeChildrenAnimationByScrolling(root, parent, child, initialClass, finalClass) {
-            const rootMid = (root.clientHeight / 2) + root.offsetTop;
-            const parentOffset = ScrollingRountines.GetOffsetTopFromParent(root, parent);
-            const parentMiddle = parentOffset + (parent.clientHeight / 2);
-            const boundary = parentMiddle - rootMid - 5; /*5 px for pushing a little before get near the boundary*/
-            root.addEventListener("scroll", function (e) {
-                ScrollingRountines.ToggleClassessByScrolling(child, initialClass, finalClass, root, boundary);
-            });
-        }
-        static ToggleClassessByScrolling(el, originalClass, toggleClass, parent, offsetHeight) {
-            if (el.classList.contains(originalClass) || el.classList.contains(toggleClass)) {
-                if (parent.scrollTop > offsetHeight) {
-                    el.classList.remove(originalClass);
-                    el.classList.add(toggleClass);
-                }
-                else {
-                    el.classList.remove(toggleClass);
-                    el.classList.add(originalClass);
-                }
-            }
-        }
-        static ToggleClasses(el, originalClass, toggleClass) {
-            if (el.classList.contains(originalClass)) {
-                el.classList.remove(originalClass);
-                void el.offsetWidth;
-                el.classList.add(toggleClass);
-            }
-            else if (el.classList.contains(toggleClass)) {
-                el.classList.remove(toggleClass);
-                void el.offsetWidth;
-                el.classList.add(originalClass);
-            }
-        }
-        static GetOffsetTopFromParent(parent, child) {
-            let height = 0.00;
-            let c = child;
-            while (true) {
-                if (c.isSameNode(parent)) {
-                    break;
-                }
-                else {
-                    height += c.offsetTop;
-                    //console.log(c.offsetParent);
-                    if (c.offsetParent) {
-                        c = c.offsetParent;
-                    }
-                    else {
-                        break;
-                    }
-                }
-            }
-            return height;
-        }
-        static ScrollToElement(parent, el) {
-            parent.click = () => {
-                console.log("ScrollToElement ...");
-                el.scrollIntoView();
-            };
-        }
-    }
     class ForgeAppDOM {
         static Ini() {
             ForgeAppDOM.SubscribeElement();
@@ -270,6 +175,108 @@ var HGR_DOM;
             }
         }
     }
-    HGR_DOM.ForgeAppDOM = ForgeAppDOM;
+    class Util_DOM_Debug {
+        static PrintTreeInfo(element) {
+            let el = element;
+            let elements = [];
+            while (el != null) {
+                elements.push(el);
+                if (el.parentElement !== undefined) {
+                    el = el.parentElement;
+                }
+                else {
+                    break;
+                }
+            }
+            let count = 0;
+            for (var i = elements.length - 1; i >= 0; i--) {
+                //console.log(count, elements[i], elements[i].offsetTop, elements[i].clientHeight);
+                count++;
+            }
+        }
+    }
+    class ScrollingRountines {
+        static ChangeElmentContent(id, content) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.innerHTML = content;
+            }
+        }
+        static ContentVisibilityOnScroll(el) {
+            const position = el.getBoundingClientRect();
+            const top = position.top;
+        }
+        /**
+         * Subscribe children nodes that satisfy the filterClass inside a html parent that its scrollabe
+        toggleing classes
+        */
+        static ChangeChildrenAnimationByScrolling(root, parent, child, initialClass, finalClass) {
+            const rootMid = (root.clientHeight / 2) + root.offsetTop;
+            const parentOffset = ScrollingRountines.GetOffsetTopFromParent(root, parent);
+            const parentMiddle = parentOffset + (parent.clientHeight / 2);
+            const boundary = parentMiddle - rootMid - 5; /*5 px for pushing a little before get near the boundary*/
+            root.addEventListener("scroll", function (e) {
+                ScrollingRountines.ToggleClassessByScrolling(child, initialClass, finalClass, root, boundary);
+            });
+        }
+        static ToggleClassessByScrolling(el, originalClass, toggleClass, parent, offsetHeight) {
+            if (el.classList.contains(originalClass) || el.classList.contains(toggleClass)) {
+                if (parent.scrollTop > offsetHeight) {
+                    el.classList.remove(originalClass);
+                    el.classList.add(toggleClass);
+                }
+                else {
+                    el.classList.remove(toggleClass);
+                    el.classList.add(originalClass);
+                }
+            }
+        }
+        static ToggleClasses(el, originalClass, toggleClass) {
+            if (el.classList.contains(originalClass)) {
+                el.classList.remove(originalClass);
+                void el.offsetWidth;
+                el.classList.add(toggleClass);
+            }
+            else if (el.classList.contains(toggleClass)) {
+                el.classList.remove(toggleClass);
+                void el.offsetWidth;
+                el.classList.add(originalClass);
+            }
+        }
+        static GetOffsetTopFromParent(parent, child) {
+            let height = 0.00;
+            let c = child;
+            while (true) {
+                if (c.isSameNode(parent)) {
+                    break;
+                }
+                else {
+                    height += c.offsetTop;
+                    //console.log(c.offsetParent);
+                    if (c.offsetParent) {
+                        c = c.offsetParent;
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            return height;
+        }
+        static ScrollToElement(parent, el) {
+            parent.click = () => {
+                console.log("ScrollToElement ...");
+                el.scrollIntoView();
+            };
+        }
+    }
+    //Is a must, classes are needed in the windows object for consuming
+    function Load() {
+        window["ForgeAppDOM"] = ForgeAppDOM;
+        window["Util_DOM_Debug"] = Util_DOM_Debug;
+        window["ScrollingRountines"] = ScrollingRountines;
+    }
+    HGR_DOM.Load = Load;
 })(HGR_DOM || (HGR_DOM = {}));
+HGR_DOM.Load();
 //# sourceMappingURL=file.js.map

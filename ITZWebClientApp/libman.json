@@ -6,10 +6,11 @@
       "library": "Chart.js@2.9.3",
       "files": [ "Chart.bundle.min.js" ],
       "destination": "wwwroot/lib/chartjs"
-    },
-    {
-      "library": "color-thief@2.3.0",
-      "destination": "wwwroot/lib/colorthief"
     }
+    //,
+    //{
+    //  "library": "color-thief@2.3.0",
+    //  "destination": "wwwroot/lib/colorthief"
+    //}
   ]
 }

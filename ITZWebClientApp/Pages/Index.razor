@@ -164,6 +164,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        Console.WriteLine("On After Render Index");
         await Interop.Utils_DOM.RegisterOnIni(js);
     }
 }

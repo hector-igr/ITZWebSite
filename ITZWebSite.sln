@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeLibs", "ForgeLibs\Forg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeViewerServer", "ForgeViewerServer\ForgeViewerServer.csproj", "{E81EB4B8-416F-4B79-B4C4-8AEB1CCD5024}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITZWebClientApp", "ITZWebClientApp\ITZWebClientApp.csproj", "{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,12 @@ Global
 		{E81EB4B8-416F-4B79-B4C4-8AEB1CCD5024}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E81EB4B8-416F-4B79-B4C4-8AEB1CCD5024}.Revit AddinManager|Any CPU.ActiveCfg = Release|Any CPU
 		{E81EB4B8-416F-4B79-B4C4-8AEB1CCD5024}.Revit AddinManager|Any CPU.Build.0 = Release|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Revit AddinManager|Any CPU.ActiveCfg = Release|Any CPU
+		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Revit AddinManager|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

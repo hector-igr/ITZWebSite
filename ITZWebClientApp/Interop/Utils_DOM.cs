@@ -15,12 +15,12 @@ namespace ITZWebClientApp.Interop
 
         public static Task<Object> RegisterOnIni(IJSRuntime js)
         {
-            return js.InvokeAsync<object>("HGR_DOM.ForgeAppDOM.Ini").AsTask();
+            return js.InvokeAsync<object>("ForgeAppDOM.Ini").AsTask();
         }
 
         public static Task<Object> RegisterBasicPageRoutines(IJSRuntime js)
         {
-            return js.InvokeAsync<object>("HGR_DOM.ForgeAppDOM.SubscriveVideoHover").AsTask();
+            return js.InvokeAsync<object>("ForgeAppDOM.SubscriveVideoHover").AsTask();
         }
     }
 }

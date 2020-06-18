@@ -7,7 +7,10 @@
     "target": "ES2015"
   },
   "exclude": [
-    //"node_modules",
-    //"wwwroot"
+    "node_modules",
+    "obj"
+  ],
+  "include": [
+    "wwwroot/scripts/*.*"
   ]
 }
