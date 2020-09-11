@@ -1,0 +1,44 @@
+﻿@inject IJSRuntime JSRuntime
+@inject HttpClient http
+<h3>Chart</h3>
+@*<div class="chart-container">
+    
+</div>*@
+
+
+<canvas id="@Id"></canvas>
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string ChartName { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
+        await chartJs.LoadBarChart(Id, "Experience");
+
+        //Console.Write(await http.GetStringAsync("db/software.json"));
+        string json = await http.GetStringAsync("db/software.json");
+        dynamic[] dataset = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic[]>(json);
+        //dynamic[] dataset = await http.GetJsonAsync<dynamic[]>("db/software.json");
+
+        Dictionary<string, double> data = dataset.ToDictionary(x => (string)x.label, y => (double)y.value);
+        Dictionary<string, System.Drawing.Color> colors = dataset.ToDictionary(x => (string)x.label, y => System.Drawing.Color.FromName((string)y.color));
+
+        ForgeLibs.Models.Charts.ChartDataSet dataSet = new ForgeLibs.Models.Charts.ChartDataSet("Experience", colors, data);
+        ForgeLibs.Models.Charts.BarChart barChart = new ForgeLibs.Models.Charts.BarChart("Software");
+        barChart.Sets.Add(dataSet);
+        barChart.Labels.AddRange(data.Keys);
+        string dataConfig = Newtonsoft.Json.JsonConvert.SerializeObject(barChart.JSON);
+        Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
+        await chartJs.LoadBarChart(Id, ChartName);
+
+        Console.WriteLine(dataConfig);
+        await chartjs.UpdateBarData(ChartName, dataConfig);
+
+    }
+}

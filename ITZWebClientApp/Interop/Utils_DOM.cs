@@ -22,5 +22,11 @@ namespace ITZWebClientApp.Interop
         {
             return js.InvokeAsync<object>("ForgeAppDOM.SubscriveVideoHover").AsTask();
         }
+
+
+        public static Task ReloadVideo(IJSRuntime js, string videoId)
+		{
+            return js.InvokeAsync<object>("ForgeAppDOM.ReloadVideo", videoId).AsTask();
+		}
     }
 }

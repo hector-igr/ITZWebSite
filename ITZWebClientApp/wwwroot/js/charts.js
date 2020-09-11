@@ -26,6 +26,8 @@
                         display: true
                     }]
                 },
+
+
                 onClick: function (ev) {
                     console.log("js_chartJS.onClick()");
                     var item = this.getElementAtEvent(ev)[0];
@@ -106,7 +108,7 @@
         //console.log(chartJS.activeCharts.length);
         for (var i = 0; i < chartJS.activeCharts.length; i++) {
             var name = chartJS.activeCharts[i]["chartName"];
-            //console.log(name);
+            console.log(name);
             if (name === chartName) {
                 var chart = chartJS.activeCharts[i]["myChart"];
                 var json = JSON.parse(data);
@@ -118,6 +120,7 @@
                 //postAction(data);
                 //idsData = json;
                 //chartJS.selectedIds.push({ chartName, data.datasets[0].ids });
+                console.log("finish")
                 break;
             }
         }

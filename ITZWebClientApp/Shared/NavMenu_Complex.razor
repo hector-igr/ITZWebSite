@@ -1,0 +1,66 @@
+﻿@using ForgeLibs.Data;
+@using ForgeLibs.Models;
+@using ForgeLibs.Models.Forge;
+@using ITZWebClientApp.Infraestructure.Data;
+
+@inject OmniClassRepository omni;
+@inject IForgeModelRepository repo;
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Forge Viewer</a>
+    <button class="navbar-toggler" @onclick="@ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="@ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="fetchdata">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            </NavLink>
+        </li>
+        @foreach (var item in projects)
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href=@($"forge/{@item.Id}")>
+                    <span class="oi oi-plus" aria-hidden="true"></span> @item.Name
+                </NavLink>
+            </li>
+        }
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href=@($"forgeNEW/1")>
+                <span class="oi oi-plus" aria-hidden="true"></span> NEW LAYOUT
+            </NavLink>
+        </li>
+    </ul>
+
+</div>
+
+@code {
+
+    bool collapseNavMenu = true;
+
+    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+
+    Project[] projects = new Project[0];
+    protected override async Task OnInitializedAsync()
+    {
+        await repo.GetDataAsync();
+        projects = repo.Projects.ToArray();
+        
+        await omni.LoadFileAsync();
+    }
+}

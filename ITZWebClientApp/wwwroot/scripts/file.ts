@@ -204,6 +204,18 @@ namespace HGR_DOM {
                 });
             }
         }
+
+        static ReloadVideo(videoElId: string): void {
+            try {
+                const el = document.getElementById(videoElId) as HTMLVideoElement;
+                if (el !== null) {
+                    el.load();
+                }
+            } catch (e) {
+
+            }
+            
+        }
     }
 
     class Util_DOM_Debug {
@@ -325,5 +337,5 @@ namespace HGR_DOM {
         window["ScrollingRountines"] = ScrollingRountines;
     }
 }
-
+console.log("enter file.js");
 HGR_DOM.Load();

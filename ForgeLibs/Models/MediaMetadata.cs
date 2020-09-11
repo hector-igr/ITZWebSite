@@ -9,7 +9,7 @@ namespace ForgeLibs.Models
         public string Id { get; set; }
         public string Headline { get; set; }
         public string Description { get; set; }
-        public string[] Keywords { get; set; }
+        public string Keywords { get; set; }
         public int ProjectId { get; set; }
         public int Order { get; set; }
         public string FileName { get; set; }

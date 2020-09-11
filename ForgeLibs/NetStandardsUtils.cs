@@ -34,6 +34,24 @@ namespace ForgeLibs
             return i;
         }
 
+        public static string AddSpace(string str)
+        {
 
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (i > 0)
+                {
+                    char c = str[i];
+                    if (!char.IsWhiteSpace(str[i - 1]))
+                    {
+                        if (char.IsUpper(c) && !char.IsUpper(str[i - 1]))
+                        {
+                            str = str.Insert(i, " ");
+                        }
+                    }
+                }
+            }
+            return str;
+        }
     }
 }

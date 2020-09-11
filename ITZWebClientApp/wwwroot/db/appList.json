@@ -1,0 +1,421 @@
+// ARCHIVO COPIA DE APPSBIM HELP
+{
+  "apps": [
+    {
+      "group": "Annotation Apps",
+      "name": "MoveTagsToCenter",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Annotation Apps",
+      "name": "SpotDuplication",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Annotation Apps",
+      "name": "FaceDimensions",
+      "clients": "ITZ"
+    },
+
+    {
+      "group": "Project Apps",
+      "name": "LinkToProject",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "Formwork Apps",
+      "name": "FW_BySelectedFaces",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Formwork Apps",
+      "name": "FW_BySideFaces",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "View Apps",
+      "name": "FilterByParemeterValues",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "Floor Apps",
+      "name": "RoomToFloor",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Floor Apps",
+      "name": "SplitFloors",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Floor Apps",
+      "name": "FloorEdgeOffset",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "Wall Apps",
+      "name": "WallCovering",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Wall Apps",
+      "name": "EdgeWall",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Wall Apps",
+      "name": "WallFrames",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "Data Apps",
+      "name": "Consecutive",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Data Apps",
+      "name": "ImportDataFromExcel",
+      "clients": "RZM"
+    },
+
+    {
+      "group": "Data Apps",
+      "name": "CopyParameters",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Data Apps",
+      "name": "TransferParameterValues",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Data Apps",
+      "name": "ExportDataToExcel",
+      "clients": "RZM"
+    },
+
+
+    {
+      "group": "Element Apps",
+      "name": "ChangeLevel",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Element Apps",
+      "name": "LinkAdaptiveComponents",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Element Apps",
+      "name": "OnePointPosition",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Element Apps",
+      "name": "AdaptComponents2P",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Element Apps",
+      "name": "MoveByPoint",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Element Apps",
+      "name": "ComponentProjectPosition",
+      "clients": "ITZ"
+    },
+
+    {
+      "group": "Family Apps",
+      "name": "CopyProfileParameters",
+      "clients": "ITZ"
+
+    },
+
+
+    {
+      "group": "Site Apps",
+      "name": "BuildingPads",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Documentation Apps",
+      "name": "DimSections",
+      "clients": "RZM"
+    },
+
+
+    {
+      "group": "Family Instance Apps",
+      "name": "CutConnectedElements",
+      "clients": "RZM"
+    },
+
+
+    {
+      "group": "Framing Apps",
+      "name": "FramingBearings",
+      "clients": "RZM"
+    },
+
+
+    {
+      "group": "Sheets Apps",
+      "name": "DuplicateSheet",
+      "clients": "RZM"
+    },
+
+
+
+
+    {
+      "group": "Schedule Apps",
+      "name": "ExportSchedules",
+      "clients": "RZM"
+    },
+
+
+    {
+      "group": "MEP Apps",
+      "name": "SplitInU",
+      "clients": "ITZ"
+    },
+
+
+    {
+      "group": "Bridge Apps",
+      "name": "AreaReinforcementCombos",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "BeamGrids",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "BoundingBoxSections",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "Bridge",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "BridgeFramingTap",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "CubesArray",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "DiaphragmDucts",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "DiaphragmPosition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "FacesToFloors",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "FormWorkAdjustments",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "FoundationPosition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "FramePosition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "FramingInterDiaphragm",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "GridProjection",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "LinkRebar",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "Neoprenes",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "PierCapPosition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "PurgeRebarShape",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarCut",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarEdition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarModel",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarPlaceHolder",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarPlaceHoldersLong",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "RebarTransfer",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "ScopeAndSections",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "SetMesh",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "StrandsWires",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "SupportPosition",
+      "clients": "ITZ,Triada"
+    },
+    {
+      "group": "Bridge Apps",
+      "name": "TransferDrawing",
+      "clients": "ITZ,Triada"
+    },
+
+
+
+    {
+      "group": "Rebar Apps",
+      "name": "InvertRebarHooks",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarDimension",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarArcInterpolation",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarInterpolation",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarExplode",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "SwitchRebarHooks",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarViews",
+      "clients": "ITZ"
+
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "ProjectRebarToSurfaces",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "SplitRebarSet",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "AddBarAlongSegment",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "EdgeReinforcement",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "BarToStirrup",
+      "clients": "ITZ"
+    },
+    {
+      "group": "Rebar Apps",
+      "name": "RebarOnFace",
+      "clients": "ITZ"
+    }
+  ],
+  "renderPaths": [
+    {
+      "clientId": "RZM",
+      "path": "D:\\Desarrollos\\ASPNETCORE\\AppsHelp\\bin\\StaticPages\\RZM"
+    },
+    {
+      "clientId": "ITZ",
+      "path": "D:\\Desarrollos\\Revit API\\ITZBim\\bin\\Help"
+    }
+  ]
+}

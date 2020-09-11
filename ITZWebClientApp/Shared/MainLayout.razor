@@ -1,29 +1,15 @@
-@using ForgeLibs.Data;
-@using ForgeLibs.Models;
-@using ForgeLibs.Models.Forge;
-@using ITZWebClientApp.Infraestructure.Data;
+﻿@inherits LayoutComponentBase
 
-@inherits LayoutComponentBase
+<div class="sidebar">
+    <NavMenu/>
+</div>
 
-@inject OmniClassRepository omni;
-@inject IForgeModelRepository repo;
-@*<div class="sidebar">
-        <NavMenuTop />
-    </div>*@
+<div class="main">
+    <div class="top-row px-4">
+        <a href="" target="_blank" class="ml-md-auto">HGR</a>
+    </div>
 
-<NavMenuTop Links="projects"></NavMenuTop>
-<main class="main">
-    @Body
-</main>
-
-
-@code{
-
-    private List<(string, string)> projects = new List<(string, string)>();
-    protected override async Task OnInitializedAsync()
-    {
-        await repo.GetDataAsync();
-        projects = repo.Projects.Select(x=> (x.Name, $"forge/{x.Id}")).ToList();
-        await omni.LoadFileAsync();
-    }
-}
+    <div class="content px-4">
+        @Body
+    </div>
+</div>

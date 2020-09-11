@@ -1,0 +1,73 @@
+﻿@page "/softwareexperience"
+@inject IJSRuntime js;
+@using System.Drawing;
+
+    <div class="container">
+        <h3>Software</h3>
+
+        <div style="position:relative;">
+            <canvas id="softwareChart"></canvas>
+        </div>
+        <br />
+        <h3>Programador</h3>
+
+        <div style="position:relative;">
+            <canvas id="codingExperience"></canvas>
+        </div>
+
+    </div>
+
+
+@*<ITZWebClientApp.Components.Charts.Chart Id="experience" ChartName="HGR"></ITZWebClientApp.Components.Charts.Chart>*@
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //Console.WriteLine("Chart INI");
+        await js.InvokeVoidAsync("SoftwareChart.Ini");
+        List<System.Drawing.Color> colors = new List<System.Drawing.Color>()
+{
+            Color.Red,
+             Color.DeepSkyBlue,
+             Color.DeepSkyBlue,
+            Color.DeepSkyBlue,
+            Color.DarkOrange,
+            Color.Aqua,
+            Color.GreenYellow,
+            Color.Red,
+            Color.Black,
+            Color.Purple,
+            Color.Gray,
+            Color.CadetBlue,
+            Color.Green,
+            Color.DarkOliveGreen,
+            Color.Pink,
+            Color.HotPink,
+            Color.OrangeRed,
+            Color.DarkSalmon
+        };
+
+        string str = "";
+        for (int i = 0; i < colors.Count; i++)
+        {
+            str += ToRGB(colors[i]);
+        }
+        Console.WriteLine(str);
+        str = "";
+        for (int i = 0; i < colors.Count; i++)
+        {
+            str += Border(colors[i]);
+        }
+        Console.WriteLine(str);
+
+
+        
+
+    }
+
+
+    public string ToRGB(Color color) => $"'rgba({color.R},{color.G},{color.B}, 0.2)',";
+    public string Border(Color color) => $"'rgba({color.R},{color.G},{color.B}, 1.0)',";
+}
+

@@ -1,0 +1,87 @@
+[
+  {
+    "label": "AutoCAD",
+    "value": 8,
+    "color": "Red"
+  },
+  {
+    "label": "Revit ARC",
+    "value": 9,
+    "color": "Blue"
+  },
+  {
+    "label": "Revit STR",
+    "value": 9,
+    "color": "Blue"
+  },
+  {
+    "label": "Revit MEP",
+    "value": 7,
+    "color": "Blue"
+  },
+  {
+    "label": "Inventor",
+    "value": 7,
+    "color": "Yellow"
+  },
+  {
+    "label": "3ds Max",
+    "value": 7,
+    "color": "AliceBlue"
+  },
+  {
+    "label": "Navisworks",
+    "value": 9,
+    "color": "DarkGreen"
+  },
+  {
+    "label": "Civil 3d",
+    "value": 3,
+    "color": "Red"
+  },
+  {
+    "label": "City Engine",
+    "value": 3,
+    "color": "MediumPurple"
+  },
+  {
+    "label": "Vray",
+    "value": 3,
+    "color": "Black"
+  },
+  {
+    "label": "Rhino-Grasshopper",
+    "value": 5,
+    "color": "Gray"
+  },
+  {
+    "label": "Photoshop",
+    "value": 9,
+    "color": "DarkBlue"
+  },
+  {
+    "label": "MS Excel",
+    "value": 9,
+    "color": "Green"
+  },
+  {
+    "label": "MS Project",
+    "value": 9,
+    "color": "ForestGreen"
+  },
+  {
+    "label": "MS Access",
+    "value": 5,
+    "color": "Pink"
+  },
+  {
+    "label": "After Effects",
+    "value": 5,
+    "color": "DeepPink"
+  },
+  {
+    "label": "Tekla Structure",
+    "value": 3,
+    "color": "Orchid"
+  }
+]

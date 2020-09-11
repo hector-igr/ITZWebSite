@@ -1,66 +1,106 @@
-﻿@using ForgeLibs.Data;
-@using ForgeLibs.Models;
-@using ForgeLibs.Models.Forge;
+﻿@using ForgeLibs.Models;
 @using ITZWebClientApp.Infraestructure.Data;
-
-@inject OmniClassRepository omni;
 @inject IForgeModelRepository repo;
 
 <div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Forge Viewer</a>
-    <button class="navbar-toggler" @onclick="@ToggleNavMenu">
+    <a class="navbar-brand" href="">HIGR CV</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="@ToggleNavMenu">
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
+            <NavLink class="nav-link" href="jobexperience" Match="NavLinkMatch.All" @onclick="()=> { showProjects = false; showApps = false; }">
+                <span class="oi oi-document" aria-hidden="true"></span> CV
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="softwareexperience" Match="NavLinkMatch.All" @onclick="()=> { showProjects = false; showApps = false; }">
+                <span class="oi oi-graph" aria-hidden="true"></span>Experiencia
             </NavLink>
         </li>
 
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+            <NavLink class="nav-link" href="counter" @onclick="()=> { showProjects = false; showApps = !showApps; }">
+                <span class="oi oi-terminal" aria-hidden="true"></span> Apps
             </NavLink>
+            @if (showApps)
+            {
+                <ul>
+                    @for (int g = 0; g < appGroups.Count; g++)
+                    {
+                        <li class="nav-item px-1">
+                            <b>@appGroups[g].Key</b>
+                        </li>
+                        @for (int i = 0; i < appGroups[g].Count(); i++)
+                        {
+                            AppInfo app = appGroups[g].ElementAt(i);
+                            <li class="nav-item px-1">
+                                <NavLink class="nav-link" href=@($"apps/{app.Name}") @onclick="()=> {  }">
+                                    @ForgeLibs.NetStandardsUtils.AddSpace(app.Name)
+                                </NavLink>
+                            </li>
+                        }
+                    }
+                </ul>
+            }
         </li>
-        @foreach (var item in projects)
-        {
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href=@($"forge/{@item.Id}")>
-                    <span class="oi oi-plus" aria-hidden="true"></span> @item.Name
-                </NavLink>
-            </li>
-        }
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href=@($"forgeNEW/1")>
-                <span class="oi oi-plus" aria-hidden="true"></span> NEW LAYOUT
+            <NavLink class="nav-link" @onclick="()=> { showProjects = !showProjects; showApps = false; }">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Proyectos
             </NavLink>
+            @if (showProjects)
+            {
+                <ul>
+                    @foreach (Project project in projects)
+                    {
+                        if (repo.ImageInfo.Where(x => x.ProjectId == project.Id).Count() == 0) continue;
+                        <li class="nav-item px-2">
+                            <NavLink class="nav-link" href=@($"projects/{@project.Id}") @onclick="()=> {  }">
+                                @project.Name
+                            </NavLink>
+                        </li>
+                    }
+                </ul>
+            }
         </li>
+
     </ul>
+
+
+
 
 </div>
 
-@functions {
-
-    bool collapseNavMenu = true;
-
-    string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    void ToggleNavMenu()
+@code {
+    private bool collapseNavMenu = true;
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : "dontCollapse";
+    private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
+    private bool showProjects = false;
+    private bool showApps = false;
+
 
     Project[] projects = new Project[0];
+    AppInfo[] apps = new AppInfo[0];
+    List<IGrouping<string, AppInfo>> appGroups = null;
     protected override async Task OnInitializedAsync()
     {
         await repo.GetDataAsync();
-        projects = repo.Projects.ToArray();
-        
-        await omni.LoadFileAsync();
+        Console.WriteLine($"Image Info count : {repo.ImageInfo.Count()}");
+        repo.ImageInfo.GroupBy(x => x.ProjectId).ToList().ForEach(x => Console.WriteLine(x.Key));
+        projects = repo.Projects.OrderByDescending(x=> x.Id).ToArray();
+        Console.WriteLine($"Project count : {projects.Length}");
+        apps = repo.AppsInfo;
+        appGroups = apps.GroupBy(x => x.Group).ToList();
+        Console.WriteLine(appGroups.Count);
+        appGroups.ForEach(x => Console.WriteLine(x.Key));
+        Console.WriteLine(":::::::");
     }
+
 }

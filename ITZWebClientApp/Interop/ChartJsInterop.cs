@@ -15,6 +15,12 @@ namespace ITZWebClientApp.Interop
             this.Js = js;
         }
         #region BarChart
+
+        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName)
+        {
+            return Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, null);
+        }
+
         public ValueTask<bool> LoadBarChart(string viewElementId, string chartName, Pages.ForgeDomain forgeDomain)
         {
             return Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain));

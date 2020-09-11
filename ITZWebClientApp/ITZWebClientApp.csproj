@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="wwwroot\db\hgr_projects.json">
+    <Content Update="wwwroot\db\hgr_projects2.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="wwwroot\media\extendedInfo\" />
     <Folder Include="wwwroot\media\projects\" />
+    <Folder Include="wwwroot\appsInfo\" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

@@ -18,44 +18,32 @@ namespace ITZWebClientApp.Infraestructure.Data
         Project[] projects;
         ForgeModel[] models;
         MediaMetadata[] imagesInfo;
+        AppInfo[] appInfo;
 
-        HttpClient client;
+        HttpClient client { get; set; }
 
         public JS_ForgeModelRespository(HttpClient client)
         {
             this.client = client;
-            //GetDataFromIO(client);
-            //GetData(client);
-        }
-
-        public void GetDataFromIO()
-        {
-            Console.WriteLine("JS_ForgeModelRespository.GetDataFromIO()");
-            using (StreamReader sr = new StreamReader("./db/hgr_projects.json"))
-            {
-                string json = sr.ReadToEnd();
-                //Console.Write(json);
-                projects = JsonConvert.DeserializeObject<Project[]>(json);
-            }
-            using (StreamReader sr = new StreamReader("./db/imageInfo.json"))
-            {
-                string json = sr.ReadToEnd();
-                //Console.Write(json);
-                imagesInfo = JsonConvert.DeserializeObject<MediaMetadata[]>(json);
-            }
         }
 
         public async Task GetDataAsync()
         {
             Console.WriteLine("JS_ForgeModelRespository.GetData()");
-            string str = await client.GetStringAsync("/db/hgr_projects.json");
+            string str = await client.GetStringAsync("/db/hgr_projects2.json");
 
             projects = JsonConvert.DeserializeObject<Project[]>(str);
             //projects = await client.GetJsonAsync<Project[]>("/db/projects.json");
             
-            str = await client.GetStringAsync("/db/imageInfo.json");
+            str = await client.GetStringAsync("/db/imageInfo2.json");
             imagesInfo = JsonConvert.DeserializeObject<MediaMetadata[]>(str);
+
+            str = await client.GetStringAsync("/db/appList.json");
+            dynamic o = JsonConvert.DeserializeObject(str);
+            str = JsonConvert.SerializeObject(o["apps"]);
+            appInfo = JsonConvert.DeserializeObject<AppInfo[]>(str);
         }
+
 
         public IEnumerable<Project> Projects => this.projects;
 
@@ -63,7 +51,9 @@ namespace ITZWebClientApp.Infraestructure.Data
 
         public IEnumerable<MediaMetadata> ImageInfo => this.imagesInfo;
 
-        public async Task<bool> DeleteForgeModelAsync(int id)
+		public AppInfo[] AppsInfo => this.appInfo;
+
+		public async Task<bool> DeleteForgeModelAsync(int id)
         {
             ForgeModel model = models.FirstOrDefault(x => x.Id == id);
             if(model != null)
@@ -81,6 +71,7 @@ namespace ITZWebClientApp.Infraestructure.Data
             ForgeModel model = models.FirstOrDefault(x => x.Id == id);
             return model;
         }
+
 
         public Task SaveForgeModelAsync(ForgeModel model)
         {

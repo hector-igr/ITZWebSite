@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    
+<main class="container">
+    
+    <div>
+        
+
+<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/18ry0sxt3nwakuf/RebarArcInterpolation.mp4?dl=1" autoplay=""></video></div><br />
+<img src="" />
+<p><b>Linear Interpolation.</b>Número de rebars interpolados dentro de dos rebars seleccionados.</p>
+<p><b>Reverse Last Rebar..</b>Invierte la dirección de la última varilla antes de realizar la interpolación.</p>
+<img src="https://www.dropbox.com/s/g671iimsmrgr5no/RebarArcInterpol02.jpg?dl=1" />
+<img src="https://www.dropbox.com/s/1macj9vnyap8xjq/RebarArcInterpol03.jpg?dl=1" />
+
+<div class='alert alert-warning'><h3>Notas</h3><div>
+    <ol>
+        <li>La selección debe de hacerse en orden con respecto a la dirección de las manecillas del reloj.</li>
+        <li>La app acepta diversos objetos como Wall, StructuralFraming y Model Lines.</li>
+        <li>Los rebars deben de coincidir con los extremos del elemento curvo.</li>
+        <li>Reverse Last Rebar está pensado para corregir interpolaciones cruzadas debido a la orientación del sketch con el cual fue trazado las varillas seleccionado.</li>
+        <li>El host de cada rebar se encuentra ligado al host del primer rebar seleccionado.</li>
+        <li>Funciona solo con varillas con segmentos rectos.</li>
+        <li>El addin busca embonar cada rebar con un shape dentro de la librería de rebar shapes existentes, si no encuentra uno que satisfaga las condiciones geométricas indicadas por la interpolación el addin genera un nuevo shape.</li>
+        <li>Si alguno de los rebars no pudo ser completado el addin procede a generar lineas con los segmentos de la varilla junto con su normal para visualizar donde pudo haber estado la falla de interpolación.</li>
+    </ol>
+</div></div><br />
+    </div>
+</main>
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+
+<body>
+    
+<main class="container">
+    
+    <div>
+        
+
+<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/24naux6rwqhfnpc/AreaReinf_Combos.mp4?dl=1" autoplay=""></video></div><br />
+<div class="container">
+    <h3>Conceptos</h3>
+    <table class="table table-condensed">
+        <tr><td><b>Rebar Model</b></td><td>Agrupacion de estribos que comparten una misma distribucion dentro de un <b>Path</b></td></tr>
+        <tr><td><b>Path</b></td><td>Linea o conjunto de lineas que definen la trayectoria de todos los <b>Stirrup Groups</b> dentro de un Rebar Model</td></tr>
+        <tr><td><b>Stirrup Group</b></td><td>Estribo o conjunto de estribos que definen la forma de todos los subsecuentes dentro del set</td></tr>
+        <tr><td><b>Members</b></td><td>Estribos miembros de un Stirrup Group</td></tr>
+        <tr><td><b>Rule</b></td><td>Regla con el cual los <b>Stirrup Groups</b> seran distribuidos a lo largo del Path</td></tr>
+    </table>
+    <!--<div class="alert alert-warning">
+        La app guarda registro de las varillas con el elemento
+        por lo que si se vuelve a ejecutar se borran las varillas y se generan nuevas. Pudiéndose perder trabajo si se editaron posteriormente.
+    </div>-->
+    <hr />
+    <div class="row">
+        <div class="col-6">
+            <h5>Rebar Model</h5>
+            <table class="table table-condensed">
+                <tr><td><b>Add</b></td><td>Agrega un Nuevo Rebar Model al documento</td></tr>
+                <tr><td><b>Delete</b></td><td>Borra el Rebar Model seleccionado del documento</td></tr>
+            </table>
+
+            <h5>Path</h5>
+            <table class="table table-condensed">
+                <tr>
+                    <td><b>Add</b></td>
+                    <td>
+                        Agrega un nuevo path al Rebar Model. Restringe la seleccion a <b>Curve Models</b>
+                        o un grupo que contenga exclusivamente Curve Models y que esten conectados en sus extremos.
+                    </td>
+                </tr>
+                <tr><td><b>Remove</b></td><td>Remueve el path de el Rebar Model. No elimina el elemento</td></tr>
+            </table>
+
+            <h5>Rule</h5>
+            <table class="table table-condensed">
+                <tr><td><b>Edit</b></td><td>Editar la regla del path seleccionado</td></tr>
+            </table>
+        </div>
+        <div class="col-6">
+            <h5>Stirrup Group</h5>
+            <table class="table table-condensed">
+                <tr><td><b>Add</b></td><td>Agrega un nuevo Stirrup Group al Rebar Model Seleccionado</td></tr>
+                <tr><td><b>Delete</b></td><td>Borra el Stirrup Group del Rebar Model Seleccionado</td></tr>
+            </table>
+
+            <h5>Members</h5>
+            <table class="table table-condensed">
+                <tr><td><b>Add</b></td><td>Agregar estribos al Rebar Group</td></tr>
+                <tr><td><b>Remove</b></td><td>Remueve el estribo del Rebar Group. No elimina el elemento</td></tr>
+            </table>
+            <div class="alert alert-warning">
+                Los estribos miembros tienen que estar orientados al sentido del path
+            </div>
+
+            <h5>Rebar</h5>
+            <table class="table table-condensed">
+                <tr><td><b>Build</b></td><td>Construye el Rebar Model con respecto a los parametros establecidos en su Path asi como en sus miembros</td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+    </div>
+</main>
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

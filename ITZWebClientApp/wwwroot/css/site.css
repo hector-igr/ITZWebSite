@@ -4,6 +4,44 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+/* The emerging W3C standard
+   that is currently Firefox-only */
+* {
+    scrollbar-width: thin;
+    /*    scrollbar-color: blue orange;*/
+    scrollbar-color: #3a0647 #333333;
+}
+
+    /* Works on Chrome/Edge/Safari */
+    *::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background: #333333;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: #3a0647;
+        border-radius: 20px;
+        border: 3px solid #333333;
+    }
+
+/*div {
+    border:dotted;
+    border-color:red;
+}*/
+
+
+
+video {
+    width:100%;
+}
+
+img {
+    width: 100%;
+}
+
 app {
     position: relative;
     display: flex;
@@ -21,17 +59,21 @@ app {
 }
 
     .main .top-row {
-        background-color: #e6e6e6;
+/*        background-color: #e6e6e6;*/
         border-bottom: 1px solid #d6d5d5;
     }
 
+
 .sidebar {
     /*background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);*/
-    background-image: linear-gradient(180deg, rgb(6, 126, 206) 0%, #3a0647 70%);
+    background-image: linear-gradient(180deg, #333333 0%, #3a0647 70%);
+    overflow: auto;
 }
 
     .sidebar .top-row {
-        background-color: rgba(0,0,0,0.4);
+        background-color: rgba(51,51,51,1);
+        position:fixed;
+        width:100%;
     }
 
     .sidebar .navbar-brand {
@@ -43,29 +85,40 @@ app {
         font-size: 1.1rem;
         vertical-align: text-top;
         top: -2px;
+        position:inherit;
     }
 
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
 }
+    .hgr_menu{
 
-    /*.nav-item:first-of-type {
+    } 
+    .nav-item:first-of-type {
         padding-top: 1rem;
-    }*/
+    }
 
     .nav-item:last-of-type {
         padding-bottom: 1rem;
     }
 
-    .nav-item a {
+    .nav-item {
         color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
-        display: flex;
-        align-items: center;
-        line-height: 3rem;
     }
+
+    .nav-item b{
+        font-size:smaller;
+    }
+
+        .nav-item a {
+            color: #d7d7d7;
+            border-radius: 4px;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            /*line-height: 3rem;*/
+        }
 
         .nav-item a.active {
             background-color: rgba(255,255,255,0.25);
@@ -132,5 +185,10 @@ app {
     .sidebar .collapse {
         /* Never collapse the sidebar for wide screens */
         display: block;
+        margin-top: 60px;
+    }
+
+    .sidebar .dontCollapse {
+        margin-top: 60px;
     }
 }

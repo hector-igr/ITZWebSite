@@ -16,5 +16,6 @@ namespace ForgeLibs.Models
         public string Job { get; set; }
         public bool Model { get; set; }
         public int Importance { get; set; }
-    }
+		public string URL { get; set; }
+	}
 }
