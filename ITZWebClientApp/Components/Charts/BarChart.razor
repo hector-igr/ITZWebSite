@@ -1,94 +1,59 @@
 ﻿@using ForgeLibs.Data
 @using ForgeLibs.ViewModels
+@using ForgeLibs.Models.Charts;
 @using ForgeLibs.Models.Forge
+
 @using ITZWebClientApp.Interfaces;
+@using Newtonsoft.Json;
 
 @inject IJSRuntime JSRuntime
 @inject HttpClient http;
 @inject OmniClassRepository omni;
 
-<div class="chart-container">
+<div class="chart-container" style="position: relative; height:100%; width:100% ">
     <canvas id="@Id"></canvas>
 </div>
 
 @code {
 
-[Parameter]
-public string Id { get; set; }
+    [CascadingParameter]
+    private ITZWebClientApp.Pages.ForgeDesktop _forgeDesktop { get; set; }
 
-[Parameter]
-public string ChartName { get; set; }
+    [Parameter]
+    public string Id { get; set; }
 
-[Parameter]
-public string Category { get; set; }
+    [Parameter]
+    public string ChartName { get; set; }
 
-[Parameter]
-public string Property { get; set; }
+    public BarChartData Data { get; set; }
 
-[Parameter]
-public string PropertyGroup { get; set; }
 
-[CascadingParameter]
-public ITZWebClientApp.Pages.ForgeDomain forgeDomain { get; set; }
-
-bool loadedChart = false;
-string lastGroup;
-string lastProperty;
-
-protected override void OnInitialized()
-{
-    Console.WriteLine("BarChart.OnIni()");
-    loadedChart = false;
-    lastProperty = "";
-    lastGroup = "";
-}
-
-protected override async Task OnParametersSetAsync()
-{
-    Console.WriteLine($"BarChart.OnParametersSetAsync() : {loadedChart}");
-    await UpdateChart();
-}
-
-protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    Console.WriteLine($"BarChart.OnAfterRenderAsync() : {loadedChart}");
-    await LoadBarChart();
-    await UpdateChart();
-}
-
-public async Task LoadBarChart()
-{
-    if(loadedChart == false && forgeDomain != null)
+    protected override async Task OnParametersSetAsync()
     {
+        //Console.WriteLine($"BarChart.OnParametersSetAsync()");
+        await UpdateChart();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //Console.WriteLine($"BarChart.OnAfterRenderAsync()");
+        //await LoadBarChart();
         Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
-        loadedChart = await chartJs.LoadBarChart(Id, ChartName, forgeDomain);
+        bool loadedChart = await chartJs.LoadBarChart(Id, ChartName, _forgeDesktop);
     }
-}
 
-public async Task UpdateChart()
-{
-    if (loadedChart && !string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(Property)
-            && (lastProperty != Property || lastGroup != PropertyGroup))
+    public async Task UpdateChart()
     {
-        ChangeChartData(ChartName, omni, forgeDomain.ForgeElems, Category,
-            Property, PropertyGroup);
-        lastGroup = PropertyGroup; lastProperty = Property;
+        Console.WriteLine($"BarChart.UpdateChart()");
+        if (Data != null)
+        {
+            Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
+            await chartjs.UpdateBarData(ChartName, JsonConvert.SerializeObject(Data.JSON));
+        }
     }
-}
 
-public void ChangeChartData(string chartName, OmniClassRepository omni,
-    IEnumerable<ForgeElement> forgeElements, string category, string property, string groupProp)
-{
-    string data = ForgeElementTableVM
-        .GetBarChart(omni, forgeElements, category, property, groupProp);
-
-    Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
-    chartjs.UpdateBarData(ChartName, data);
-}
-
-protected override bool ShouldRender()
-{
-    return !loadedChart;
-}
-
+    protected override bool ShouldRender()
+    {
+        return false; //avoid that the graph re renders from the beginning in every change of the parameter
+    }
 }

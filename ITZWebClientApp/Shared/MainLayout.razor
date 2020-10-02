@@ -1,15 +1,81 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="sidebar">
-    <NavMenu/>
-</div>
+<style>
+    .mainlayout {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .ribbon {
+        /*    border: dotted;
+    border-color: red;*/
+        flex-basis: var(--ribbonHeight); /*flex item*/
+        display: flex; /*new flex for nested items*/
+        flex-direction: row row-reverse; /*contentt to the right*/
+        align-items: center; /*align the items in this case in vertical center*/
+        padding: 0 10px;
+        background-color: var(--ribbonColor);
+    }
+    .main {
+        /*    border: dotted;
+    border-color: greenyellow;*/
+        flex-basis: 100%;
+        display: flex;
+        flex-direction: row;
+        transition: 0.5s;
+    }
+    .content {
+        /*    border: double;*/
+        height: calc(100vh - var(--ribbonHeight));
+        overflow: auto;
+        width: 100%;
+    }
+    .mailDirection {
+        right: 10px;
+        color: white;
+        position: absolute;
+    }
+    .container {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .logoFont {
+        font-weight: bold;
+        color: white;
+        font-size: 1.5rem;
+        transition: 0.2s;
+    }
+        .logoFont:hover {
+            cursor: pointer;
+            font-size: 2rem;
+            transition: 0.2s;
+        }
+</style>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="" target="_blank" class="ml-md-auto">HGR</a>
+    <div class="mainlayout">
+        <div class="ribbon">
+            <NavLink class="nav-link" @onclick="(x => toggle())">
+                <div class="logoFont">Forge Demo</div>
+            </NavLink>
+            <a  class="mailDirection" style="color:white">
+                <span class="oi oi-envelope-closed" aria-hidden="true"> </span>&nbsp hector.igr@gmail.com
+            </a>
+        </div>
+        <div class="main">
+            <div class="sidebar @collapseClass">
+                <NavMenu @ref="navmenu" />
+            </div>
+            <div class="content">
+                @Body
+            </div>
+        </div>
     </div>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+
+@code{
+    NavMenu navmenu;
+    private bool collapseSideBar = false;
+    private string collapseClass => collapseSideBar ? "hide" : "";
+    private void toggle() { collapseSideBar = !collapseSideBar; StateHasChanged(); }
+}

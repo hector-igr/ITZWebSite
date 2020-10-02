@@ -5,6 +5,8 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ITZWebClientApp.Infraestructure.Data;
+using System.Net.Http.Json;
+using System.Net.Http;
 
 namespace ITZWebClientApp
 {
@@ -13,13 +15,23 @@ namespace ITZWebClientApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            
             builder.RootComponents.Add<App>("app");
-
             builder.Services.AddBaseAddressHttpClient();
             builder.Services.AddSingleton<ForgeLibs.Data.OmniClassRepository>();
-            builder.Services.AddSingleton<IForgeModelRepository, JS_ForgeModelRespository>();
+            builder.Services.AddSingleton<IItzRepository, JS_ItzModelRespository>();
 
-            await builder.Build().RunAsync();
+            var host = builder.Build();
+            var omni = host.Services.GetRequiredService<ForgeLibs.Data.OmniClassRepository>();
+            bool success = await omni.LoadFileAsync();
+   //         var cat = omni.GetCategory("MX.03.01");
+   //         Console.WriteLine(cat);
+			//var prop = omni.GetParameters("MX.03.01")[0];
+			//Console.WriteLine(prop);
+			//var prop2 = omni.GetGroupingParameters("MX.03.01")[0];
+			//Console.WriteLine(prop2);
+
+			await host.RunAsync();
         }
     }
 }

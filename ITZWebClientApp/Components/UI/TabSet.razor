@@ -2,15 +2,49 @@
 
 <style>
     .tab-stackedByTwo{
-        display:grid;
-        grid-template-rows: 40px auto;
-        height:100%;
+        display:flex;
+        flex-direction:column;
+        width:100%;
     }
+
+    .tabsets {
+        display: flex;
+        /*        flex-wrap: nowrap;*/
+        flex-direction: row;
+        background-image: linear-gradient(90deg,var(--webFavoriteColor) 0%, #333333 70%);
+        list-style-type: none;
+        padding-left: 0%;
+        align-content: center;
+        align-items: center;
+        justify-content: space-around;
+        height: 50px;
+    }
+    .tab-item {
+/*        flex-grow: 1;*/
+        color: white;
+        border-radius: 4px;
+    }
+        .tab-item.active {
+            background-color: rgba(255,255,255,0.25);
+            color: white;
+        }
+            .tab-item a:hover {
+                background-color: rgba(255,255,255,0.1);
+                color: white;
+            }
+
+    .tab-content {
+        overflow: auto;
+    }
+
+
+
+
 </style>
 
 <div class="tab-stackedByTwo">
     <CascadingValue Value="this">
-        <ul class="nav nav-pills nav-justified">
+        <ul class="tabsets">
             @ChildContent
         </ul>
     </CascadingValue>

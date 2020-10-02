@@ -19,6 +19,7 @@ namespace ITZWebClientApp.Interop
             return JS.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, 
                 urn, DotNetObjectReference.Create(forgeViewer));
         }
+
         //public Task<object> LoadDocument(string viewId, string token, string urn, string onSelectHandlers)
         //{
         //    return JS.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, urn, onSelectHandlers);

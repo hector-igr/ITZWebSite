@@ -15,53 +15,56 @@
 
 
         var ctx = document.getElementById('softwareChart').getContext('2d');
-        var softwareChart = new Chart(ctx, {
-            type: 'horizontalBar',
-            data: {
-                labels: ['AutoCAD', 'Revit ARC', 'Revit STR', 'Revit MEP', 'Inventor', '3ds Max', 'Navisworks', 'Civil 3d', 'City Engine', 'Vray', 'Rhino-Grasshopper', 'Photoshop', 'MS Excel', 'MS Project', 'MS Access', 'After Effects', 'Tekla Structure', 'Lumion'],
-                datasets: [{
-                    label: 'Nivel de Experiencia',
-                    data: values,
-                    backgroundColor: backgroundColors,
-                    borderColor: backgroundBorderColors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            suggestedMin: 0, 
-                            beginAtZero: true
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax:10,
-                            beginAtZero: true,
-                            callback: function (value, index, values) {
-                                if (value === 1) {
-                                    return "basico"
-                                }
-                                if (value === 4) {
-                                    return "medio"
-                                }
-                                if (value === 7) {
-                                    return "avanzado"
-                                }
-                                if (value === 10) {
-                                    return "experto"
+        if (ctx !== undefined) {
+            var softwareChart = new Chart(ctx, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['AutoCAD', 'Revit ARC', 'Revit STR', 'Revit MEP', 'Inventor', '3ds Max', 'Navisworks', 'Civil 3d', 'City Engine', 'Vray', 'Rhino-Grasshopper', 'Photoshop', 'MS Excel', 'MS Project', 'MS Access', 'After Effects', 'Tekla Structure', 'Lumion'],
+                    datasets: [{
+                        label: 'Nivel de Experiencia',
+                        data: values,
+                        backgroundColor: backgroundColors,
+                        borderColor: backgroundBorderColors,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 10,
+                                beginAtZero: true,
+                                callback: function (value, index, values) {
+                                    if (value === 1) {
+                                        return "basico"
+                                    }
+                                    if (value === 4) {
+                                        return "medio"
+                                    }
+                                    if (value === 7) {
+                                        return "avanzado"
+                                    }
+                                    if (value === 10) {
+                                        return "experto"
+                                    }
                                 }
                             }
-                        }
-                    }],
-                    labelstring:"Nivel"
+                        }],
+                        labelstring: "Nivel"
+                    },
+                    responsive: true
                 },
-                responsive: true
-            },
 
-        });
+            });
+        }
+
 
         values = [4000, 85, 228, 171, 571, 142, 257, 171, 1428, 228, 228, 285],
         backgroundColors = [];
@@ -75,38 +78,39 @@
         }
 
         var ctx2 = document.getElementById('codingExperience').getContext('2d');
-        var codingExperience = new Chart(ctx2, {
-            type: 'horizontalBar',
-            data: {
-                labels: ['Revit API C#', 'Autocad API C#', 'Navisworks API C#', 'WPF C#', 'ASP.NET Core C#', 'MS Project VSTO C#', 'MS Excel VSTO C#', 'SQL Server', '3dsMax Maxscript', 'HTML-JavaScript', 'Autodesk Forge JavaScript', 'Grasshopper'],
-                datasets: [{
-                    label: 'Horas Aprox de Experiencia',
-                    data: values,
-                    backgroundColor: backgroundColors,
-                    borderColor: backgroundBorderColors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            suggestedMin: 0,
-                            beginAtZero: true
-                        }
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            suggestedMin: 0,
-                            beginAtZero: true
-                        }
-                    }],
-                    labelstring: "Nivel"
+        if (ctx2 !== undefined) {
+            var codingExperience = new Chart(ctx2, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['Revit API C#', 'Autocad API C#', 'Navisworks API C#', 'WPF C#', 'ASP.NET Core C#', 'MS Project VSTO C#', 'MS Excel VSTO C#', 'SQL Server', '3dsMax Maxscript', 'HTML-JavaScript', 'Autodesk Forge JavaScript', 'Grasshopper'],
+                    datasets: [{
+                        label: 'Horas Aprox de Experiencia',
+                        data: values,
+                        backgroundColor: backgroundColors,
+                        borderColor: backgroundBorderColors,
+                        borderWidth: 1
+                    }]
                 },
-                responsive: true
-            },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                                beginAtZero: true
+                            }
+                        }],
+                        xAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                                beginAtZero: true
+                            }
+                        }],
+                        labelstring: "Nivel"
+                    },
+                    responsive: true
+                },
 
-        });
-
+            });
+        }
     }
 }

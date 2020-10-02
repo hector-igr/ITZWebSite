@@ -1,0 +1,113 @@
+﻿@using ForgeLibs
+@using ForgeLibs.Models.Forge
+@using Pages
+@using ITZWebClientApp.Infraestructure.Data;
+
+@inject IJSRuntime JSRuntime
+@inject HttpClient http;
+@inject IItzRepository repo;
+
+@namespace ITZWebClientApp.Components.Forge
+
+<style>
+    .changeColors-button{
+/*        background-color:red;*/
+    }
+        .changeColors-button:before {
+            content: "\f042"; /* this is your text. You can also use UTF-8 character codes as I do here */
+            font-family: FontAwesome;
+            font-size:23px;
+        }
+    .resetColors-button {
+/*        background-color: green;*/
+    }
+        .resetColors-button:before {
+            content: "\f12d"; /* this is your text. You can also use UTF-8 character codes as I do here */
+            font-family: FontAwesome;
+            font-size: 23px;
+        }
+
+</style>
+
+<div id="@ViewerId" style="position: relative;
+        height: 100%;
+        width: 100%;
+        /*background-color: #F0F8FF;*/
+    "> </div>
+@code {
+
+    [Parameter]
+    public string ViewerId { get; set; }
+
+    [Parameter]
+    public string AccessToken { get; set; }
+
+    [Parameter]
+    public string ProjectUrn64 { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnDocumentLoadSuccess { get; set; }
+
+    [Parameter]
+    public EventCallback<int[]> OnChangeSelection { get; set; }
+
+    bool shouldRedner = true;
+    protected override async Task OnParametersSetAsync()
+    {
+        if (!string.IsNullOrEmpty(AccessToken) && !string.IsNullOrEmpty(ProjectUrn64) && shouldRedner)
+        {
+            //Console.WriteLine("token : " + AccessToken);
+            //Console.WriteLine("urn64 : " + ProjectUrn64);
+            Interop.ForgeInterop forge = new Interop.ForgeInterop(JSRuntime);
+            await forge.LoadDocument(ViewerId, AccessToken, ProjectUrn64, this);
+        }
+    }
+
+
+    public void IsolateElements(string ids)
+    {
+        IsolateElements(ids.Split(',').Select(x => Convert.ToInt32(x)).ToArray());
+    }
+
+    protected override bool ShouldRender()
+    {
+        return false;
+    }
+
+    [JSInvokable]
+    public void IsolateElements(int[] ids)
+    {
+        Console.WriteLine($"ForgeViewer.IsolateElements()");
+        Interop.ForgeInterop forge = new Interop.ForgeInterop(JSRuntime);
+        forge.IsolateElement(ViewerId, ids);
+    }
+
+    [JSInvokable]
+    public void OnViewerChangedSelection(int[] ids)
+    {
+        Console.WriteLine("ForgeViewer.OnViewerChangedSelection()");
+        OnChangeSelection.InvokeAsync(ids);
+    }
+
+
+    [JSInvokable]
+    public void OnLoadInstanceSuccess()
+    {
+        OnDocumentLoadSuccess.InvokeAsync(true);
+        shouldRedner = false;
+    }
+
+    [JSInvokable]
+    public static void OnLoadSuccess()
+    {
+        Console.WriteLine("SUPER SUCCESS");
+    }
+
+
+    public void ChangeColorElements(int[] ids, string rgbString)
+    {
+        Console.WriteLine($"ForgeViewer.ChangeColorElements()");
+        Interop.ForgeInterop forge = new Interop.ForgeInterop(JSRuntime);
+        forge.ChangeColorElement(ViewerId, ids, rgbString);
+    }
+}

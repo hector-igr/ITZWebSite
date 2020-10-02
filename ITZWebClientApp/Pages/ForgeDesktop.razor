@@ -1,0 +1,230 @@
+﻿@page "/forgedesktop/{ProjectId:int}"
+
+
+@using ITZWebClientApp.Components
+@using ForgeLibs;
+@using ForgeLibs.Models.Forge;
+@using ForgeLibs.Data;
+@using ITZWebClientApp.Infraestructure.Data;
+@using ITZWebClientApp.Infraestructure;
+@using ITZWebClientApp.Components.UI;
+@using ITZWebClientApp.Components.Charts;
+@using ITZWebClientApp.Components.Forge;
+
+@inject HttpClient client
+@inject IJSRuntime JSRuntime
+@inject OmniClassRepository omni
+@inject IItzRepository repo;
+
+
+<style>
+    .forge_div {
+        /*border:dotted;*/
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        padding: 5px;
+    }
+
+    .forge_ribbon {
+        /*        border-color: red;*/
+        /*        border: groove;*/
+        flex-basis: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .forge_content {
+        /*        background-color:orangered;*/
+        display: flex;
+        overflow: auto;
+        flex-basis: 100%;
+        flex-direction: row;
+        border-color: olive;
+    }
+
+    .forge_viewer {
+        flex-basis: calc(100% - 350px);
+        display: flex;
+    }
+
+    .forge_sidebar {
+        /*        background-color: greenyellow;*/
+        flex-basis: 350px;
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+    }
+
+    .forge_chart {
+        flex-basis: 25%;
+    }
+
+    .forge_table {
+        flex-basis: 75%;
+        /*        border: dotted;*/
+        display: flex;
+        overflow: auto;
+    }
+</style>
+
+<div class="forge_div">
+    <CascadingValue Value="this">
+        <div class="forge_ribbon">
+            <ForgeQueryController ForgeElements="ForgeElems"
+                                   SelectedIds="@_selectedIDs"
+                                   OnChartDataChanged="@(x => { _barChart.Data = x; } )"
+                                   OnCategoryChanged="@(x=> Category = x)"
+                                   OnSelectIds="@(x=> _forgeViewer.IsolateElements(x))"
+                                   />
+        </div>
+
+        <div class="forge_content">
+            <div class="forge_viewer">
+                <ForgeViewer @ref="_forgeViewer"
+                             ViewerId="view1"
+                             AccessToken="@_modelAccessToken"
+                             ProjectUrn64="@_modelUrn64"
+                             OnDocumentLoadSuccess="x=> _shoulRender = false"
+                             OnChangeSelection="@(x=> {
+                                                      _selectedIDs = string.Join(",", x);
+                                                      _selectedElement = ForgeElems.FirstOrDefault(y => y.ObjectId == x[0]);
+                                                      if(_selectedElement != null)
+                                                      {
+                                                          _selectedElement.GetChildren(ForgeElems);
+                                                          _selectedElement.GetParent(ForgeElems);
+                                                      }
+                                                  })" />
+            </div>
+            <div class="forge_sidebar">
+                <div class="forge_chart">
+                    @if (this != null)
+                    {
+                        <BarChart @ref="_barChart" ChartName="Grafica" Id="chart" />
+                    }
+                </div>
+                <div class="forge_table">
+                    <TabSet>
+                        <Tab Title="Resumen">
+                            <ForgeCategoryTable @ref="_tblCat" ForgeElements="@ForgeElems" Category="@Category"
+                                                OnItemSelected="@(x=> _forgeViewer?.IsolateElements(new int[] { x }))" />
+                        </Tab>
+                        <Tab Title="Elemento">
+                            @if (_selectedElement != null)
+                            {
+                                <ForgeItemTable Element="@_selectedElement"
+                                                OnParentSelection="@(x=> GetForgeElement(x))"
+                                                OnItemSelection="@(x=> _forgeViewer.IsolateElements(x.ToString()))" />
+                            }
+                        </Tab>
+                    </TabSet>
+
+                </div>
+            </div>
+        </div>
+    </CascadingValue>
+</div>
+
+@functions {
+
+    private string _projectName { get; set; }
+    private string _selectedIDs { get; set; }
+    private string _modelUrn64 { get; set; }
+    private string _modelAccessToken { get; set; }
+    private bool _shoulRender = true;
+    private ForgeViewer _forgeViewer;
+    private ForgeCategoryTable _tblCat;
+    private BarChart _barChart;
+    private ForgeElement _selectedElement;
+    public string Category { get; set; }
+
+    [CascadingParameter]
+    MainLayout layout { get; set; }
+    [Parameter]
+    public int ProjectId { get; set; }
+    public IEnumerable<ForgeElement> ForgeElems = Enumerable.Empty<ForgeElement>();
+
+    [JSInvokable]
+    public void OnGraphBarSelection(string label, string rgb, int[] ids)
+    {
+        string str = string.Join(",", ids);
+        _forgeViewer.IsolateElements(ids);
+        _forgeViewer.ChangeColorElements(ids, rgb);
+    }
+
+    int counter = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("ini Forge desktop");
+        if (counter == 0)
+        {
+            _projectName = repo.Projects.FirstOrDefault(x => x.Id == ProjectId).Name;
+            ForgeModel model = repo.GetForgeModelAsync(ProjectId);
+            if (model != null)
+            {
+                bool auth = await LoadForgeModelAuthInfo(model.ObjectId);
+                await LoadModelData(model);
+            }
+        }
+    }
+
+    public async Task<bool> LoadForgeModelAuthInfo(string objectId)
+    {
+        _modelUrn64 = ForgeUtils.Base64Encode(objectId);
+        //ForgeAuth auth = await http.GetJsonAsync<ForgeAuth>(@"https://localhost:44383/api/auth");
+
+
+        //string uri = "https://www.dropbox.com/s/f63bysbygw3rrlw/access.json?dl=1";
+        //HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
+
+        //var json = await http.GetStringAsync(uri);
+        //dynamic credentials = JsonConvert.DeserializeObject(json);
+        //Console.WriteLine(credentials);
+        // Now parse with JSON.Net
+
+        //HttpResponseMessage response = await http.GetAsync(uri);
+        //dynamic credentials = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
+        //Console.WriteLine(credentials);
+
+        ForgeAuth auth = await ForgeUtils.GetForgeAuth("a4Pg8Uq0WXDMO5ANelaKXywSAJAOvUsK", "Y510f0377670e4df", "data:read");
+        if (auth != null)
+        {
+            Console.WriteLine("get auth from itz server ... OK");
+            _modelAccessToken = auth.Access_Token;
+            return true;
+        }
+        else
+        {
+            Console.WriteLine("get auth from itz server ... Cant reach the server");
+        }
+        return false;
+    }
+
+    public async Task LoadModelData(ForgeModel model)
+    {
+        Console.WriteLine("loading model data ....");
+        string fileName = model.ObjectKey + "Translate.txt";
+        string json = await client.GetStringAsync("models_metadata/" + fileName);
+        ForgeElems = ForgeElement.ParseForgeElements(json);
+    }
+
+    /// <summary>
+    /// Loads the parent and children of the object id and isolate in forge viewer
+    /// </summary>
+    /// <param name="objectId"></param>
+    public void GetForgeElement(int objectId)
+    {
+        //Console.WriteLine($"ForgeDomain.GetForgeElement({objectId})");
+        ForgeElement forgeElement = this.ForgeElems.FirstOrDefault(x => x.ObjectId == objectId);
+        //Console.WriteLine($"{forgeElement?.RevitId}");
+        if (forgeElement != null)
+        {
+            _selectedElement = forgeElement;
+            _forgeViewer.IsolateElements(forgeElement.ObjectId.ToString());
+            _selectedElement.GetChildren(ForgeElems);
+            _selectedElement.GetParent(ForgeElems);
+            StateHasChanged();
+        }
+    }
+}

@@ -2,8 +2,9 @@
 @implements Interfaces.UI.ITab;
 @implements IDisposable;
 
-<li class="nav-item">
-    <a @onclick="@Activate" class="nav-link @TitleCssClass" role="button">
+
+<li class="tab-item @TitleCssClass">
+    <a @onclick="@Activate" class="nav-link " role="button">
         @Title
     </a>
 </li>

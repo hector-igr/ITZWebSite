@@ -4,7 +4,7 @@
 @using ForgeLibs.Models;
 @using ITZWebClientApp.Infraestructure.Data;
 
-@inject IForgeModelRepository repo;
+@inject IItzRepository repo;
 @inject IJSRuntime js;
 
 <link href="/css/slideshow_cv.css" rel="stylesheet" />
@@ -154,7 +154,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await repo.GetDataAsync();
+        await repo.LoadDataAsync();
 
         this.ImageCovers = repo.ImageInfo.ToArray();
         Console.WriteLine("Image Covers " + ImageCovers.Length);

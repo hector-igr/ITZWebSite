@@ -14,7 +14,8 @@ namespace ForgeLibs.Models
         public int Order { get; set; }
         public string FileName { get; set; }
         public string MediaType { get; set; }
-        public string[] PredominantColors { get; set; }
+        private string PredominantColorsRaw { get; set; }
+        public string[] PredominantColors { get { return PredominantColorsRaw.Split(','); } }
         public string URL { get; set; }
         public int Rating { get; set; }
     }

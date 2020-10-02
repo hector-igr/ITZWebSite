@@ -1,10 +1,12 @@
 ﻿window.chartJS = {
     activeCharts: [],
     selectedIds: [],
-
     setBarChart: function (chartName, viewElId, dotNetItem) {
         var el = document.getElementById(viewElId);
-        if (el === null) return false;
+        if (el === null) {
+            console.log("js_charts.setBarChart() ... couldnt find id : " + viewElId);
+            return false
+        };
         var ctx = el.getContext('2d');
         var config = {
             type: 'bar',
@@ -108,11 +110,18 @@
         //console.log(chartJS.activeCharts.length);
         for (var i = 0; i < chartJS.activeCharts.length; i++) {
             var name = chartJS.activeCharts[i]["chartName"];
-            console.log(name);
+            //console.log(name);
             if (name === chartName) {
                 var chart = chartJS.activeCharts[i]["myChart"];
                 var json = JSON.parse(data);
-                //console.log(data);
+                //console.log(json);
+                //if (json.data.datasets === undefined) {
+                //    chart.config.data.labels = [];
+                //    chart.config.data.datasets = [];
+                //}
+                //else {
+                //    chart.config.data = json.data;
+                //}
                 chart.config.data = json.data;
                 chart.config.options.scales.yAxes[0].scaleLabel.labelString = json.units;
                 chart.update();
@@ -120,7 +129,6 @@
                 //postAction(data);
                 //idsData = json;
                 //chartJS.selectedIds.push({ chartName, data.datasets[0].ids });
-                console.log("finish")
                 break;
             }
         }
@@ -198,7 +206,6 @@ window.chartJsPie = {
                                 sum += data;
                             });
                             let percentage = (value * 100 / sum).toFixed(2) + "%";
-                            
                             return percentage;
                         },
                         color: '#fff'

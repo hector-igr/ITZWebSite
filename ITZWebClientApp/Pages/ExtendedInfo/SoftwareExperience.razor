@@ -2,19 +2,34 @@
 @inject IJSRuntime js;
 @using System.Drawing;
 
+
+<style>
+/*    .chartReport{
+        flex-basis:50%;
+        border:dotted;
+    }*/
+</style>
+
     <div class="container">
-        <h3>Software</h3>
+        <div class="chartReport" @*style="display:flex; flex-direction:column; height:100%"*@>
+            <div class="chartReport">
+                <h3>Software</h3>
 
-        <div style="position:relative;">
-            <canvas id="softwareChart"></canvas>
+                <div style="position:relative;">
+                    <canvas id="softwareChart"></canvas>
+                </div>
+            </div>
+            <br />
+            <div class="chartReport">
+                <h3>Programador</h3>
+
+                <div style="position:relative;">
+                    <canvas id="codingExperience"></canvas>
+                </div>
+            </div>
+
+            
         </div>
-        <br />
-        <h3>Programador</h3>
-
-        <div style="position:relative;">
-            <canvas id="codingExperience"></canvas>
-        </div>
-
     </div>
 
 

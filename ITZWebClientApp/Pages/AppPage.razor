@@ -1,17 +1,22 @@
-﻿@using ForgeLibs.Models;
+﻿@page "/apps/{name}"
+
+@using ForgeLibs.Models;
 @using ITZWebClientApp.Infraestructure.Data;
 @using System;
 
-
-@inject IForgeModelRepository repo;
+@inject IItzRepository repo;
 @inject IJSRuntime JSRuntime
 @inject HttpClient client
-@page "/apps/{name}"
 
-<h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>
-@((MarkupString)$"{Html}")
+    <main class="container">
+        <h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>
+
+        @((MarkupString)$"{Html}")
+    </main>
+
 
 @code {
+
     [Parameter]
     public string Name { get; set; }
 
@@ -19,12 +24,8 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Console.WriteLine(client);
-
         string addess = $"/appsInfo/{Name}.html";
-        Console.WriteLine(addess);
         string str = await client.GetStringAsync(addess);
-        Console.WriteLine(str);
         Html = str;
     }
 }

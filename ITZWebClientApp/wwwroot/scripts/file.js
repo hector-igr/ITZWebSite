@@ -288,6 +288,5 @@ var HGR_DOM;
     }
     HGR_DOM.Load = Load;
 })(HGR_DOM || (HGR_DOM = {}));
-console.log("enter file.js");
 HGR_DOM.Load();
 //# sourceMappingURL=file.js.map

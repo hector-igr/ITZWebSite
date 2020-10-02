@@ -12,7 +12,7 @@ namespace ForgeLibs.Data
     public class OmniClassRepository
     {
         public const string OmniClassPath = @"models_metadata/OmniClass.txt";
-        public const string OmniClassAbsolutePath = @"D:\Desarrollos\ASPNETCORE\ForgeViewer\ForgeViewerClient\wwwroot\models_metadata/OmniClass.txt";
+        //public const string OmniClassAbsolutePath = @"D:\Desarrollos\ASPNETCORE\ForgeViewer\ForgeViewerClient\wwwroot\models_metadata/OmniClass.txt";
         public const string OmniClassTitle = "OmniClass Title";
         public const string OmniClassNumber = "OmniClass Number";
         public const string OminiClassCategoryId = "RevitCategoryId";
@@ -32,21 +32,35 @@ namespace ForgeLibs.Data
             this._client = client;
         }
 
-        public async Task LoadFileAsync()
+        public async Task<bool> LoadFileAsync()
         {
-            Console.WriteLine("OmniClassRepository.LoadFileAsync()");
-            if(this._client != null)
-            {
-                var str = await _client.GetStringAsync(OmniClassPath);
-                _Table = StringToDataTable(str, '\t');
-            }
-            else
-            {
-                using (StreamReader sr = new StreamReader(OmniClassAbsolutePath))
-                {
-                    _Table = StringToDataTable(sr.ReadToEnd(), '\t');
-                }
-            }
+            
+            var str = await _client.GetStringAsync(OmniClassPath);
+            _Table = StringToDataTable(str, '\t');
+            if(!string.IsNullOrEmpty(str))
+			{
+                Console.WriteLine("Load Omni File Success");
+                return true;
+			}
+			else
+			{
+                Console.WriteLine("Load Omni File Failed");
+                return false;
+			}
+
+            //if (this._client != null)
+            //{
+            //    Console.WriteLine("BY CLIENT");
+               
+            //}
+            //else
+            //{
+            //    Console.WriteLine("BY IO");
+            //    using (StreamReader sr = new StreamReader(OmniClassAbsolutePath))
+            //    {
+            //        _Table = StringToDataTable(sr.ReadToEnd(), '\t');
+            //    }
+            //}
             
             //Console.WriteLine("columns count : " + _Table.Columns.Count);
             //Console.WriteLine("rows count : " + _Table.Rows.Count);
@@ -149,9 +163,12 @@ namespace ForgeLibs.Data
                 if (title == omniNumber)
                 {
                     string str = (string)_Table.Rows[r][OmniClassParameters];
-                    var paramNames = str.Split(',').OrderBy(x=> x).ToList();
-                    paramNames.RemoveAll(x => string.IsNullOrEmpty(x));
-                    return paramNames.ToArray();
+                    if (!string.IsNullOrEmpty(str))
+					{
+                        var paramNames = str.Split(',').OrderBy(x => x).ToList();
+                        paramNames.RemoveAll(x => string.IsNullOrEmpty(x));
+                        return paramNames.ToArray();
+                    }
                 }
             }
             return new string[0];
@@ -170,13 +187,16 @@ namespace ForgeLibs.Data
                 if (title == omniNumber)
                 {
                     string str = (string)_Table.Rows[r][OmniClassGroupingParameters];
-                    var paramNames = str.Split(',').OrderBy(x => x).ToList();
-                    paramNames.RemoveAll(x => string.IsNullOrEmpty(x));
-                    paramNames.Add("Nombre");
-                    return paramNames.ToArray();
+                    if(!string.IsNullOrEmpty(str))
+					{
+                        var paramNames = str.Split(',').OrderBy(x => x).ToList();
+                        paramNames.RemoveAll(x => string.IsNullOrEmpty(x));
+                        paramNames.Add("Nombre");
+                        return paramNames.ToArray();
+                    }
                 }
             }
-            return null;
+            return new string[] { "Nombre" };
         }
 
         /// <summary>

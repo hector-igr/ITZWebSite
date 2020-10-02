@@ -43,15 +43,22 @@ img {
 }
 
 app {
-    position: relative;
+/*    position: relative;
     display: flex;
-    flex-direction: column;
+    flex-direction: column;*/
 }
 
 .top-row {
     height: 3.5rem;
-    display: flex;
+    display: block;
     align-items: center;
+
+
+    z-index: 999;
+    width: 100%;
+    position: fixed;
+    background-color: #333133;
+    text-align:right;
 }
 
 .main {
@@ -162,7 +169,7 @@ app {
     }
 
     .sidebar {
-        width: 250px;
+        width: 350px;
         height: 100vh;
         position: sticky;
         top: 0;
@@ -171,6 +178,7 @@ app {
     .main .top-row {
         position: sticky;
         top: 0;
+        
     }
 
     .main > div {
@@ -188,7 +196,7 @@ app {
         margin-top: 60px;
     }
 
-    .sidebar .dontCollapse {
+/*    .sidebar .dontCollapse {
         margin-top: 60px;
-    }
+    }*/
 }

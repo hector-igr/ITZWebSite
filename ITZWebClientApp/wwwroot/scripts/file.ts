@@ -337,5 +337,5 @@ namespace HGR_DOM {
         window["ScrollingRountines"] = ScrollingRountines;
     }
 }
-console.log("enter file.js");
+
 HGR_DOM.Load();

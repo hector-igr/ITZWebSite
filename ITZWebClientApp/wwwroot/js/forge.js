@@ -76,7 +76,7 @@ window.forgeFunctions = {
 
             //#Add Extra Toolbar
 
-            function ToolbarExtension(viwer, options) {
+            function ToolbarExtension(viewer, options) {
                 Autodesk.Viewing.Extension.call(this, viewer, options);
             }
             ToolbarExtension.prototype = Object.create(Autodesk.Viewing.Extension.prototype);
@@ -104,10 +104,12 @@ window.forgeFunctions = {
                 var button1 = new Autodesk.Viewing.UI.Button('changeColors-button');
                 var b = false;
                 button1.onClick = function (e) {
-                    if (idsData !== undefined) { //check idsdata implementation
-                        viewer.setGhosting(b);
-                        b = !b;
-                    }
+                    console.log("GHOSTING");
+                    //if (idsData !== undefined) { //check idsdata implementation
+                        
+                    //}
+                    viewer.setGhosting(b);
+                    b = !b;
                 };
                 button1.addClass('changeColors-button');
                 button1.setToolTip('Show/Hide Wireframe');
@@ -196,7 +198,6 @@ window.forgeFunctions = {
 
 
         function onDocumentLoadSuccess(doc) {
-
             // A document contains references to 3D and 2D geometries.
             var geometries = doc.getRoot().search({ 'type': 'geometry' });
             if (geometries.length === 0) {
@@ -234,6 +235,11 @@ window.forgeFunctions = {
             forgeViewApp.push({ "viewId" : viewerId, "viewer": viewer });
             //console.log("FORGE DIC");
             //console.log(viewer);
+
+            //DotNet.invokeMethodAsync("ITZWebClientApp", "OnLoadSuccess");
+            if (dotNetInstance !== undefined) {
+                dotNetInstance.invokeMethodAsync("OnLoadInstanceSuccess");
+            };
         }
 
         function onDocumentLoadFailure(viewerErrorCode) {
@@ -252,7 +258,7 @@ window.forgeFunctions = {
     },
 
     isolateElements: function (viewId, ids) {
-        console.log("js_forge.isolateElements() " + ids);
+        console.log("js_forge.isolateElements() ");
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
             if (register["viewId"] === viewId) {
@@ -272,7 +278,7 @@ window.forgeFunctions = {
     },
 
     changeColor: function (viewId, ids, rgbString) {
-        console.log("js_forge.changeColor() " + ids);
+        console.log("js_forge.changeColor() ");
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
             if (register["viewId"] === viewId) {

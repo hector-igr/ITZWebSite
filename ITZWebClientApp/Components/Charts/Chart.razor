@@ -1,4 +1,6 @@
-﻿@inject IJSRuntime JSRuntime
+﻿@using ForgeLibs.Models.Charts; 
+
+@inject IJSRuntime JSRuntime
 @inject HttpClient http
 <h3>Chart</h3>
 @*<div class="chart-container">
@@ -29,8 +31,8 @@
         Dictionary<string, double> data = dataset.ToDictionary(x => (string)x.label, y => (double)y.value);
         Dictionary<string, System.Drawing.Color> colors = dataset.ToDictionary(x => (string)x.label, y => System.Drawing.Color.FromName((string)y.color));
 
-        ForgeLibs.Models.Charts.ChartDataSet dataSet = new ForgeLibs.Models.Charts.ChartDataSet("Experience", colors, data);
-        ForgeLibs.Models.Charts.BarChart barChart = new ForgeLibs.Models.Charts.BarChart("Software");
+        ChartDataSet dataSet = new ChartDataSet("Experience", colors, data);
+        BarChartData barChart = new BarChartData("Software");
         barChart.Sets.Add(dataSet);
         barChart.Labels.AddRange(data.Keys);
         string dataConfig = Newtonsoft.Json.JsonConvert.SerializeObject(barChart.JSON);

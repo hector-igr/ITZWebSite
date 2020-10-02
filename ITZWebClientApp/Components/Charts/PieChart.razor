@@ -1,103 +1,109 @@
 @using ForgeLibs.Data;
+@using ForgeLibs.Models.Charts;
 @using ForgeLibs.Models.Forge;
 @using ForgeLibs.ViewModels;
+@using Newtonsoft.Json;
+
 
 @implements IDisposable
 
-@inject  IJSRuntime JSRuntime;
-@inject  OmniClassRepository omni;
+@inject IJSRuntime JSRuntime;
+@inject OmniClassRepository omni;
 
-    <div class="chart-container">
-        <canvas id="@Id"></canvas>
-    </div>
+<div class="chart-container">
+    <canvas id="@Id"></canvas>
+</div>
 
 @code {
 
 
-[Parameter]
-public string Id { get; set; }
+    [Parameter]
+    public string Id { get; set; }
 
-[Parameter]
-public string ChartName { get; set; }
+    [Parameter]
+    public string ChartName { get; set; }
 
-[Parameter]
-public string Category { get; set; }
+    [Parameter]
+    public string Category { get; set; }
 
-[Parameter]
-public string Property { get; set; }
+    [Parameter]
+    public string Property { get; set; }
 
-[Parameter]
-public string PropertyGroup { get; set; }
+    [Parameter]
+    public string PropertyGroup { get; set; }
 
-[CascadingParameter]
-public ITZWebClientApp.Pages.ForgeDomain forgeDomain { get; set; }
+    [CascadingParameter]
+    public ITZWebClientApp.Pages.ForgeDesktop forgeDomain { get; set; }
 
-bool loadedChart = false;
-string lastGroup;
-string lastProperty;
+    bool loadedChart = false;
+    string lastGroup;
+    string lastProperty;
 
-protected override void OnInitialized()
-{
-    Console.WriteLine("PieChart.OnIni()");
-    loadedChart = false;
-    lastProperty = "";
-    lastGroup = "";
-}
-
-protected override async Task OnAfterRenderAsync(bool firstRender)
-{
-    Console.WriteLine($"PieChart.OnAfterRenderAsync() : {loadedChart}");
-    await LoadPieChart();
-    await UpdateChart();
-}
-
-protected override async Task OnParametersSetAsync()
-{
-    Console.WriteLine($"PieChart.OnParametersSetAsync() : {loadedChart}");
-    await UpdateChart();
-}
-
-public async Task LoadPieChart()
-{
-    if (loadedChart == false && forgeDomain != null)
+    protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("PieChart.OnInitializedAsync()");
+        loadedChart = false;
+        lastProperty = "";
+        lastGroup = "";
+        await LoadPieChart();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine($"PieChart.OnAfterRenderAsync() : {loadedChart}");
+
+        await UpdateChart();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Console.WriteLine($"PieChart.OnParametersSetAsync() : {loadedChart}");
+        await UpdateChart();
+    }
+
+    public async Task LoadPieChart()
+    {
+        if (loadedChart == false && forgeDomain != null)
+        {
+            Console.WriteLine($"PieChart.loading ......");
+            Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
+            loadedChart = await chartJs.LoadPieChart(Id, ChartName, forgeDomain, false);
+            Console.WriteLine($"PieChart.loading ...... finish");
+        }
+    }
+
+    public async Task UpdateChart()
+    {
+        if (loadedChart && !string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(Property)
+                && (lastProperty != Property || lastGroup != PropertyGroup))
+        {
+            ChangeChartData(ChartName, omni, forgeDomain.ForgeElems, Category,
+                Property, PropertyGroup);
+            lastGroup = PropertyGroup; lastProperty = Property;
+        }
+    }
+
+
+    public void ChangeChartData(string chartName, OmniClassRepository omni,
+    IEnumerable<ForgeElement> forgeElements, string category, string property, string groupProp)
+    {
+        Console.WriteLine($"PieChart.ChangeChartData()");
+
+        BarChartData data = ForgeModelUtils.GetBarChart(omni, forgeElements, category, property, groupProp);
+
         Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
-        loadedChart = await chartJs.LoadPieChart(Id, ChartName, forgeDomain, false);
+        chartJs.UpdatePieChart(ChartName, JsonConvert.SerializeObject(data.JSON));
     }
-}
 
-public async Task UpdateChart()
-{
-    if (loadedChart && !string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(Property)
-            && (lastProperty != Property || lastGroup != PropertyGroup))
+    protected override bool ShouldRender()
     {
-        ChangeChartData(ChartName, omni, forgeDomain.ForgeElems, Category,
-            Property, PropertyGroup);
-        lastGroup = PropertyGroup; lastProperty = Property;
+        //return true;
+        return !loadedChart;
     }
-}
 
+    public void Dispose()
+    {
 
-public void ChangeChartData(string chartName, OmniClassRepository omni,
-IEnumerable<ForgeElement> forgeElements, string category, string property, string groupProp)
-{
-    Console.WriteLine($"PieChart.ChangeChartData()");
-    string data = ForgeElementTableVM
-        .GetBarChart(omni, forgeElements, category, property, groupProp);
-
-    Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
-    chartJs.UpdatePieChart(ChartName, data);
-}
-
-protected override bool ShouldRender()
-{
-    //return true;
-    return !loadedChart;
-}
-
-public void Dispose()
-{
-
-}
+    }
 
 }

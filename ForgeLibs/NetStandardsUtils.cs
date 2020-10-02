@@ -36,7 +36,6 @@ namespace ForgeLibs
 
         public static string AddSpace(string str)
         {
-
             for (int i = 0; i < str.Length; i++)
             {
                 if (i > 0)

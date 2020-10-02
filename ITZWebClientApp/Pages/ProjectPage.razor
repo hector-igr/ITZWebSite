@@ -1,316 +1,261 @@
-﻿@using ForgeLibs.Models;
+﻿@page "/projects/{ProjectId:int}"
+
+@using ForgeLibs.Models;
 @using ITZWebClientApp.Infraestructure.Data;
-@implements IDisposable
+
 @inject HttpClient client
-@inject IForgeModelRepository repo;
+@inject IItzRepository repo;
 @inject IJSRuntime JSRuntime
-@page "/projects/{ProjectId:int}"
 
-<h1><b>@project?.Name</b>  (@project.Year)</h1>
-<h3>@project.Company - @project.Job</h3>
+    <main class="container">
 
-<div class="container">
+        <h1><b>@project?.Name</b>  (@project.Year)</h1>
+        <h3>@project.Company - @project.Job</h3>
 
-
-    @for (int v = 0; v < firstMediaData.Length; v++)
-    {
-
-        MediaMetadata media = firstMediaData[v];
-        string[] description = media.Description.Split("\\n");
-        string modalName = $"exampleModalCenter{media.Id}";
-        string modalTitle = $"exampleModalCenterTitle{media.Id}";
-
-        <div class="card mt-4 " style="position:relative;">
-            @{
-                var keywords = media.Keywords.Split(',');
-            }
-
-            @if (media.Headline?.Length > 0 || keywords.Length > 0)
-            {
-                <div class="row card-header">
-                    <div class="col-sm-6">
-                        <h6 class="">
-                            @media.Headline
-                        </h6>
-                    </div>
-                    <div class="col-sm-6">
-                        <div style="text-align:right">
-                            @*<span class="badge badge-pill badge-danger">@media.Keywords</span>*@
-                            @foreach (string keyword in keywords)
-                            {
-                                @switch (keyword)
-                                {
-                                    case "3dsMax":
-                                        <span class="badge badge-pill badge-success">@keyword</span>
-                                        break;
-                                    case "Revit":
-                                        <span class="badge badge-pill badge-primary">@keyword</span>
-                                        break;
-                                    case "Inventor":
-                                        <span class="badge badge-pill badge-warning">@keyword</span>
-                                        break;
-                                    case "Navisworks":
-                                        <span class="badge badge-pill badge-info">@keyword</span>
-                                        break;
-                                    default:
-                                        <span class="badge badge-pill badge-danger">@keyword</span>
-                                        break;
-
-                                }
-                            }
-                        </div>
-                    </div>
-                </div>
-            }
-            @if (media.MediaType == "Video")
-            {
-                <video id="vid" controls autoplay>
-                    <source src="@media.URL" class="d-block w-100" alt="@media.Headline" type="audio/mp4" />
-                </video>
-            }
-            else
-            {
-        <a>
-            <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" @onloadstart="x => { PrintSomething(); }" data-toggle="modal" data-target="#@modalName" />
-        </a>
-                
-            }
-
-
-            @if (media.Description?.Length > 0)
-            {
-                <div class="card-body text-center">
-                    @for (int d = 0; d < description.Length; d++)
-                    {
-                        <p>@description[d]</p>
-                    }
-                </div>
-
-            }
-        </div>
-
-        @if (media.MediaType != "Video")
+        @for (int v = 0; v < firstMediaData.Length; v++)
         {
-           
 
-            @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@modalName">
-                Launch demo modal
-            </button>*@
+            MediaMetadata media = firstMediaData[v];
+            string[] description = media.Description.Split("\\n");
+            string modalName = $"exampleModalCenter{media.Id}";
+            string modalTitle = $"exampleModalCenterTitle{media.Id}";
 
-            <!-- Modal -->
-            <div class="modal fade" id="@modalName" tabindex="@v" role="dialog" aria-labelledby="@modalTitle" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                    <div class="modal-content">
-                        <div class="modal-body">
-                            <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" @onloadstart="x => { PrintSomething(); }" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    }
+            <div class="card mt-4 " style="position:relative;">
+                @{
+                    var keywords = media.Keywords.Split(',');
+                }
 
-    @{
-        int colNumber = 3;
-        int rows = metadata.Length / colNumber;
-        int counter = 0;
-        for (int r = 0; r < rows; r++)
-        {
-        <div class="row">
-            @for (int c = 0; c < colNumber; c++)
-            {
-                @if (counter < metadata.Length)
+                @if (media.Headline?.Length > 0 || keywords.Length > 0)
                 {
-                    MediaMetadata media = metadata[++counter];
-                    string modalName = $"exampleModalCenter{media.Id}";
-                    string modalTitle = $"exampleModalCenterTitle{media.Id}";
-
-
-                    <div class="col-sm-4 mt-4">
-                        <div class="card" style="position:relative;">
-
-                            <img src="@media.URL" style="height:100%; object-fit:scale-down" alt="@media.Headline" @onloadstart="x => { PrintSomething(); }" 
-                                 data-toggle="modal" data-target="#@modalName"/>
-
-                            @if (media.Headline?.Length > 0)
-                            {
-                                <h7 class="card-header">@media.Headline</h7>
-                            }
-
-                            @if (media.Description?.Length > 0)
-                            {
-                                <div class="card-body text-center">
-                                    @media.Description
-                                </div>
-                            }
+                    <div class="row card-header">
+                        <div class="col-sm-6">
+                            <h6 class="">
+                                @media.Headline
+                            </h6>
                         </div>
-                    </div>
+                        <div class="col-sm-6">
+                            <div style="text-align:right">
+                                @*<span class="badge badge-pill badge-danger">@media.Keywords</span>*@
+                                @foreach (string keyword in keywords)
+                                {
+                                    @switch (keyword)
+                                    {
+                                        case "3dsMax":
+                                            <span class="badge badge-pill badge-success">@keyword</span>
+                                            break;
+                                        case "Revit":
+                                            <span class="badge badge-pill badge-primary">@keyword</span>
+                                            break;
+                                        case "Inventor":
+                                            <span class="badge badge-pill badge-warning">@keyword</span>
+                                            break;
+                                        case "Navisworks":
+                                            <span class="badge badge-pill badge-info">@keyword</span>
+                                            break;
+                                        default:
+                                            <span class="badge badge-pill badge-danger">@keyword</span>
+                                            break;
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="@modalName" tabindex="@c" role="dialog" aria-labelledby="@modalTitle" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                    <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" @onloadstart="x => { PrintSomething(); }" />
-                                </div>
+                                    }
+                                }
                             </div>
                         </div>
                     </div>
                 }
-            }
-        </div>
-        }
-    }
-
-    @if (metadata.Length > 0 && false)
-    {
-        <div id="carousel" class="carousel slide" data-ride="carousel">
-
-            @if (metadata.Length > 1)
-            {
-                <ol class="carousel-indicators">
-                    @for (int i = 0; i < metadata.Length; i++)
-                    {
-                        <li data-target="carousel" data-slide-to="i" class="@(i == 0 ? "active" : "")"></li>
-                    }
-                </ol>
-            }
-
-            <div class="carousel-inner">
-
-                @for (int i = 0; i < metadata.Length; i++)
+                @if (media.MediaType == "Video")
                 {
-                    MediaMetadata media = metadata[i];
+                    <video id="vid" controls autoplay>
+                        <source src="@media.URL" class="d-block w-100" alt="@media.Headline" type="audio/mp4" />
+                    </video>
+                }
+                else
+                {
+                    <a>
+                        <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" data-toggle="modal" data-target="#@modalName" />
+                    </a>
 
-                    <div class="carousel-item @(i == 0 ? "active" : "")">
-                        @if (media.MediaType == "Video")
+                }
+
+
+                @if (media.Description?.Length > 0)
+                {
+                    <div class="card-body text-center">
+                        @for (int d = 0; d < description.Length; d++)
                         {
-                            <div class="card">
-                                <div class="card-body">
+                            <p>@description[d]</p>
+                        }
+                    </div>
 
+                }
+            </div>
+
+            @if (media.MediaType != "Video")
+            {
+                @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@modalName">
+                    Launch demo modal
+                </button>*@
+
+                <!-- Modal -->
+                <div class="modal fade" id="@modalName" tabindex="@v" role="dialog" aria-labelledby="@modalTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+
+        @{
+            int colNumber = 3;
+            int rows = metadata.Length / colNumber;
+            int counter = 0;
+            for (int r = 0; r < rows; r++)
+            {
+                <div class="row">
+                    @for (int c = 0; c < colNumber; c++)
+                    {
+                        @if (counter < metadata.Length)
+                        {
+                            MediaMetadata media = metadata[++counter];
+                            string modalName = $"exampleModalCenter{media.Id}";
+                            string modalTitle = $"exampleModalCenterTitle{media.Id}";
+
+                            <div class="col-sm-4 mt-4">
+                                <div class="card" style="position:relative;">
+                                    <img src="@media.URL" style="height:100%; object-fit:scale-down" alt="@media.Headline" data-toggle="modal" data-target="#@modalName" />
+                                    @if (media.Headline?.Length > 0)
+                                    {
+                                        <h7 class="card-header">@media.Headline</h7>
+                                    }
+
+                                    @if (media.Description?.Length > 0)
+                                    {
+                                        <div class="card-body text-center">
+                                            @media.Description
+                                        </div>
+                                    }
                                 </div>
                             </div>
 
+                            <!-- Modal -->
+                            <div class="modal fade" id="@modalName" tabindex="@c" role="dialog" aria-labelledby="@modalTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <img src="@media.URL" class="card-img-bottom" alt="@media.Headline" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
-                        else
+                    }
+                </div>
+            }
+        }
+
+        @if (metadata.Length > 0 && false)
+        {
+            <div id="carousel" class="carousel slide" data-ride="carousel">
+
+                @if (metadata.Length > 1)
+                {
+                    <ol class="carousel-indicators">
+                        @for (int i = 0; i < metadata.Length; i++)
                         {
-                            @*<div class="card">
+                            <li data-target="carousel" data-slide-to="i" class="@(i == 0 ? "active" : "")"></li>
+                        }
+                    </ol>
+                }
+
+                <div class="carousel-inner">
+
+                    @for (int i = 0; i < metadata.Length; i++)
+                    {
+                        MediaMetadata media = metadata[i];
+
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            @if (media.MediaType == "Video")
+                            {
+                                <div class="card">
+                                    <div class="card-body">
+
+                                    </div>
+                                </div>
+
+                            }
+                            else
+                            {
+                                @*<div class="card">
                                     <img class="card-img-top" src="@media.URL"/>
                                     <div class="card-body">
                                         <h5 class="card-title">@media.Headline</h5>
                                         <p class="card-text">@media.Description</p>
                                     </div>
                                 </div>*@
-                            <img src="@media.URL" class="d-block w-100" alt="@media.Headline" @onloadstart="x=> { PrintSomething(); }" />
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>@media.Headline</h5>
-                                <p>@media.Description</p>
-                            </div>
-                        }
+                                <img src="@media.URL" class="d-block w-100" alt="@media.Headline" />
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>@media.Headline</h5>
+                                    <p>@media.Description</p>
+                                </div>
+                            }
 
-                    </div>
+                        </div>
+                    }
+                </div>
+
+
+                @if (metadata.Length > 1)
+                {
+                    <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
                 }
             </div>
+        }
 
+        @((MarkupString)$"{html}")
 
-            @if (metadata.Length > 1)
-            {
-                <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            }
-        </div>
-    }
-
-
-    @if (project.URL.Length > 0)
-    {
-        @((MarkupString)$"{Html}")
-    }
-</div>
-
-
+    </main>
 
 
 @code {
 
-    public string Html { get; set; }
-
-    void PrintSomething()
-    {
-        Console.WriteLine("Hello");
-    }
-
-    public bool IsLoaded { get; set; } = false;
-
-    MediaMetadata[] firstMediaData = new MediaMetadata[0];
-    MediaMetadata[] metadata = new MediaMetadata[0];
-
     [Parameter]
-    public int ProjectId
-    {
-        get;
-        set;
-    }
-
-    //MediaMetadata[] ImageCovers { get; set; } = new MediaMetadata[0];
-    Project project = null;
-
+    public int ProjectId { get; set; }
+    private Project project { get; set; }
+    private string html { get; set; }
+    private MediaMetadata[] firstMediaData = Array.Empty<MediaMetadata>();
+    private MediaMetadata[] metadata = Array.Empty<MediaMetadata>();
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
-        {
-        }
-        else
+        if (!firstRender)
         {
             await Interop.Utils_DOM.ReloadVideo(JSRuntime, "vid");
         }
-
-
-        //await repo.GetDataAsync();
-        //project = repo.Projects.Single(x => x.Id == ProjectId);
-        //Console.WriteLine(project.Name);
-
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        //Console.WriteLine("INi");
-        //await repo.GetDataAsync();
-        //project = repo.Projects.Single(x => x.Id == ProjectId);
-        //Console.WriteLine(project.Name);
-    }
 
     protected override async Task OnParametersSetAsync()
     {
         project = repo.Projects.Single(x => x.Id == ProjectId);
 
         metadata = repo.ImageInfo.Where(x => x.ProjectId == project.Id).ToArray();
-        firstMediaData = metadata.Where(x => x.MediaType == "Video" || x.Rating == 5).OrderByDescending(x=> x.MediaType).ThenBy(x=> x.Rating).ToArray();
+        firstMediaData = metadata.Where(x => x.MediaType == "Video" || x.Rating == 5).OrderByDescending(x => x.MediaType).ThenBy(x => x.Rating).ToArray();
         metadata = metadata.Where(x => x.MediaType != "Video" && x.Rating < 5).ToArray();
-
-        StateHasChanged();
-        //return base.OnParametersSetAsync();
-        Console.WriteLine(project.URL);
 
         if (project.URL.Length > 0)
         {
             string addess = $"projectInfo/{project.URL}.html";
-            Console.WriteLine(addess);
-            string str = await client.GetStringAsync(addess);
-            Console.WriteLine(str);
-            Html = str;
+            html = await client.GetStringAsync(addess);
         }
-    }
-
-    public void Dispose()
-    {
-        Console.WriteLine("Dispose");
     }
 }

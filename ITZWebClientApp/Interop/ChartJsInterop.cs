@@ -21,9 +21,10 @@ namespace ITZWebClientApp.Interop
             return Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, null);
         }
 
-        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName, Pages.ForgeDomain forgeDomain)
+        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName, Pages.ForgeDesktop forgeDomain)
         {
-            return Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain));
+            var result = Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain));
+            return result;
         }
 
         public ValueTask<object> UpdateBarData(string chartName, string data)
@@ -39,7 +40,7 @@ namespace ITZWebClientApp.Interop
 
         #region PieChart
 
-        public ValueTask<bool> LoadPieChart(string viewElementId, string chartName, Pages.ForgeDomain forgeDomain, bool reset)
+        public ValueTask<bool> LoadPieChart(string viewElementId, string chartName, Pages.ForgeDesktop forgeDomain, bool reset)
         {
             return Js.InvokeAsync<bool>("chartJsPie.setPieChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain), reset);
         }

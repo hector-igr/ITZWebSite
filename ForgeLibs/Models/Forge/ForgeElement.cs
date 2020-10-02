@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Threading;
 using ForgeLibs.ViewModels;
+using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
@@ -27,16 +28,17 @@ namespace ForgeLibs.Models.Forge
         public string TypeName { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
-        public ForgeElement Parent { get; set; }
-        public Dictionary<string, object> Properties { get; set; }
+		public string OmmiCode { get; set; }
+		public ForgeElement Parent { get; set; }
         public IEnumerable<ForgeElement> Children { get; set; }
-        public IEnumerable<ForgeElementTableVM> Grouping { get; set; }
-        public ForgeElementTableVM ElementProperties { get; set; }
+        public Dictionary<string, object> Properties { get; set; }
+        public IEnumerable<ForgeTableByCategoryVM> Grouping { get; set; }
+        public ForgeTableByCategoryVM ElementProperties { get; set; }
 
         public static string SerializeForgeElements(IEnumerable<ForgeElement> forgeElements)
         {
             StringBuilder sb = new StringBuilder();
-            string[] headers = new string[] { "RevitId","ObjectId","Category","TypeName","Name","FullName","Parent_RevitId","Properties","Children"};
+            string[] headers = new string[] { "RevitId","ObjectId","Category","OmniCode" , "TypeName","Name","FullName","Parent_RevitId","Properties","Children"};
             sb.AppendLine(string.Join("\t", headers));
             foreach (ForgeElement elem in forgeElements)
             {
@@ -49,7 +51,7 @@ namespace ForgeLibs.Models.Forge
                     }
                     string dic = string.Join(";", properties);
                     string children_Nodeld = string.Join(";", elem.Children?.Select(x => x.RevitId));
-                    object[] values = new object[] { elem.RevitId, elem.ObjectId, elem.Category, elem.TypeName, elem.Name, elem.FullName, elem.Parent?.RevitId, dic, children_Nodeld };
+                    object[] values = new object[] { elem.RevitId, elem.ObjectId, elem.Category, elem.OmmiCode, elem.TypeName, elem.Name, elem.FullName, elem.Parent?.RevitId, dic, children_Nodeld };
                     sb.AppendLine(string.Join("\t", values));
                 }
                 catch (Exception ex)
@@ -114,47 +116,50 @@ namespace ForgeLibs.Models.Forge
             }
         }
 
-        /// <summary>
-        /// BLAZOR NOT SUPPORTS THREADING :(
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static List<ForgeElement> ParseForgeElementsAsync(string str)
-        {
-            List<ForgeElement> forgeElements = new List<ForgeElement>();
-            var lines = str.Split('\n');
-            Console.WriteLine($"lines : {lines.Length}");
-            int numberOfThreads = 3;
-            int numberOfLines = lines.Length / numberOfThreads;
+        ///// <summary>
+        ///// BLAZOR NOT SUPPORTS THREADING :(
+        ///// </summary>
+        ///// <param name="str"></param>
+        ///// <returns></returns>
+        //public static List<ForgeElement> ParseForgeElementsAsync(string str)
+        //{
+        //    List<ForgeElement> forgeElements = new List<ForgeElement>();
+        //    var lines = str.Split('\n');
+        //    Console.WriteLine($"lines : {lines.Length}");
+        //    int numberOfThreads = 3;
+        //    int numberOfLines = lines.Length / numberOfThreads;
 
-            int startIndex = 0;
-            List<Thread> threads = new List<Thread>();
-            for (int i = 0; i < numberOfThreads; i++)
-            {
-                IEnumerable<string> lineStack = lines.Skip(i * startIndex).Take(numberOfLines);
-                Thread t = new Thread(() =>
-                    forgeElements.AddRange(ParseForgeElements(lineStack))
-                );
-                threads.Add(t);
-                t.Start();
-            }
+        //    int startIndex = 0;
+        //    List<Thread> threads = new List<Thread>();
+        //    for (int i = 0; i < numberOfThreads; i++)
+        //    {
+        //        IEnumerable<string> lineStack = lines.Skip(i * startIndex).Take(numberOfLines);
+        //        Thread t = new Thread(() =>
+        //            forgeElements.AddRange(ParseForgeElements(lineStack))
+        //        );
+        //        threads.Add(t);
+        //        t.Start();
+        //    }
 
-            for (int i = 0; i < threads.Count; i++)
-            {
-                threads[i].Join();
-            }
+        //    for (int i = 0; i < threads.Count; i++)
+        //    {
+        //        threads[i].Join();
+        //    }
 
-            return forgeElements;
-        }
+        //    return forgeElements;
+        //}
 
-        public static List<ForgeElement> ParseForgeElements(string str, int maxElements = 1000)
+        public static List<ForgeElement> ParseForgeElements(string str, int maxElements = int.MaxValue)
         {
             List<ForgeElement> forgeElements = new List<ForgeElement>();
             var lines = str.Split('\n').ToList();
-            Console.WriteLine($"lines : {lines.Count}");
             lines.RemoveAt(0);
-
-            lines = lines.Take(maxElements).ToList();
+            Console.WriteLine($"Parsing '{lines.Count}' forge elements");
+            if (maxElements != int.MaxValue)
+			{
+                Console.WriteLine($"Parsing limit to '{maxElements}'");
+                lines = lines.Take(maxElements).ToList();
+            }
 
             forgeElements.AddRange(ParseForgeElements(lines));
             //for (int i = 1; i < lines.Length; i++)
@@ -182,7 +187,29 @@ namespace ForgeLibs.Models.Forge
             return forgeElements;
         }
 
-        
+        public static async Task<List<ForgeElement>> ParseForgeElementsAsync(string str)
+        {
+            List<ForgeElement> forgeElements = new List<ForgeElement>();
+            var lines = str.Split('\n').ToList();
+            Console.WriteLine($"lines : {lines.Count}");
+            lines.RemoveAt(0);
+			for (int l = 0; l < lines.Count; l++)
+			{
+                string line = lines[l];
+                ForgeElement forgeElement = ParseForgeElement(line);
+                forgeElements.Add(forgeElement);
+                if (l % 100 == 0)
+				{
+                    Console.WriteLine("Yielding ... " + forgeElements.Count);
+                    await Task.Yield();
+				}
+            }
+
+            lines = lines.ToList();
+            forgeElements.AddRange(ParseForgeElements(lines));
+            return forgeElements;
+        }
+
 
         /// <summary>
         /// Gets ForgeElements using json from Autodesk Forge
@@ -197,7 +224,7 @@ namespace ForgeLibs.Models.Forge
             var pr = desJson["data"]["collection"];
             foreach (JToken item in desJson["data"]["collection"])
             {
-                string name = "", externalId = "", category = "";
+                string name = "", externalId = "", category = "", omniCode = "";
                 int objId = -1;
                 Dictionary<string, object> properties = new Dictionary<string, object>();
                 Stopwatch watch = Stopwatch.StartNew();
@@ -229,10 +256,12 @@ namespace ForgeLibs.Models.Forge
                                             properties[paramName] = param.Value;
                                             if (paramName == OmniClassRepository.OmniClassNumber)
                                             {
-                                                var cat = omni.GetCategory(param.Value.ToString());
+                                                omniCode = param.Value.ToString();
+                                                var cat = omni.GetCategory(omniCode);
                                                 if (!string.IsNullOrEmpty(cat))
                                                 {
                                                     category = cat;
+                                                    
                                                 }
                                             }
                                         }
@@ -279,7 +308,8 @@ namespace ForgeLibs.Models.Forge
                         Properties = properties,
                         RevitId = id,
                         TypeName = typeName,
-                        FullName = fullName
+                        FullName = fullName,
+                        OmmiCode = omniCode
                     };
                     forgeElements.Add(newElement);
                 }
@@ -295,17 +325,17 @@ namespace ForgeLibs.Models.Forge
 
         public void LoadProperties(OmniClassRepository repo)
         {
-            this.ElementProperties = ForgeElementTableVM.GetModelByCategory(repo, new ForgeElement[] { this }, this.Category);
+            this.ElementProperties = ForgeTableByCategoryVM.GetModelByCategory(repo, new ForgeElement[] { this }, this.Category);
         }
 
         public void LoadGroups(OmniClassRepository repo)
         {
-            List<ForgeElementTableVM> viewModels = new List<ForgeElementTableVM>();
+            List<ForgeTableByCategoryVM> viewModels = new List<ForgeTableByCategoryVM>();
             var groups = this.Children.GroupBy(x => x.Category);
             Console.WriteLine("LoadGroups()" + groups.Count());
             foreach (var grp in groups)
             {
-                viewModels.Add(ForgeElementTableVM.GetModelByCategory(repo, grp, grp.Key));
+                viewModels.Add(ForgeTableByCategoryVM.GetModelByCategory(repo, grp, grp.Key));
             }
             this.Grouping = viewModels;
         }
