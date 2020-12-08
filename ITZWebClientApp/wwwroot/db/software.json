@@ -1,7 +1,7 @@
 [
   {
     "label": "AutoCAD",
-    "value": 8,
+    "value": 6,
     "color": "Red"
   },
   {
@@ -16,7 +16,7 @@
   },
   {
     "label": "Revit MEP",
-    "value": 7,
+    "value": 6,
     "color": "Blue"
   },
   {
@@ -56,7 +56,7 @@
   },
   {
     "label": "Photoshop",
-    "value": 9,
+    "value": 5,
     "color": "DarkBlue"
   },
   {
@@ -66,22 +66,22 @@
   },
   {
     "label": "MS Project",
-    "value": 9,
+    "value": 7,
     "color": "ForestGreen"
   },
   {
     "label": "MS Access",
-    "value": 5,
+    "value": 4,
     "color": "Pink"
   },
   {
     "label": "After Effects",
-    "value": 5,
+    "value": 3,
     "color": "DeepPink"
   },
   {
     "label": "Tekla Structure",
-    "value": 3,
+    "value": 1,
     "color": "Orchid"
   }
 ]

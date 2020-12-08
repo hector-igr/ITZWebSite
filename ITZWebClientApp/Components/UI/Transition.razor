@@ -1,0 +1,24 @@
+﻿<div class="@(_toggleActive ? OnClassName : OffClassName)">
+    @ChildContent
+</div>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+    [Parameter]
+    public string OnClassName { get; set; }
+    [Parameter]
+    public string OffClassName { get; set; }
+    [Parameter]
+    public int DurationMilliseconds { get; set; }
+    [Parameter]
+    public EventCallback<bool> TransitionEnd { get; set; }
+
+    private bool _toggleActive;
+    public async Task ToggleTransition()
+    {
+        _toggleActive = !_toggleActive;
+        await Task.Delay(DurationMilliseconds);
+        await TransitionEnd.InvokeAsync(_toggleActive);
+    }
+}

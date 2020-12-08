@@ -8,15 +8,15 @@ namespace ITZWebClientApp.Interop
 {
     public class ForgeInterop
     {
-        private readonly IJSRuntime JS;
-        public ForgeInterop(IJSRuntime js)
-        {
-            this.JS = js;
-        }
+        //private readonly IJSRuntime JS;
+        //public ForgeInterop(IJSRuntime js)
+        //{
+        //    this.JS = js;
+        //}
 
-        public ValueTask<object> LoadDocument(string viewId, string token, string urn, object forgeViewer)
+        public static ValueTask<object> LoadDocument(IJSRuntime js, string viewId, string token, string urn, object forgeViewer)
         {
-            return JS.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, 
+            return js.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, 
                 urn, DotNetObjectReference.Create(forgeViewer));
         }
 
@@ -25,15 +25,35 @@ namespace ITZWebClientApp.Interop
         //    return JS.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, urn, onSelectHandlers);
         //}
 
-        public ValueTask<object> IsolateElement(string viewerId, int[] ids)
+        public static ValueTask<object> IsolateElement(IJSRuntime js, string viewerId, int[] ids)
         {
-            return JS.InvokeAsync<object>("forgeFunctions.isolateElements", viewerId, ids);
+            return js.InvokeAsync<object>("forgeFunctions.isolateElements", viewerId, ids);
         }
 
-        public ValueTask<object> ChangeColorElement(string viewerId, int[] ids, string rgbStr)
+        public static ValueTask<object> ChangeColorElement(IJSRuntime js, string viewerId, int[] ids, string rgbStr)
         {
-            return JS.InvokeAsync<object>("forgeFunctions.changeColor", 
+            return js.InvokeAsync<object>("forgeFunctions.changeColor", 
                 viewerId, ids, rgbStr);
+        }
+
+        public static ValueTask<object> Resize(IJSRuntime js, string viewId)
+		{
+            return js.InvokeAsync<object>("forgeFunctions.resize", viewId);
+        }
+
+        public static ValueTask<object> ResetOverrideColors(IJSRuntime js, string viewId)
+		{
+            return js.InvokeAsync<object>("forgeFunctions.resetOverrideColors", viewId);
+        }
+
+        public static void ShowAll(IJSRuntime js, string viewId)
+        {
+            js.InvokeVoidAsync("forgeFunctions.showAll", viewId);
+        }
+
+        public static void FitToView(IJSRuntime js, string viewId, int[] ids = null)
+        {
+            js.InvokeVoidAsync("forgeFunctions.fitToView", viewId, ids);
         }
     }
 }

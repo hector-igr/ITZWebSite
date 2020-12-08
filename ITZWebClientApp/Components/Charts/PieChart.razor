@@ -67,7 +67,7 @@
         {
             Console.WriteLine($"PieChart.loading ......");
             Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
-            loadedChart = await chartJs.LoadPieChart(Id, ChartName, forgeDomain, false);
+            loadedChart = await chartJs.LoadPieChart(Id, ChartName, false);
             Console.WriteLine($"PieChart.loading ...... finish");
         }
     }

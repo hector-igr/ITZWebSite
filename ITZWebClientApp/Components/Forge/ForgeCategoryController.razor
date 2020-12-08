@@ -1,0 +1,159 @@
+﻿@using ForgeLibs.Data;
+@using ForgeLibs.Models.Forge;
+@using ForgeLibs.Models.Forge.Queries;
+@using ForgeLibs.Models.Charts;
+@using ITZWebClientApp.Infraestructure;
+@using ITZWebClientApp.Components.UI;
+@using ITZWebClientApp.Infraestructure.StateManagement;
+@using ITZWebClientApp.Interop; 
+@using Newtonsoft.Json;
+
+@inject IJSRuntime js
+@inject HttpClient client;
+@inject OmniClassRepository omni;
+@inject ForgeQueryState state;
+
+<PropertySelector @ref="_catSelector"
+                  PropertyName="Category"
+                  Id="@_catSelectorId"
+                  Values="_categories"
+                  CSS="form-control custom-select"
+                  PropertyChanged="@(x => {
+                                         SelectedCategory = x;
+                                         _forgeQuery.Category = x;
+                                         _forgeQuery.Property = "";
+                                         _forgeQuery.Group = "";
+                                         var data = BarChartData.EmptyBarChart();
+                                         OnChartDataChanged.InvokeAsync(data);
+                                         _parameters = _forgeQuery.GetParametersByCategories().ToArray();
+                                         _groups = _forgeQuery.GetGroupParametersByCategories().ToArray();
+                                         SelectDropDownInterop.ChangeSelectIndexById(js, _propertySelectorId, 0);
+                                         SelectDropDownInterop.ChangeSelectIndexById(js, _groupSelectorId, 0);
+
+                                     })"
+                  OnValuesLoaded="@(x => {
+                                        PropertySelector.ChangeToLastSavedIndex(_catSelector, state);
+                                    })"
+                  ></PropertySelector>
+
+<PropertySelector @ref="_propSelector"
+                    PropertyName="Parameter"
+                    Id="@_propertySelectorId"
+                    Values="_parameters"
+                    CSS="form-control custom-select"
+                    PropertyChanged="@(x => {
+
+                                            _forgeQuery.Property = x;
+                                            if (x == "-1")
+                                            {
+                                                _forgeQuery.Property = "";
+                                                var data = BarChartData.EmptyBarChart();
+                                                OnChartDataChanged.InvokeAsync(data);
+                                            }
+                                            else
+                                            {
+                                                OnChartDataChanged.InvokeAsync(_forgeQuery.GetChartData());
+                                            }
+                                        })"
+                    OnValuesLoaded="@(x => {
+                                          PropertySelector.ChangeToLastSavedIndex(_propSelector, state);
+                                      })"></PropertySelector>
+
+<PropertySelector @ref="_groupSelector"
+                    PropertyName="Group"
+                    Id="@_groupSelectorId"
+                    Values="_groups"
+                    CSS="form-control custom-select"
+                    PropertyChanged="@(x => {
+
+                                            _forgeQuery.Group = x;
+                                            if (x == "-1")
+                                            {
+                                                _forgeQuery.Group = "";
+                                            }
+                                            OnChartDataChanged.InvokeAsync(_forgeQuery.GetChartData());
+                                        })"
+                    OnValuesLoaded="@(x => {
+                                          PropertySelector.ChangeToLastSavedIndex(_groupSelector, state);
+                                      })"></PropertySelector>
+
+
+
+@code {
+
+    //[Parameter]
+    //public int CatIndex { get; set; }
+    //[Parameter]
+    //public int ParamIndex { get; set; }
+    //[Parameter]
+    //public int GroupIndex { get; set; }
+
+    private string _catSelectorId = "selector_Cat";
+    private string _propertySelectorId = "selector_param";
+    private string _groupSelectorId = "selector_group";
+
+    private QueryByCatetory _forgeQuery;
+    private PropertySelector _catSelector = null;
+    private PropertySelector _propSelector = null;
+    private PropertySelector _groupSelector = null;
+
+    private string[] _categories = Array.Empty<string>();
+    private string[] _parameters = Array.Empty<string>();
+    private string[] _groups = Array.Empty<string>();
+
+    [Parameter]
+    public IEnumerable<ForgeElement> ForgeElements { get; set; }
+
+    private string _selectedCategory;
+    public string SelectedCategory
+    {
+        get { return _selectedCategory; }
+        set
+        {
+            OnCategoryChanged.InvokeAsync(value);
+            if (_selectedCategory != value)
+            {
+                _selectedCategory = value;
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> OnCategoryChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<BarChartData> OnChartDataChanged { get; set; }
+
+    int counter = 0;
+    protected override Task OnParametersSetAsync()
+    {
+        //Console.WriteLine($"{nameof(ForgeCategoryController)} - {nameof(OnParametersSetAsync)} : {counter}");
+        if (counter++ == 0)
+        {
+            LoadCategories();
+        }
+        return base.OnParametersSetAsync();
+    }
+
+    public void LoadCategories()
+    {
+        _forgeQuery = new QueryByCatetory(ForgeElements, omni);
+        _categories = _forgeQuery.Categories.ToArray();
+    }
+
+    public void Reset()
+    {
+        SelectDropDownInterop.ChangeSelectIndexById(js, _propertySelectorId, 0);
+        SelectDropDownInterop.ChangeSelectIndexById(js, _groupSelectorId, 0);
+    }
+
+    public void PrintObject(string message, object obj)
+    {
+        Console.WriteLine($"{message} : {JsonConvert.SerializeObject(obj)}");
+    }
+
+    protected override void OnInitialized()
+    {
+        //Console.WriteLine($"{nameof(ForgeCategoryController)} - {nameof(OnInitialized)}");
+    }
+}

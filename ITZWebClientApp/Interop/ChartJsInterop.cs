@@ -16,14 +16,17 @@ namespace ITZWebClientApp.Interop
         }
         #region BarChart
 
-        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="viewElementId"></param>
+        /// <param name="chartName"></param>
+        /// <param name="barType">Chose 'bar' or 'horizontalBar'</param>
+        /// <param name="forgeDomain"></param>
+        /// <returns></returns>
+        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName, string barType, bool keepAspectRatio, Components.Charts.BarChart barChartComponent = null)
         {
-            return Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, null);
-        }
-
-        public ValueTask<bool> LoadBarChart(string viewElementId, string chartName, Pages.ForgeDesktop forgeDomain)
-        {
-            var result = Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain));
+            var result = Js.InvokeAsync<bool>("chartJS.setBarChart", chartName, viewElementId, barType, keepAspectRatio, DotNetObjectReference.Create(barChartComponent));
             return result;
         }
 
@@ -36,13 +39,42 @@ namespace ITZWebClientApp.Interop
         {
             return Js.InvokeAsync<object>("chartJS.getSelectedIds", chartName);
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chartName"></param>
+        /// <param name="axy">xAxy or yAxy</param>
+        /// <param name="min"></param>
+        /// <param name="max"></param>
+        /// <param name="beginAtZero"></param>
+        /// <param name="axyIndex">index of axy options</param>
+        /// <param name="functionTicks">body of the function to change labels</param>
+        public ValueTask<object> SetMinAndMax(string chartName, string axy, double min, double max, bool beginAtZero, int axyIndex = 0, string functionTicks = "")
+		{
+            return Js.InvokeAsync<object>("chartJS.setMinAndMax", chartName, axy,  min, max, beginAtZero, axyIndex, functionTicks);
+        }
+
+        public ValueTask<object> SetAspectRatio(string chartName, bool maintainAspectRatio)
+		{
+            return Js.InvokeAsync<object>("chartJS.setAspectRatio", chartName, maintainAspectRatio);
+        }
+
         #endregion
 
         #region PieChart
 
-        public ValueTask<bool> LoadPieChart(string viewElementId, string chartName, Pages.ForgeDesktop forgeDomain, bool reset)
+        public ValueTask<bool> LoadPieChart(string viewElementId, string chartName, bool reset, Components.Charts.BarChart barChartComponent = null)
         {
-            return Js.InvokeAsync<bool>("chartJsPie.setPieChart", chartName, viewElementId, DotNetObjectReference.Create(forgeDomain), reset);
+            if(barChartComponent != null)
+			{
+                return Js.InvokeAsync<bool>("chartJsPie.setPieChart", chartName, viewElementId, reset, DotNetObjectReference.Create(barChartComponent));
+            }
+			else
+			{
+                return Js.InvokeAsync<bool>("chartJsPie.setPieChart", chartName, viewElementId, reset);
+            }
+            
         }
 
         public Task UpdatePieChart(string chartName, string data)

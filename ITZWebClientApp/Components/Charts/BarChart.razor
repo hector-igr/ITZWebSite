@@ -10,14 +10,11 @@
 @inject HttpClient http;
 @inject OmniClassRepository omni;
 
-<div class="chart-container" style="position: relative; height:100%; width:100% ">
+<div class="" style="position: relative; height:100%; width:100% ">
     <canvas id="@Id"></canvas>
 </div>
 
 @code {
-
-    [CascadingParameter]
-    private ITZWebClientApp.Pages.ForgeDesktop _forgeDesktop { get; set; }
 
     [Parameter]
     public string Id { get; set; }
@@ -25,35 +22,47 @@
     [Parameter]
     public string ChartName { get; set; }
 
-    public BarChartData Data { get; set; }
+    [Parameter]
+    public string BarType { get; set; } = "bar";
 
+    [Parameter]
+    public bool KeepAspectRatio { get; set; } = true;
 
-    protected override async Task OnParametersSetAsync()
-    {
-        //Console.WriteLine($"BarChart.OnParametersSetAsync()");
-        await UpdateChart();
-    }
+    [Parameter]
+    public EventCallback<(string label, string rgb, int[] ids)> OnBarClicked { get; set; }
+
+    [Parameter]
+    public EventCallback OnClickOnEmptySpace { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         //Console.WriteLine($"BarChart.OnAfterRenderAsync()");
-        //await LoadBarChart();
         Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(JSRuntime);
-        bool loadedChart = await chartJs.LoadBarChart(Id, ChartName, _forgeDesktop);
+        bool loadedChart = await chartJs.LoadBarChart(Id, ChartName, BarType, KeepAspectRatio, this);
     }
 
-    public async Task UpdateChart()
+    public async Task UpdateChart(BarChartData data)
     {
-        Console.WriteLine($"BarChart.UpdateChart()");
-        if (Data != null)
-        {
-            Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
-            await chartjs.UpdateBarData(ChartName, JsonConvert.SerializeObject(Data.JSON));
-        }
+        //Console.WriteLine($"BarChart.UpdateChart()");
+        Interop.ChartJsInterop chartjs = new Interop.ChartJsInterop(JSRuntime);
+        await chartjs.UpdateBarData(ChartName, JsonConvert.SerializeObject(data.JSON));
     }
 
     protected override bool ShouldRender()
     {
         return false; //avoid that the graph re renders from the beginning in every change of the parameter
     }
+
+    [JSInvokable]
+    public void ClickInBar(string label, string rgb, int[] ids)
+    {
+        OnBarClicked.InvokeAsync((label, rgb, ids));
+    }
+
+    [JSInvokable]
+    public void ClickInEmptySpace()
+    {
+        OnClickOnEmptySpace.InvokeAsync(null);
+    }
+
 }

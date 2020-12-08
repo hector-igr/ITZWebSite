@@ -1,0 +1,83 @@
+﻿@page "/cycle/{No:int}"
+@inject HttpClient client
+
+<h3>@No</h3>
+@((MarkupString)html)
+
+@code {
+
+    [CascadingParameter]
+    public MainLayout Lay { get; set; }
+
+    public int Counter { get; set; } = 0;
+    private int no;
+    [Parameter]
+    public int No { get { return no; } set { no = value; Counter++; } }
+    public string html { get; set; }
+
+    public override Task SetParametersAsync(ParameterView parameters)
+    {
+        Console.WriteLine($"0 {nameof(Cycle)} -> {nameof(SetParametersAsync)} : {Counter}");
+        PrintParameters(parameters);
+        return base.SetParametersAsync(parameters);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine($"{nameof(Cycle)} -> {nameof(OnInitializedAsync)} : {Counter}");
+
+        //return base.OnInitializedAsync();
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Console.WriteLine($"{nameof(Cycle)} -> {nameof(OnParametersSetAsync)} : {Counter}");
+        if (no == 2)
+        {
+            Console.WriteLine($"BEFORE PRINTING HTML.... {No}");
+            html = await client.GetStringAsync($"projectInfo/NAICM.html");
+            Console.WriteLine($"AFTER PRINTING HTML.... {No}");
+
+        }
+        else
+        {
+            html = "";
+        }
+       // return base.OnParametersSetAsync();
+    }
+
+    //protected override async void OnParametersSet()
+    //{
+    //    Console.WriteLine($"{nameof(Cycle)} -> {nameof(OnParametersSetAsync)}, No : {No} ");
+    //    //return base.OnParametersSetAsync();
+    //    base.OnParametersSet();
+    //}
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"{nameof(Cycle)} -> {nameof(OnAfterRender)} : {Counter}");
+        base.OnAfterRender(firstRender);
+    }
+
+
+    protected override bool ShouldRender()
+    {
+        Console.WriteLine($"{nameof(Cycle)} -> {nameof(ShouldRender)} : {Counter}");
+        return true;
+    }
+
+
+    public void PrintParameters(ParameterView parameters)
+    {
+        //Console.WriteLine("\t------->>");
+        //var dic = parameters.ToDictionary();
+        //foreach (var pair in dic)
+        //{
+        //    Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        //}
+        //Console.WriteLine("\t------->>");
+    }
+
+}

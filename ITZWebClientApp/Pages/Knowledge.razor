@@ -1,0 +1,142 @@
+﻿@page "/knowledge"
+@inject IJSRuntime js;
+@inject HttpClient http;
+@using System.Drawing;
+@using System.Globalization;
+@using ForgeLibs.Models.Charts;
+@using ITZWebClientApp.Components.Charts;
+@using System.Diagnostics; 
+
+<div class="container">
+
+    <h1>Software</h1>
+    <hr class="my-lg-4">
+    <BarChart @ref="_barChart" Id="chart1" ChartName="Software" BarType="horizontalBar" KeepAspectRatio=@_keepAspectRatio />
+    <br />
+
+    <h1>Programador</h1>
+    <hr class="my-4">
+    <BarChart @ref="_barChart2" Id="chart2" ChartName="Hours" BarType="horizontalBar" KeepAspectRatio=@_keepAspectRatio />
+    <br />
+
+</div>
+
+@code {
+
+    private bool _keepAspectRatio = true;
+    private BarChart _barChart;
+    private BarChart _barChart2;
+
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //System.Drawing.Color white = System.Drawing.Color.FromArgb(255, 200, 200, 200);
+        //System.Drawing.Color black = System.Drawing.Color.FromArgb(255, 50, 50, 50);
+        System.Drawing.Color white = await GetRootVariableColor("--webFavoriteColor");
+        white = Color.FromArgb(50, white);
+        //white = Color.FromArgb(white.A, white.R + 150, white.G + 150, white.B + 150);
+        System.Drawing.Color black = await GetRootVariableColor("--webFavoriteColor");
+        black = Color.FromArgb(200, black);
+
+        Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(js);
+        if (_barChart != null)
+        {
+            string json = await http.GetStringAsync("db/software.json");
+            dynamic[] dataset = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic[]>(json);
+            var data = dataset.ToDictionary(x => (string)x.label, y => (double)y.value);
+            double min = data.Values.OrderBy(x => x).First();
+            double max = data.Values.OrderBy(x => x).Last();
+
+            var dicColors = data.OrderBy(x => x.Value).ToDictionary(x => x.Key, y => GetColorByIntensity(white, black, min, max, y.Value));
+            ChartDataSet chartDataSet = new ChartDataSet("Nivel de Experiencia", dicColors, data);
+            BarChartData barChartData = new BarChartData("Software")
+            {
+                Sets = new List<ChartDataSet>() { chartDataSet },
+            };
+
+            barChartData.Labels.AddRange(barChartData.Sets.First().Labels);
+            //_barChart.Data = barChartData;
+
+            string functBody = @"tempFunc = function () {if (value === 1) { return 'basico'} if (value === 4) { return 'medio'} if (value === 7) { return 'avanzado'} if (value === 10) { return 'experto'}}";
+            await chartJs.SetMinAndMax("Software", "xAxy", 0, 10, true, 0, functBody);
+            await _barChart.UpdateChart(barChartData);
+        }
+
+        if (_barChart2 != null)
+        {
+            string json = await http.GetStringAsync("db/codingHours.json");
+            dynamic[] dataset = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic[]>(json);
+            var data = dataset.ToDictionary(x => (string)x.CodingExperience, y => (double)y.Hours);
+            double min = data.Values.OrderBy(x => x).First();
+            double max = data.Values.OrderBy(x => x).Last();
+
+            var dicColors = data.OrderBy(x => x.Value).ToDictionary(x => x.Key, y => GetColorByIntensity(white, black, min, max, y.Value));
+            ChartDataSet chartDataSet = new ChartDataSet("Horas Aprox de Experiencia", dicColors, data);
+            BarChartData barChartData = new BarChartData("Horas")
+            {
+                Sets = new List<ChartDataSet>() { chartDataSet },
+            };
+            barChartData.Labels.AddRange(barChartData.Sets.First().Labels);
+            //_barChart2.Data = barChartData;
+            await _barChart2.UpdateChart(barChartData);
+        }
+
+    }
+
+
+    public IEnumerable<System.Drawing.Color> IterpolatedColor(System.Drawing.Color color1, System.Drawing.Color color2, int steps)
+    {
+        int t = (color2.A - color1.A) / steps;
+        int r = (color2.R - color1.R) / steps;
+        int g = (color2.G - color1.G) / steps;
+        int b = (color2.B - color1.B) / steps;
+
+        for (int i = 0; i < steps; i++)
+        {
+            yield return Color.FromArgb(color1.A + (t * i), color1.R + (r * i), color1.G + (g * i), color1.B + (b * i));
+        }
+    }
+
+    public Color GetColorByIntensity(Color color1, Color color2, double min, double max, double value)
+    {
+        double intensity = (value - min) / (max - min);
+        double t = (color2.A - color1.A) * intensity;
+        double r = (color2.R - color1.R) * intensity;
+        double g = (color2.G - color1.G) * intensity;
+        double b = (color2.B - color1.B) * intensity;
+
+        return Color.FromArgb((int)(color1.A + t), (int)(color1.R + r), (int)(color1.G + g), (int)(color1.B + b));
+    }
+
+    public async Task<Color> GetRootVariableColor(string variable)
+    {
+        string hx = await js.InvokeAsync<string>("GetCssRootValue", variable);
+        return HexToColor(hx);
+    }
+
+    public static Color ParseColor(string str)
+    {
+        string[] values = str.Split(',');
+        return Color.FromArgb(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]));
+    }
+
+    public static Color HexToColor(string hexString)
+    {
+        hexString = hexString.Replace(" ", "");
+        if (hexString.IndexOf('#') != -1)
+            hexString = hexString.Replace("#", "");
+
+        int r, g, b = 0;
+
+        r = int.Parse(hexString.Substring(0, 2), NumberStyles.AllowHexSpecifier);
+        g = int.Parse(hexString.Substring(2, 2), NumberStyles.AllowHexSpecifier);
+        b = int.Parse(hexString.Substring(4, 2), NumberStyles.AllowHexSpecifier);
+        return Color.FromArgb(r, g, b);
+    }
+
+
+}

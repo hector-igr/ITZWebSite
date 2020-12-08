@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\ExtendedInfo\Knowledge.razor" />
+    <Content Remove="Pages\ExtendedInfo\NAICM.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="3.2.0-preview3.20168.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Build" Version="3.2.0-preview3.20168.3" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="3.2.0-preview3.20168.3" PrivateAssets="all" />
@@ -29,9 +34,19 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\ForgeQuery\" />
+    <Folder Include="wwwroot\lib\jsgantt\" />
     <Folder Include="wwwroot\media\extendedInfo\" />
+    <Folder Include="wwwroot\media\index\" />
     <Folder Include="wwwroot\media\projects\" />
     <Folder Include="wwwroot\appsInfo\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Include="Pages\ExtendedInfo\NAICM.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\Knowledge.razor" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

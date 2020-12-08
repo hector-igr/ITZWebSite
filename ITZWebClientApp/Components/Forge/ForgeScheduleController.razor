@@ -1,0 +1,114 @@
+﻿@using ForgeLibs.Models.Forge;
+@using ITZWebClientApp.Components.UI;
+@using ITZWebClientApp.Infraestructure.StateManagement;
+
+@inject IJSRuntime js
+@inject HttpClient client;
+@inject ForgeQueryState state;
+
+<div class="input-group px-2">
+    <PropertySelector @ref="_versionSelector"
+                      PropertyName="Version"
+                      Id="_schduleVer"
+                      Values="_versions"
+                      CSS="form-control custom-select"
+                      PropertyChanged="@(async x=> {
+                                             int index = await Interop.SelectDropDownInterop.GetSelectedIndex(js, "_schduleVer");
+                                             if (index > 0)
+                                             {
+                                                 _selectedSchedule = Schedules[index-1];
+                                                 await _selectedSchedule.LoadjSONfromAddress(client);
+                                                 await OnScheduleSelected.InvokeAsync(_selectedSchedule);
+                                                 MinDate = _selectedSchedule.FirstDate;
+                                                 MaxDate = _selectedSchedule.LastDate;
+                                                 StartDate = MinDate.Value;
+                                                 EndDate = MaxDate.Value;
+                                                 StateHasChanged();
+                                             }
+                                             else
+                                             {
+                                                 //ForgeSchedule s = new ForgeSchedule();
+                                                 await OnScheduleSelected.InvokeAsync(new ForgeSchedule());
+                                                 MinDate = null;
+                                                 MaxDate = null;
+                                                 StateHasChanged();
+                                             }
+                                         })"
+                      OnValuesLoaded="@(x => {
+                                        PropertySelector.ChangeToLastSavedIndex(_versionSelector, state);
+                                    })"></PropertySelector>
+</div>
+
+<ForgeDatePicker @ref="_datePicker"
+                 Id="forgeScheduleDate"
+                 Name="Date"
+                 Value="@Now"
+                 MinDate="@MinDate"
+                 MaxDate="@MaxDate"
+                 OnDateChange="@(x => { Now = DateTime.Parse(x); ChangeTodayDate(Now); })"></ForgeDatePicker>
+<ForgeDatePicker @ref="_startDatePicker"
+                 Id="forgeScheduleFirstDate"
+                 Value="@MinDate"
+                 MinDate="@MinDate"
+                 MaxDate="@MaxDate"
+                 Name="First Date"
+                 OnDateChange="@(x => { StartDate = DateTime.Parse(x);  ChangeDateRange(StartDate, EndDate); })"></ForgeDatePicker>
+<ForgeDatePicker @ref="_endDatePicker"
+                 Id="forgeScheduleLastDate"
+                 Value="@MaxDate"
+                 MinDate="@MinDate"
+                 MaxDate="@MaxDate"
+                 Name="Last Date"
+                 OnDateChange="@(x => { EndDate = DateTime.Parse(x);  ChangeDateRange(StartDate, EndDate); })"></ForgeDatePicker>
+
+@code {
+
+    public DateTime Now { get; set; } = DateTime.Now;
+    public DateTime? MinDate { get; set; }
+    public DateTime? MaxDate { get; set; }
+
+    public DateTime StartDate;
+    public DateTime EndDate;
+
+
+    private PropertySelector _versionSelector = null;
+    private ForgeSchedule _selectedSchedule = null;
+
+    private ForgeDatePicker _datePicker = null;
+    private ForgeDatePicker _startDatePicker = null;
+    private ForgeDatePicker _endDatePicker = null;
+
+    private string[] _versions = Array.Empty<string>();
+
+    [Parameter]
+    public ForgeSchedule[] Schedules { get; set; } = Array.Empty<ForgeSchedule>();
+
+    [Parameter]
+    public EventCallback<ForgeSchedule> OnScheduleSelected { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime> OnDateChanged { get; set; }
+
+    public void ChangeDateRange(DateTime? firstDate, DateTime? lastDate)
+    {
+        if (firstDate.HasValue && lastDate.HasValue)
+        {
+            _selectedSchedule.FilterJSON(firstDate.Value, lastDate.Value);
+            OnScheduleSelected.InvokeAsync(_selectedSchedule);
+        }
+    }
+
+    protected override Task OnParametersSetAsync()
+    {
+        _versions = Schedules.Select(x => x.Version.ToString("0.00")).ToArray();
+
+        return base.OnParametersSetAsync();
+    }
+
+    public void ChangeTodayDate(DateTime date)
+    {
+        _selectedSchedule.Now = date;
+        OnScheduleSelected.InvokeAsync(_selectedSchedule);
+    }
+
+}

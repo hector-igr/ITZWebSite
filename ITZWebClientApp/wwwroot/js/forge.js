@@ -1,4 +1,5 @@
-﻿window.forgeViewApp = [];
+﻿debugViewer = undefined;
+window.forgeViewApp = [];
 window.forgeFunctions = {
 
     initialize: function (viewerId, accesToken, direction, dotNetInstance) {
@@ -258,13 +259,23 @@ window.forgeFunctions = {
     },
 
     isolateElements: function (viewId, ids) {
-        console.log("js_forge.isolateElements() ");
+        //console.log("js_forge.isolateElements() ");
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
             if (register["viewId"] === viewId) {
                 var viewer = register["viewer"];
                 viewer.isolateById(ids);
                 viewer.fitToView(ids);
+            }
+        }
+    },
+
+    resize: function (viewId) {
+        for (var i = 0; i < forgeViewApp.length; i++) {
+            var register = forgeViewApp[i];
+            if (register["viewId"] === viewId) {
+                var viewer = register["viewer"];
+                viewer.resize();
             }
         }
     },
@@ -278,7 +289,7 @@ window.forgeFunctions = {
     },
 
     changeColor: function (viewId, ids, rgbString) {
-        console.log("js_forge.changeColor() ");
+        //console.log("js_forge.changeColor() ");
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
             if (register["viewId"] === viewId) {
@@ -286,6 +297,45 @@ window.forgeFunctions = {
                 var color = forgeFunctions.changeRGBAStringToThreeVector4(rgbString);
                 for (var c = 0; c < ids.length; c++) {
                     viewer.setThemingColor(ids[c], color);
+                }
+            }
+        }
+    },
+
+    resetOverrideColors: function (viewId) {
+        //console.log("js_forge.resetColors() ");
+        for (var i = 0; i < forgeViewApp.length; i++) {
+            var register = forgeViewApp[i];
+            if (register["viewId"] === viewId) {
+                var viewer = register["viewer"];
+                viewer.clearThemingColors();
+            }
+        }
+    },
+
+    showAll: function (viewId) {
+        for (var i = 0; i < forgeViewApp.length; i++) {
+            var register = forgeViewApp[i];
+            if (register["viewId"] === viewId) {
+                var viewer = register["viewer"];
+                debugViewer = viewer;
+                viewer.showAll();
+            }
+        }
+    },
+
+    fitToView: function (viewId, ids) {
+        for (var i = 0; i < forgeViewApp.length; i++) {
+            var register = forgeViewApp[i];
+            if (register["viewId"] === viewId) {
+                var viewer = register["viewer"];
+                viewer.fitToView(ids);
+                if (ids !== null) {
+                    viewer.fitToView(ids);
+                }
+                else {
+                    viewer.fitToView();
+                    
                 }
             }
         }

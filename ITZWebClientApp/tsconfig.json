@@ -11,6 +11,6 @@
     "obj"
   ],
   "include": [
-    "wwwroot/scripts/*.*"
+    "wwwroot/js/*.*"
   ]
 }

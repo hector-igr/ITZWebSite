@@ -39,7 +39,7 @@ namespace ForgeLibs.ViewModels
             {
                 if (el.Category == category) filteredElements.Add(el);
             }
-            string omniNumber = repository.GetOmniClassNumber(category);
+            string omniNumber = repository.GetOmniClassNumberByClassFullTitle(category);
             string[] parameters = repository.GetParameters(omniNumber);
             string[] groupingProperties = repository.GetGroupingParameters(omniNumber);
             ForgeTableByCategoryVM vm = new ForgeTableByCategoryVM
@@ -58,9 +58,8 @@ namespace ForgeLibs.ViewModels
         }
         public IEnumerable<IGrouping<string, ForgeElement>> GroupElementsByFullName()
         {
+            //Console.WriteLine(string.Join(",", this.Elements.GroupBy(x => x.FullName).Select(x=> x.Key)));
             return this.Elements.GroupBy(x => x.FullName);
         }
-
-        
     }
 }

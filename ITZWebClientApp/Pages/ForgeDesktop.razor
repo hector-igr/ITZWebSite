@@ -10,6 +10,9 @@
 @using ITZWebClientApp.Components.UI;
 @using ITZWebClientApp.Components.Charts;
 @using ITZWebClientApp.Components.Forge;
+@using ForgeLibs.Models.Forge.Queries;
+@using ForgeLibs.Models.Charts; 
+@using Newtonsoft.Json; 
 
 @inject HttpClient client
 @inject IJSRuntime JSRuntime
@@ -44,50 +47,188 @@
         border-color: olive;
     }
 
-    .forge_viewer {
-        flex-basis: calc(100% - 350px);
+    .forge_main {
+        /*        border: dotted;
+        border-color: blue;*/
+        /*        flex-basis: calc(100% - 350px);*/
         display: flex;
+        flex-direction: column;
+        overflow: auto;
+    }
+
+    .forge_viewer {
+        flex-basis: 100%;
+    }
+
+    .forge_botton {
+        overflow: auto;
+        /*        border: dotted;
+        border-color: red;*/
+        /*        height: 40%;*/
     }
 
     .forge_sidebar {
         /*        background-color: greenyellow;*/
-        flex-basis: 350px;
+        /*        flex-basis: 350px;*/
         display: flex;
         flex-direction: column;
         padding: 5px;
     }
 
     .forge_chart {
-        flex-basis: 25%;
+        /*        flex-basis: 25%;*/
     }
 
     .forge_table {
-        flex-basis: 75%;
+        /*        flex-basis: 75%;*/
         /*        border: dotted;*/
         display: flex;
         overflow: auto;
     }
 </style>
 
+<style>
+    .forge_query_form {
+        flex-basis: 70%;
+    }
+
+    .forge_layout_switcher {
+        display: flex;
+        justify-content: right;
+        /*        border:dotted;*/
+        flex-basis: 30%;
+    }
+</style>
+
+<style>
+    .gutter {
+        background-color: #eee;
+        background-repeat: no-repeat;
+        background-position: 50%;
+    }
+
+        .gutter.gutter-horizontal {
+            cursor: col-resize;
+        }
+
+        .gutter.gutter-vertical {
+            cursor: row-resize;
+        }
+</style>
+<LoadingScreen IsLoaded="_contentLoaded" @ref="loadingScreen" CssClass="@_loadingScreenClass"></LoadingScreen>
+
 <div class="forge_div">
     <CascadingValue Value="this">
         <div class="forge_ribbon">
-            <ForgeQueryController ForgeElements="ForgeElems"
-                                   SelectedIds="@_selectedIDs"
-                                   OnChartDataChanged="@(x => { _barChart.Data = x; } )"
-                                   OnCategoryChanged="@(x=> Category = x)"
-                                   OnSelectIds="@(x=> _forgeViewer.IsolateElements(x))"
-                                   />
+            <div class="forge_query_form">
+                <ForgeQueryController ForgeElements="ForgeElems"
+                                      SelectedIds="@_selectedIDs"
+                                      OnChartDataChanged="@(x => {
+                                                                _barChart.UpdateChart(x);
+                                                                try
+                                                                {
+                                                                    dynamic json = (dynamic)x.JSON;
+                                                                    _forgeViewer.ResetOverrideColors();
+                                                                    IEnumerable<dynamic> datasets = json.data.datasets;
+                                                                    dynamic dataset = datasets.FirstOrDefault();
+                                                                    if(dataset != null)
+                                                                    {
+                                                                        IEnumerable<dynamic> data = dataset.data;
+                                                                        int counter = data.Count();
+                                                                        List<int> totalIds = new List<int>();
+                                                                        //Console.WriteLine($"dataset ids : {dataset.ids}");
+                                                                        for (int i = 0; i < counter; i++)
+                                                                        {
+                                                                            string background = dataset.backgroundColor[i];
+                                                                            IEnumerable<dynamic> ids = dataset.ids[i];
+                                                                            int[] ids1 = ids.Select(x => (int)x).ToArray();
+                                                                            totalIds.AddRange(ids1);
+                                                                            _forgeViewer.ChangeColorElements(ids1, background);
+                                                                            //Console.WriteLine($"element : {string.Join(",", ids1 )} ,  background : {background} ");
+                                                                        }
+                                                                        if(totalIds.Count > 0)
+                                                                        {
+                                                                            SavedIds = totalIds.ToArray();
+                                                                            _forgeViewer.IsolateElements(string.Join(",", totalIds));
+                                                                        }
+                                                                        //Console.WriteLine($"FINISH ISOLATION AND CHANGE COLOR");
+                                                                        
+                                                                    }
+                                                                }
+                                                                catch (Exception ex)
+                                                                {
+                                                                    Console.WriteLine(ex);
+                                                                }
+
+                                                            } )"
+                                      OnCategoryChanged="@(async x => {
+                                                               Category = x;
+                                                               if(string.IsNullOrEmpty(Category))
+                                                               {
+                                                                   _forgeViewer.ResetOverrideColors();
+                                                                   _forgeViewer.ShowAll();
+                                                                   _forgeViewer.FitToView();
+                                                               }
+                                                               else
+                                                               {
+                                                                   var ids = ForgeElems.Where(y => y.Category == x).Select(y=> y.ObjectId);
+                                                                   _forgeViewer.IsolateElements(string.Join(",", ids));
+                                                               }
+                                                           })"
+                                      OnSelectIds="@(x => _forgeViewer.IsolateElements(x))"
+                                      OnScheduleChanged="@(async x=> {
+                                                               if (!string.IsNullOrEmpty(x.JSON))
+                                                               {
+                                                                   _jsgantt.LoadJsGanttData(x.Now, x.JSON);
+                                                                   ChangeSplitterSizes("bottonbar", new int[] { 70, 30 });
+                                                               }
+                                                               else
+                                                               {
+                                                                   _jsgantt.UnLoadJsGanttData();
+                                                                   ChangeSplitterSizes("bottonbar", new int[] { 100, 00 });
+                                                               }
+                                                                StateHasChanged();
+                                                           } )"
+                                      ForgeSchedules="@_forgeSchedules"
+                                      OnQueryTypeChanged="@(x=> {
+                                                                switch(x)
+                                                                  {
+                                                                      case QueryType.None:
+                                                                          {
+                                                                              ChangeSplitterSizes("main", new int[] { 100, 0 });
+                                                                              ChangeSplitterSizes("bottonbar", new int[] { 100, 0 });
+                                                                              break;
+                                                                          }
+                                                                      case QueryType.ByCategory:
+                                                                          {
+                                                                              ChangeSplitterSizes("main", new int[] { 70, 30 });
+                                                                              ChangeSplitterSizes("bottonbar", new int[] { 100, 0 });
+                                                                              break;
+                                                                          }
+                                                                      case QueryType.ByAdvance:
+                                                                          {
+                                                                              ChangeSplitterSizes("main", new int[] { 100, 0 });
+                                                                              ChangeSplitterSizes("bottonbar", new int[] { 100, 0 });
+                                                                              break;
+                                                                          }
+                                                                  };
+                                                            } )" />
+            </div>
+            <div class="forge_layout_switcher">
+                <button class="oi oi-arrow-bottom" @onclick="@(x => { SetSplitterToMin("main", false); UpdateResize(x); })"></button>
+                <button class="oi oi-arrow-right" @onclick="@(x => { SetSplitterToMin("bottonbar", false); UpdateResize(x); })"></button>
+            </div>
         </div>
 
         <div class="forge_content">
-            <div class="forge_viewer">
-                <ForgeViewer @ref="_forgeViewer"
-                             ViewerId="view1"
-                             AccessToken="@_modelAccessToken"
-                             ProjectUrn64="@_modelUrn64"
-                             OnDocumentLoadSuccess="x=> _shoulRender = false"
-                             OnChangeSelection="@(x=> {
+            <div class="forge_main">
+                <div class="forge_viewer">
+                    <ForgeViewer @ref="_forgeViewer"
+                                 ViewerId="view1"
+                                 AccessToken="@_modelAccessToken"
+                                 ProjectUrn64="@_modelUrn64"
+                                 OnDocumentLoadSuccess="x=> _shoulRender = false"
+                                 OnChangeSelection="@(x=> {
                                                       _selectedIDs = string.Join(",", x);
                                                       _selectedElement = ForgeElems.FirstOrDefault(y => y.ObjectId == x[0]);
                                                       if(_selectedElement != null)
@@ -96,18 +237,37 @@
                                                           _selectedElement.GetParent(ForgeElems);
                                                       }
                                                   })" />
+                </div>
+                <div class="forge_botton">
+                    @*<GanttChart></GanttChart>*@
+                    <JsGantt @ref="_jsgantt" Id="GanttChartDIV" OnRowSelected="@(x=> { })"></JsGantt>
+                </div>
             </div>
+
             <div class="forge_sidebar">
                 <div class="forge_chart">
-                    @if (this != null)
-                    {
-                        <BarChart @ref="_barChart" ChartName="Grafica" Id="chart" />
-                    }
+                    <BarChart @ref="_barChart"
+                              ChartName="Grafica"
+                              Id="chart"
+                              KeepAspectRatio="false"
+                              OnBarClicked="@(x=> {
+                                                  _forgeViewer.IsolateElements(x.ids);
+                                              })" 
+                              OnClickOnEmptySpace="@(x=> { 
+                                                        if(SavedIds.Length > 0)
+                                                        {
+                                                            _forgeViewer.IsolateElements(string.Join(",", SavedIds));
+                                                        }                                 
+                                                     })"
+                              />
+                            
                 </div>
                 <div class="forge_table">
                     <TabSet>
                         <Tab Title="Resumen">
-                            <ForgeCategoryTable @ref="_tblCat" ForgeElements="@ForgeElems" Category="@Category"
+                            <ForgeCategoryTable @ref="_tblCat"
+                                                ForgeElements="@ForgeElems"
+                                                Category="@Category"
                                                 OnItemSelected="@(x=> _forgeViewer?.IsolateElements(new int[] { x }))" />
                         </Tab>
                         <Tab Title="Elemento">
@@ -119,7 +279,6 @@
                             }
                         </Tab>
                     </TabSet>
-
                 </div>
             </div>
         </div>
@@ -128,12 +287,30 @@
 
 @functions {
 
+
+    private int[] SavedIds = Array.Empty<int>();
+    private ForgeSchedule[] _forgeSchedules { get; set; }
+
+    private string _loadingScreenClass = "appear";
+    public string LoadingScreenClass
+    {
+        get { return _loadingScreenClass; }
+        set
+        {
+            _loadingScreenClass = value;
+            StateHasChanged();
+        }
+    }
+    LoadingScreen loadingScreen;
+    private bool _contentLoaded = false;
+
     private string _projectName { get; set; }
     private string _selectedIDs { get; set; }
     private string _modelUrn64 { get; set; }
     private string _modelAccessToken { get; set; }
     private bool _shoulRender = true;
     private ForgeViewer _forgeViewer;
+    private JsGantt _jsgantt;
     private ForgeCategoryTable _tblCat;
     private BarChart _barChart;
     private ForgeElement _selectedElement;
@@ -145,28 +322,35 @@
     public int ProjectId { get; set; }
     public IEnumerable<ForgeElement> ForgeElems = Enumerable.Empty<ForgeElement>();
 
-    [JSInvokable]
-    public void OnGraphBarSelection(string label, string rgb, int[] ids)
-    {
-        string str = string.Join(",", ids);
-        _forgeViewer.IsolateElements(ids);
-        _forgeViewer.ChangeColorElements(ids, rgb);
-    }
-
     int counter = 0;
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine("ini Forge desktop");
+        layout.Toggle();
+
+        //_contentLoaded = true;
         if (counter == 0)
         {
             _projectName = repo.Projects.FirstOrDefault(x => x.Id == ProjectId).Name;
+            Console.WriteLine("project name " + _projectName);
             ForgeModel model = repo.GetForgeModelAsync(ProjectId);
             if (model != null)
             {
                 bool auth = await LoadForgeModelAuthInfo(model.ObjectId);
+                await Task.Delay(1000);
                 await LoadModelData(model);
+
             }
+            await LoadSplitter("main", "forge_main", "forge_sidebar", false, 5, new int[] { 100, 00 });
+            await LoadSplitter("sidebar", "forge_chart", "forge_table", true, 5, new int[] { 30, 70 });
+            await LoadSplitter("bottonbar", "forge_viewer", "forge_botton", true, 5, new int[] { 100, 0 });
         }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+
+        //return base.OnAfterRenderAsync(firstRender);
     }
 
     public async Task<bool> LoadForgeModelAuthInfo(string objectId)
@@ -206,7 +390,10 @@
         Console.WriteLine("loading model data ....");
         string fileName = model.ObjectKey + "Translate.txt";
         string json = await client.GetStringAsync("models_metadata/" + fileName);
-        ForgeElems = ForgeElement.ParseForgeElements(json);
+        ForgeElems = ForgeElement.ParseForgeElements(json, 1000);
+        _contentLoaded = true;
+        Console.WriteLine("No Schedules : " + model.Schedules.Length);
+        _forgeSchedules = model.Schedules;
     }
 
     /// <summary>
@@ -227,4 +414,33 @@
             StateHasChanged();
         }
     }
+
+    [JSInvokable]
+    public async void UpdateResize(dynamic sizes)
+    {
+        _forgeViewer.Resize();
+        Console.WriteLine($"sizes: {sizes}");
+    }
+
+    public async ValueTask LoadSplitter(string splitterName, string firstDiv, string secondDiv, bool isVertical, int gutterWidth, int[] iniSizes)
+    {
+        firstDiv = $".{firstDiv}";
+        secondDiv = $".{secondDiv}";
+        string dir = isVertical ? "vertical" : "horizontal";
+        await JSRuntime.InvokeVoidAsync("LoadSplitter", splitterName, firstDiv, secondDiv, dir, gutterWidth, iniSizes, DotNetObjectReference.Create(this));
+    }
+
+
+    public async void SetSplitterToMin(string splitterName, bool firstEl)
+    {
+        int index = firstEl ? 0 : 1;
+        await JSRuntime.InvokeVoidAsync("SetSplitterToMin", splitterName, index);
+    }
+
+    public async void ChangeSplitterSizes(string splitterName, int[] sizes)
+    {
+        await JSRuntime.InvokeVoidAsync("ChangeSplitterSize", splitterName, sizes);
+        _forgeViewer.Resize();
+    }
+
 }

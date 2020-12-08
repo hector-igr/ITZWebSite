@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ITZWebClientApp.Infraestructure.Data;
+using ITZWebClientApp.Infraestructure.StateManagement;
 using System.Net.Http.Json;
 using System.Net.Http;
 
@@ -20,10 +21,15 @@ namespace ITZWebClientApp
             builder.Services.AddBaseAddressHttpClient();
             builder.Services.AddSingleton<ForgeLibs.Data.OmniClassRepository>();
             builder.Services.AddSingleton<IItzRepository, JS_ItzModelRespository>();
+            builder.Services.AddSingleton<ForgeQueryState>();
 
             var host = builder.Build();
             var omni = host.Services.GetRequiredService<ForgeLibs.Data.OmniClassRepository>();
-            bool success = await omni.LoadFileAsync();
+            await omni.LoadFileAsync();
+
+            var repo = host.Services.GetRequiredService<IItzRepository>();
+            await repo.LoadDataAsync();
+
    //         var cat = omni.GetCategory("MX.03.01");
    //         Console.WriteLine(cat);
 			//var prop = omni.GetParameters("MX.03.01")[0];

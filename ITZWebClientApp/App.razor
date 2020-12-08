@@ -1,10 +1,27 @@
-<Router AppAssembly="@typeof(Program).Assembly">
-    <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-    </Found>
-    <NotFound>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p>Sorry, there's nothing at this address.</p>
-        </LayoutView>
-    </NotFound>
-</Router>
+<LoadingScreen @ref="LoadingScreen" IsLoaded="IsLoaded">
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <ITZWebClientApp.Pages.CV></ITZWebClientApp.Pages.CV>
+                @*<p>Sorry, there's nothing at this address.</p>*@
+            </LayoutView>
+        </NotFound>
+    </Router>
+</LoadingScreen>
+
+@code{
+
+    public LoadingScreen LoadingScreen { get; set; }
+    public bool IsLoaded { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await Task.Delay(8000); // TODO actual initialization job
+        IsLoaded = true;
+    }
+
+
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "CodingExperience": "Revit API C#",
+    "Hours": 4000
+  },
+  {
+    "CodingExperience": "Autocad API C#",
+    "Hours": 85
+  },
+  {
+    "CodingExperience": "Navisworks API C#",
+    "Hours": 228
+  },
+  {
+    "CodingExperience": "WPF C#",
+    "Hours": 171
+  },
+  {
+    "CodingExperience": "ASP.NET Core C#",
+    "Hours": 571
+  },
+  {
+    "CodingExperience": "MS Project VSTO C#",
+    "Hours": 142
+  },
+  {
+    "CodingExperience": "MS Excel VSTO C#",
+    "Hours": 257
+  },
+  {
+    "CodingExperience": "SQL Server",
+    "Hours": 171
+  },
+  {
+    "CodingExperience": "3dsMax Maxscript",
+    "Hours": 1428
+  },
+  {
+    "CodingExperience": "HTML-JavaScript",
+    "Hours": 228
+  },
+  {
+    "CodingExperience": "Autodesk Forge JavaScript",
+    "Hours": 228
+  },
+  {
+    "CodingExperience": "Grasshopper",
+    "Hours": 285
+  }
+]

@@ -1,15 +1,16 @@
 ﻿window.chartJS = {
     activeCharts: [],
     selectedIds: [],
-    setBarChart: function (chartName, viewElId, dotNetItem) {
+    setBarChart: function (chartName, viewElId, barType, keepAspectRatio, dotNetItem) {
         var el = document.getElementById(viewElId);
         if (el === null) {
             console.log("js_charts.setBarChart() ... couldnt find id : " + viewElId);
             return false
         };
+        
         var ctx = el.getContext('2d');
         var config = {
-            type: 'bar',
+            type: barType,
             options: {
                 scales: {
                     yAxes: [{
@@ -20,7 +21,10 @@
                         ticks: {
                             beginAtZero: true,
                             callback: function (label, index, labels) {
-                                return String(label.toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                if (!isNaN(label)) {
+                                    return String(label.toFixed(0)).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                }
+                                return label;
                             }
                         }
                     }],
@@ -31,20 +35,25 @@
 
 
                 onClick: function (ev) {
-                    console.log("js_chartJS.onClick()");
+                    //console.log("js_chartJS.onClick()");
                     var item = this.getElementAtEvent(ev)[0];
                     if (item !== undefined) {
                         //console.log(item);
                         var index = item._index;
                         var ids = this.config.data.datasets[0].ids[index];
                         //console.log(ids);
-                        if (dotNetItem !== undefined) {
-                            dotNetItem.invokeMethodAsync("OnGraphBarSelection",
+                        if (dotNetItem !== null) {
+                            dotNetItem.invokeMethodAsync("ClickInBar",
                                 item._model.label, item._model.backgroundColor, ids);
                         }
                     }
+                    else {
+                        if (dotNetItem !== null) {
+                            dotNetItem.invokeMethodAsync("ClickInEmptySpace");
+                        }
+                    }
                 },
-                maintainAspectRatio: false,
+                maintainAspectRatio: keepAspectRatio,
                 responsive: true,
                 title: {
                     display: false,
@@ -53,7 +62,9 @@
                 tooltips: {
                     callbacks: {
                         label: function (tooltipItem, data) {
-                            return tooltipItem.yLabel.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            if (!isNaN(tooltipItem.yLabel)) {
+                                return tooltipItem.yLabel.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            }
                         }
                     }
                 }
@@ -104,7 +115,8 @@
     },
 
     updateChart(chartName, data) {
-        console.log("js_charts.updateChart()");
+        //console.log("js_charts.updateChart()");
+
         //console.log(chartName);
         //console.log(chartJS.activeCharts);
         //console.log(chartJS.activeCharts.length);
@@ -114,7 +126,7 @@
             if (name === chartName) {
                 var chart = chartJS.activeCharts[i]["myChart"];
                 var json = JSON.parse(data);
-                //console.log(json);
+                
                 //if (json.data.datasets === undefined) {
                 //    chart.config.data.labels = [];
                 //    chart.config.data.datasets = [];
@@ -122,10 +134,16 @@
                 //else {
                 //    chart.config.data = json.data;
                 //}
+
                 chart.config.data = json.data;
-                chart.config.options.scales.yAxes[0].scaleLabel.labelString = json.units;
+                if (json.units !== undefined && json.units.length > 0) {
+                    chart.config.options.scales.yAxes[0].scaleLabel.labelString = json.units;
+                }
+                else {
+                    chart.config.options.scales.yAxes[0].scaleLabel.labelString = "";
+                }
+                
                 chart.update();
-                console.log('js_charts.updateChart() updated');
                 //postAction(data);
                 //idsData = json;
                 //chartJS.selectedIds.push({ chartName, data.datasets[0].ids });
@@ -134,10 +152,62 @@
         }
     },
 
+    setMinAndMax(chartName, axy, min, max, beginAtZero, indexAxy, functionStr) {
+        //console.log("js_charts.setMinAndMax()");
+        for (var i = 0; i < chartJS.activeCharts.length; i++) {
+            var name = chartJS.activeCharts[i]["chartName"];
+            if (name === chartName) {
+                var chart = chartJS.activeCharts[i]['myChart'];
+                
+                if (axy === 'yAxy') {
+                    chart.config.options.scales.yAxes[indexAxy].ticks.suggestedMin = min;
+                    chart.config.options.scales.yAxes[indexAxy].ticks.suggestedMax = max;
+                    chart.config.options.scales.yAxes[indexAxy].ticks.beginAtZero = beginAtZero;
+                    if (functionStr !== undefined) {
+                        chart.config.options.scales.yAxes[indexAxy].ticks.callback = function (value, index, values) {
+                            //console.log(functionStr);
+                            return eval(functionStr)();
+                        }
+                    }
+
+                }
+                else if (axy === 'xAxy') {
+                    chart.config.options.scales.xAxes[indexAxy].ticks.suggestedMin = min;
+                    chart.config.options.scales.xAxes[indexAxy].ticks.suggestedMax = max;
+                    chart.config.options.scales.xAxes[indexAxy].ticks.beginAtZero = beginAtZero;
+                    if (functionStr !== null) {
+                        chart.config.options.scales.xAxes[indexAxy].ticks.callback = function (value, index, values) {
+                            //console.log(functionStr);
+                            return eval(functionStr)();
+                        }
+                    }
+                }
+                else {
+                    console.log('no valid axy');
+                }
+
+                
+                chart.update();
+                break;
+            }
+        }
+    },
+
+    setAspectRatio(chartName, b) {
+        //console.log("js_charts.setAspectRatio()");
+        for (var i = 0; i < chartJS.activeCharts.length; i++) {
+            var name = chartJS.activeCharts[i]["chartName"];
+            if (name === chartName) {
+                var chart = chartJS.activeCharts[i]['myChart'];
+                chart.config.options.maintainAspectRatio = b;
+            }
+        }
+    },
+
     getSelectedIds(chartName) {
         for (var i = 0; i < selectedIds.length; i++) {
             var name = chartJS.selectedIds[i]["chartName"];
-            if (name === charname) {
+            if (name === chartName) {
                 return chartJS.selectedIds[i]["chartName"];
             }
         }
@@ -150,7 +220,7 @@ window.chartJsPie = {
     setPieChart: function (chartName, viewElId, dotNetItem, reset) {
         console.log('js_charts.setPieChart() ... start on ' + viewElId);
         var el = document.getElementById(viewElId);
-        console.log("..." + el);
+        
         if (el === null) return false;
         if (reset === true) chartJsPie.activeCharts = [];
         var ctx = el.getContext('2d');
@@ -254,13 +324,10 @@ window.chartJsPie = {
                 var chart = chartJsPie.activeCharts[i]['myChart'];
                 var json = JSON.parse(data);
                 chart.config.data = json.data;
-                console.log('BEFORE UPDATE');
-                console.log(chart);
                 chart.update();
                 console.log('js_charts.updatePieChart() ... updated');
                 break;
             }
         }
     }
-
 }

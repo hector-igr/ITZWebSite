@@ -1,0 +1,60 @@
+﻿@page "/apps/index"
+@using ForgeLibs.Models;
+@using ITZWebClientApp.Infraestructure.Data;
+@inject IItzRepository repo;
+
+<style>
+    a {
+        color: #2d2d2dab;
+        text-decoration: none;
+    }
+        a:hover {
+            text-decoration: none;
+        }
+</style>
+
+<div class="container">
+    <h1>Listado de Apps</h1>
+    <hr class="my-4">
+    <div>
+        <div style="column-count: 2;">
+            @for (int grp = 0; grp < _appGroups.Count; grp++)
+            {
+                var item = _appGroups[grp];
+                var apps = item.Select(x => x).OrderBy(x => x.Name).ToList();
+
+                <h5>@item.Key</h5>
+                <ul>
+                    @for (int a = 0; a < apps.Count; a++)
+                    {
+                        var app = apps[a];
+                    <li>
+                        
+                        <NavLink href="@($"apps/{app.Name}")">
+                            @ForgeLibs.NetStandardsUtils.AddSpace(app.Name) 
+                            @if (app.Rating == 5)
+                            {
+                                <span class="oi oi-star" aria-hidden="true"></span>
+                            }
+                        </NavLink>
+                    </li>
+                    }
+                </ul>
+            }
+
+        </div>
+    </div>
+
+    @code {
+
+        private IEnumerable<AppInfo> _apps = Enumerable.Empty<AppInfo>();
+        private List<IGrouping<string, AppInfo>> _appGroups = new List<IGrouping<string, AppInfo>>();
+
+        protected override void OnInitialized()
+        {
+            _apps = repo.AppsInfo;
+            _appGroups = _apps.GroupBy(x => x.Group).OrderBy(x => x.Key).ToList();
+        }
+
+    }
+</div>

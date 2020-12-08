@@ -103,7 +103,8 @@ namespace ForgeLibs.Models.Forge
 					{
                         //Console.WriteLine("SECOND BLOCK");
                         data = preFilteredElems.Where(x => !string.IsNullOrEmpty(x.GetPropertyValue(property, true)))
-                            .Where(x => x.Properties[groupby] != null).GroupBy(x => x.Properties[groupby].ToString())
+                            .Where(x => x.Properties[groupby] != null)
+                            .GroupBy(x => x.Properties[groupby].ToString())
                             .OrderBy(x => x.Key)
                             .ToDictionary(x => x.Key, y => y.Sum(z =>
                             {

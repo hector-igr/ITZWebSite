@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
+
     public class ForgeElement
     {
         public int RevitId { get; set; }
@@ -25,6 +26,7 @@ namespace ForgeLibs.Models.Forge
         public int ObjectId { get; set; }
         //public string ExternalId { get; set; }
         public string Category { get; set; }
+
         public string TypeName { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
@@ -68,7 +70,7 @@ namespace ForgeLibs.Models.Forge
             object[] values = line.Split('\t');
             try
             {
-                string properties = values[7].ToString();
+                string properties = values[8].ToString();
                 string[] propertyValues = properties.Split(';');
                 Dictionary<string, object> dic = new Dictionary<string, object>();
                 char[] delimiters = new char[] { ':', ':', ':' };
@@ -85,15 +87,16 @@ namespace ForgeLibs.Models.Forge
 
                 ForgeElement forgeElement = new ForgeElement()
                 {
+                    
                     RevitId = Convert.ToInt32(values[0]),
                     ObjectId = Convert.ToInt16(values[1]),
                     Category = values[2].ToString(),
-                    TypeName = values[3].ToString(),
-                    Name = values[4].ToString(),
-                    FullName = values[5].ToString(),
+                    OmmiCode = values[3].ToString(),
+                    TypeName = values[4].ToString(),
+                    Name = values[5].ToString(),
+                    FullName = values[6].ToString(),
                     Properties = dic
                 };
-
                 return forgeElement;
                 
             }

@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Threading;
+@inject HttpClient client
+@inherits LayoutComponentBase
 
 <style>
     .mainlayout {
@@ -6,7 +8,9 @@
         flex-direction: column;
         width: 100%;
         height: 100%;
+        transition: 1s;
     }
+
     .ribbon {
         /*    border: dotted;
     border-color: red;*/
@@ -17,6 +21,7 @@
         padding: 0 10px;
         background-color: var(--ribbonColor);
     }
+
     .main {
         /*    border: dotted;
     border-color: greenyellow;*/
@@ -25,27 +30,33 @@
         flex-direction: row;
         transition: 0.5s;
     }
+
     .content {
         /*    border: double;*/
+        position: relative;
         height: calc(100vh - var(--ribbonHeight));
         overflow: auto;
         width: 100%;
     }
+
     .mailDirection {
         right: 10px;
         color: white;
         position: absolute;
     }
+
     .container {
         margin-top: 30px;
         margin-bottom: 30px;
     }
+
     .logoFont {
         font-weight: bold;
         color: white;
         font-size: 1.5rem;
         transition: 0.2s;
     }
+
         .logoFont:hover {
             cursor: pointer;
             font-size: 2rem;
@@ -53,29 +64,125 @@
         }
 </style>
 
-    <div class="mainlayout">
-        <div class="ribbon">
-            <NavLink class="nav-link" @onclick="(x => toggle())">
-                <div class="logoFont">Forge Demo</div>
-            </NavLink>
-            <a  class="mailDirection" style="color:white">
-                <span class="oi oi-envelope-closed" aria-hidden="true"> </span>&nbsp hector.igr@gmail.com
-            </a>
+<style>
+    .appear {
+        opacity: 1.0;
+        /*        display:block;*/
+        visibility: visible;
+        z-index: 10;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        /*        border: dotted;*/
+    }
+
+    .hide {
+        opacity: 0.0;
+        /*        display:none;*/
+        visibility: hidden;
+        z-index: -1;
+        /*        transition: all 1s;*/
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        /*        border: dotted;*/
+        transition: opacity 5s;
+        transition: visibility 5s;
+    }
+</style>
+
+<div class="mainlayout">
+    <div class="ribbon">
+        <NavLink class="nav-link" @onclick="(x => Toggle())">
+            <div class="logoFont">HIGR</div>
+        </NavLink>
+        <a class="mailDirection" style="color:white">
+            <span class="oi oi-envelope-closed" aria-hidden="true"> </span>&nbsp hector.igr@gmail.com
+        </a>
+    </div>
+    <div class="main">
+        <div class="sidebar @collapseClass">
+            <NavMenu @ref="navmenu" />
         </div>
-        <div class="main">
-            <div class="sidebar @collapseClass">
-                <NavMenu @ref="navmenu" />
-            </div>
-            <div class="content">
+        <div class="content">
+            @*<LoadingScreen IsLoaded="_contentLoaded" @ref="loadingScreen" CssClass="@_loadingScreenClass">
+                </LoadingScreen>*@
+            <CascadingValue Value="this" IsFixed="true">
                 @Body
-            </div>
+            </CascadingValue>
         </div>
     </div>
+</div>
 
 
 @code{
+
+    //LoadingScreen loadingScreen;
+
+    private bool _contentLoaded = false;
+    public bool ContentLoaded
+    {
+        get { return _contentLoaded; }
+        set { _contentLoaded = value; }
+    }
+    private string _loadingScreenClass = "appear";
+    public string LoadingScreenClass
+    {
+        get { return _loadingScreenClass; }
+        set
+        {
+            _loadingScreenClass = value;
+            StateHasChanged();
+        }
+    }
+
     NavMenu navmenu;
     private bool collapseSideBar = false;
     private string collapseClass => collapseSideBar ? "hide" : "";
-    private void toggle() { collapseSideBar = !collapseSideBar; StateHasChanged(); }
+    public void Toggle() { collapseSideBar = !collapseSideBar; StateHasChanged(); }
+
+
+    //public int Counter { get; set; } = 0;
+    //public override Task SetParametersAsync(ParameterView parameters)
+    //{
+    //    Console.WriteLine($"0 {nameof(MainLayout)} -> {nameof(SetParametersAsync)} : {Counter}");
+    //    PrintParameters(parameters);
+    //    return base.SetParametersAsync(parameters);
+    //}
+
+    //protected override Task OnInitializedAsync()
+    //{
+    //    Console.WriteLine($"{nameof(MainLayout)} -> {nameof(OnInitializedAsync)} : {Counter}");
+    //    return base.OnInitializedAsync();
+    //}
+
+    //protected override async Task OnParametersSetAsync()
+    //{
+    //    Console.WriteLine($"{nameof(MainLayout)} -> {nameof(OnParametersSetAsync)} : {Counter}");
+
+    //    //return base.OnParametersSetAsync();
+    //}
+
+    //protected override void OnAfterRender(bool firstRender)
+    //{
+    //    Console.WriteLine($"{nameof(MainLayout)} -> {nameof(OnAfterRender)} : {Counter}");
+    //    base.OnAfterRender(firstRender);
+    //}
+
+    //protected override bool ShouldRender()
+    //{
+    //    Console.WriteLine($"{nameof(MainLayout)} -> {nameof(ShouldRender)} : {Counter}");
+    //    return true;
+    //}
+
+    public void PrintParameters(ParameterView parameters)
+    {
+        //Console.WriteLine("\t------->>");
+        //var dic = parameters.ToDictionary();
+        //foreach (var pair in dic)
+        //{
+        //    Console.WriteLine($"\t{pair.Key} : {pair.Value}");
+        //}
+        //Console.WriteLine("\t------->>");
+    }
 }

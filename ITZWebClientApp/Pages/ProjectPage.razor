@@ -2,15 +2,21 @@
 
 @using ForgeLibs.Models;
 @using ITZWebClientApp.Infraestructure.Data;
+@using ITZWebClientApp.Components.UI;
 
+
+@inject NavigationManager NavigationManager
 @inject HttpClient client
 @inject IItzRepository repo;
 @inject IJSRuntime JSRuntime
 
-    <main class="container">
 
-        <h1><b>@project?.Name</b>  (@project.Year)</h1>
-        <h3>@project.Company - @project.Job</h3>
+
+    <main id="projectContainer" class="container" onload="console.log('Loaded!')">
+
+        <h1><b>@project?.Name</b> <small class="text-muted">(@project?.Year)</small> </h1>
+        <h3 class="font-weight-bold">@project?.Company <b class="text-secondary font-weight-light">@project?.Job.ToUpper()</b> </h3>
+        <hr class="my-4">
 
         @for (int v = 0; v < firstMediaData.Length; v++)
         {
@@ -64,7 +70,7 @@
                 }
                 @if (media.MediaType == "Video")
                 {
-                    <video id="vid" controls autoplay>
+                    <video id="vid" controls autoplay onloadeddata="OnLoadVideo">
                         <source src="@media.URL" class="d-block w-100" alt="@media.Headline" type="audio/mp4" />
                     </video>
                 }
@@ -89,6 +95,9 @@
                 }
             </div>
 
+
+
+
             @if (media.MediaType != "Video")
             {
                 @*<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#@modalName">
@@ -112,6 +121,7 @@
             int colNumber = 3;
             int rows = metadata.Length / colNumber;
             int counter = 0;
+
             for (int r = 0; r < rows; r++)
             {
                 <div class="row">
@@ -119,7 +129,7 @@
                     {
                         @if (counter < metadata.Length)
                         {
-                            MediaMetadata media = metadata[++counter];
+                            MediaMetadata media = metadata[counter++];
                             string modalName = $"exampleModalCenter{media.Id}";
                             string modalTitle = $"exampleModalCenterTitle{media.Id}";
 
@@ -155,6 +165,7 @@
                 </div>
             }
         }
+
 
         @if (metadata.Length > 0 && false)
         {
@@ -220,42 +231,134 @@
                 }
             </div>
         }
-
-        @((MarkupString)$"{html}")
-
+        @((MarkupString)html)
     </main>
-
 
 @code {
 
+    [CascadingParameter]
+    private MainLayout Parent { get; set; }
+
+    private int _projectId;
     [Parameter]
-    public int ProjectId { get; set; }
+    public int ProjectId
+    {
+        get { return _projectId; }
+        set
+        {
+            //if (_projectId != value)
+            {
+                //Console.WriteLine($"---------------- {value}");
+                _projectId = value;
+                //counter = 0;
+                counter++;
+                medialoaded = 0;
+                //StateHasChanged();
+            }
+        }
+    }
+    //public int ProjectId { get; set; }
+
     private Project project { get; set; }
-    private string html { get; set; }
+    [Parameter]
+    public string html { get; set; } = "";
     private MediaMetadata[] firstMediaData = Array.Empty<MediaMetadata>();
     private MediaMetadata[] metadata = Array.Empty<MediaMetadata>();
+
+    private bool render = true;
+    private int counter = 0;
+
+    private int medialoaded = 0;
+    [JSInvokable]
+    public void ChangeMediaStatus(bool loaded)
+    {
+        medialoaded++;
+        if (counter == 0 && medialoaded >= 2)
+        {
+            //Console.WriteLine("CHANGING VIDEO STATUS");
+            Parent.ContentLoaded = loaded;
+            Parent.LoadingScreenClass = "hide";
+
+            //render = false;
+            //StateHasChanged();
+        }
+        counter++;
+    }
+
+    protected override void OnInitialized()
+    {
+        //Console.WriteLine($"INI: {_projectId}");
+    }
+
+    //public override Task SetParametersAsync(ParameterView parameters)
+    //{
+    //    Console.WriteLine($"SETPARAMETERS {counter}");
+    //    PrintParameters(parameters);
+    //    return base.SetParametersAsync(parameters);
+    //}
+
+
+    public void PrintParameters(ParameterView parameters)
+    {
+        Console.WriteLine("------->>");
+        var dic = parameters.ToDictionary();
+        foreach (var pair in dic)
+        {
+            Console.WriteLine($"{pair.Key} : {pair.Value}");
+        }
+        Console.WriteLine("------->>");
+    }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        //Console.WriteLine($"REPO project count : {repo.Projects.Count()}");
+        project = repo.Projects?.FirstOrDefault(x => x.Id == _projectId);
+        if(project != null)
+        {
+            metadata = repo.ImageInfo.Where(x => x.ProjectId == project.Id).ToArray();
+            firstMediaData = metadata.Where(x => x.MediaType == "Video" || x.Rating == 5).OrderByDescending(x => x.MediaType).ThenBy(x => x.Rating).ToArray();
+            metadata = metadata.Where(x => x.MediaType != "Video" && x.Rating < 5).ToArray();
+
+            if (project.URL.Length > 0)
+            {
+                string addess = $"projectInfo/{project.URL}.html";
+                var response = await client.GetAsync(addess);
+                if (response.IsSuccessStatusCode)
+                {
+                    html = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    html = null;
+                }
+            }
+            else
+            {
+                html = null;
+            }
+        }
+        else
+        {
+            NavigationManager.NavigateTo("CV");
+        }
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (!firstRender)
         {
             await Interop.Utils_DOM.ReloadVideo(JSRuntime, "vid");
+            //Console.WriteLine("FIRST RENDER");
+
+            //await JSRuntime.InvokeVoidAsync("OnLoadVideo", "vid", DotNetObjectReference.Create<ProjectPage>(this));
+            //await JSRuntime.InvokeVoidAsync("OnAllImageLoaded", "projectContainer", DotNetObjectReference.Create<ProjectPage>(this));
         }
+
     }
-
-
-    protected override async Task OnParametersSetAsync()
+    protected override bool ShouldRender()
     {
-        project = repo.Projects.Single(x => x.Id == ProjectId);
-
-        metadata = repo.ImageInfo.Where(x => x.ProjectId == project.Id).ToArray();
-        firstMediaData = metadata.Where(x => x.MediaType == "Video" || x.Rating == 5).OrderByDescending(x => x.MediaType).ThenBy(x => x.Rating).ToArray();
-        metadata = metadata.Where(x => x.MediaType != "Video" && x.Rating < 5).ToArray();
-
-        if (project.URL.Length > 0)
-        {
-            string addess = $"projectInfo/{project.URL}.html";
-            html = await client.GetStringAsync(addess);
-        }
+        return true;
     }
+
 }

@@ -16,18 +16,26 @@
       "name": "FaceDimensions",
       "clients": "ITZ"
     },
+    {
+      "group": "Grid Apps",
+      "name": "OrderGrids",
+      "clients": "ITZ"
+
+    },
 
     {
       "group": "Project Apps",
       "name": "LinkToProject",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
 
 
     {
       "group": "Formwork Apps",
       "name": "FW_BySelectedFaces",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
     {
       "group": "Formwork Apps",
@@ -46,7 +54,8 @@
     {
       "group": "Floor Apps",
       "name": "RoomToFloor",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
     {
       "group": "Floor Apps",
@@ -73,7 +82,8 @@
     {
       "group": "Wall Apps",
       "name": "WallFrames",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
 
 
@@ -147,7 +157,8 @@
     {
       "group": "Site Apps",
       "name": "BuildingPads",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
     {
       "group": "Documentation Apps",
@@ -176,20 +187,18 @@
       "clients": "RZM"
     },
 
-
-
-
     {
       "group": "Schedule Apps",
       "name": "ExportSchedules",
-      "clients": "RZM"
+      "clients": "ITZ,ITISA"
     },
 
 
     {
       "group": "MEP Apps",
       "name": "SplitInU",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
 
 
@@ -301,7 +310,8 @@
     {
       "group": "Bridge Apps",
       "name": "RebarPlaceHolder",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 5,
     },
     {
       "group": "Bridge Apps",
@@ -338,9 +348,6 @@
       "name": "TransferDrawing",
       "clients": "ITZ,Triada"
     },
-
-
-
     {
       "group": "Rebar Apps",
       "name": "InvertRebarHooks",
@@ -359,7 +366,8 @@
     {
       "group": "Rebar Apps",
       "name": "RebarInterpolation",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating":  5
     },
     {
       "group": "Rebar Apps",
@@ -380,7 +388,8 @@
     {
       "group": "Rebar Apps",
       "name": "ProjectRebarToSurfaces",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
     {
       "group": "Rebar Apps",
@@ -408,14 +417,4 @@
       "clients": "ITZ"
     }
   ],
-  "renderPaths": [
-    {
-      "clientId": "RZM",
-      "path": "D:\\Desarrollos\\ASPNETCORE\\AppsHelp\\bin\\StaticPages\\RZM"
-    },
-    {
-      "clientId": "ITZ",
-      "path": "D:\\Desarrollos\\Revit API\\ITZBim\\bin\\Help"
-    }
-  ]
 }

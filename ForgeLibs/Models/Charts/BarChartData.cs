@@ -11,8 +11,9 @@ namespace ForgeLibs.Models.Charts
     public class BarChartData
     {
         public string Title { get; set; }
-        public List<string> Labels { get; private set; } = new List<string>();
-        public IList<ChartDataSet> Sets { get; set; } = new List<ChartDataSet>();
+
+		public List<string> Labels { get; private set; } = new List<string>();
+		public IList<ChartDataSet> Sets { get; set; } = new List<ChartDataSet>();
         public string Unit { get; set; }
 
         public object JSON
@@ -92,29 +93,29 @@ namespace ForgeLibs.Models.Charts
             }
         }
 
-        public void SetLabels()
-        {
-            for (int ii = 0; ii < this.Sets.Count; ii++)
-            {
-                ChartDataSet data = this.Sets[ii];
-                string background = data.Background.FirstOrDefault(x => !string.IsNullOrEmpty(x));
-                string borderColor = data.BorderColor.FirstOrDefault(x => !string.IsNullOrEmpty(x));
-                for (int i = 0; i < this.Labels.Count; i++)
-                {
-                    if (data.Labels.Count > i)
-                    {
-                        if (this.Labels[i] != data.Labels[i])
-                        {
-                            InsertBlank(ref data, i, background, borderColor);
-                        }
-                    }
-                    else
-                    {
-                        InsertBlank(ref data, i, background, borderColor);
-                    }
-                }
-            }
-        }
+        //public void SetLabels()
+        //{
+        //    for (int ii = 0; ii < this.Sets.Count; ii++)
+        //    {
+        //        ChartDataSet data = this.Sets[ii];
+        //        string background = data.Background.FirstOrDefault(x => !string.IsNullOrEmpty(x));
+        //        string borderColor = data.BorderColor.FirstOrDefault(x => !string.IsNullOrEmpty(x));
+        //        for (int i = 0; i < this.Labels.Count; i++)
+        //        {
+        //            if (data.Labels.Count > i)
+        //            {
+        //                if (this.Labels[i] != data.Labels[i])
+        //                {
+        //                    InsertBlank(ref data, i, background, borderColor);
+        //                }
+        //            }
+        //            else
+        //            {
+        //                InsertBlank(ref data, i, background, borderColor);
+        //            }
+        //        }
+        //    }
+        //}
 
         public void InsertBlank(ref ChartDataSet dataSet, int indx, string backgroundColor, string borderColor)
         {

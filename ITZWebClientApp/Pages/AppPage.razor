@@ -4,15 +4,16 @@
 @using ITZWebClientApp.Infraestructure.Data;
 @using System;
 
+@inject NavigationManager NavigationManager
 @inject IItzRepository repo;
 @inject IJSRuntime JSRuntime
 @inject HttpClient client
 
-    <main class="container">
-        <h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>
+<main class="container">
+    <h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>
 
-        @((MarkupString)$"{Html}")
-    </main>
+    @((MarkupString)$"{Html}")
+</main>
 
 
 @code {
@@ -25,7 +26,17 @@
     protected override async Task OnParametersSetAsync()
     {
         string addess = $"/appsInfo/{Name}.html";
-        string str = await client.GetStringAsync(addess);
-        Html = str;
+
+        var response = await client.GetAsync(addess);
+        if(response.IsSuccessStatusCode)
+        {
+            string str = await response.Content.ReadAsStringAsync();
+            Html = str;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("CV");
+        }
+
     }
 }

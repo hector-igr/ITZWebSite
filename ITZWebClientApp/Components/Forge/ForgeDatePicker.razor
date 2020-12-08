@@ -1,0 +1,29 @@
+﻿<div class="input-group px-2">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="@Id">@Name</label>
+    </div>
+    <input id="@Id" class="form-control" type="date" value="@Value?.ToString("yyyy-MM-dd")" min="@MinDate?.ToString("yyyy-MM-dd")" max="@MaxDate?.ToString("yyyy-MM-dd")" 
+           @onchange="(x=> OnDateChange.InvokeAsync(x.Value.ToString()))"
+           />
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public DateTime? Value { get; set; } = DateTime.Now;
+
+    [Parameter]
+    public DateTime? MinDate { get; set; }
+
+    [Parameter]
+    public DateTime? MaxDate { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnDateChange { get; set; }
+
+}

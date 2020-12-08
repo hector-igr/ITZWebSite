@@ -46,6 +46,7 @@
 
 @if (Model != null)
 {
+    var groups = Model.GroupElementsByFullName();
     <table>
         <thead id='forgeTableHead'>
             <tr>
@@ -64,7 +65,7 @@
             </tr>
         </thead>
         <tbody id="forgeTableBody">
-            @{ var groups = Model.GroupElementsByFullName();}
+
             @foreach (var group in groups)
             {
                 if (!ExpandGroup.ContainsKey(group.Key)) ExpandGroup[group.Key] = true;
@@ -147,8 +148,9 @@
     public string Category
     {
         get { return _Category; }
-        set {
-            if(_Category != value)
+        set
+        {
+            if (_Category != value)
             {
                 JSRuntime.InvokeVoidAsync("PaintRow", "");
             }

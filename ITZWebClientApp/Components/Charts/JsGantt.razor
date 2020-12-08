@@ -1,0 +1,62 @@
+﻿@inject IJSRuntime js
+@inject HttpClient client
+
+<style>
+    .gantt{
+/*        background-color:red;
+        border:dotted;*/
+    }
+</style>
+
+<div style="position:relative; height:100%;" class="gantt" id="@Id"></div>
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string FileAddress { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnRowSelected { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await base.OnParametersSetAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadJsGantt(DateTime.Now);
+        }
+    }
+
+    public async ValueTask LoadJsGantt(DateTime know)
+    {
+        await js.InvokeVoidAsync("LoadJsGantt", Id, DotNetObjectReference.Create(this), know);
+    }
+
+    public async void LoadJsGanttData(DateTime know, string json)
+    {
+        if (!string.IsNullOrEmpty(json))
+        {
+            await js.InvokeVoidAsync("LoadJsGanttData", json, know);
+        }
+    }
+
+    public async void UnLoadJsGanttData()
+    {
+        await js.InvokeVoidAsync("UnloadJsGanttData");
+    }
+
+
+    [JSInvokable]
+    public async void SelectedRow(string name)
+    {
+        await OnRowSelected.InvokeAsync(name);
+    }
+}
+

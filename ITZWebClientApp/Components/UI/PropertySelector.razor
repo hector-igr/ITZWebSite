@@ -1,0 +1,114 @@
+﻿@using ForgeLibs.Models.Forge;
+@using ITZWebClientApp.Infraestructure.StateManagement; 
+@using ITZWebClientApp.Interop; 
+@inject IJSRuntime js; 
+@inject ForgeQueryState state;
+
+@{
+    int indx = -1;
+}
+
+<div class="input-group px-2">
+    <div class="input-group-prepend">
+        <label class="input-group-text" for="queryTypeSelector">@PropertyName</label>
+    </div>
+    <select id="@Id" class="@CSS" 
+            @onchange="@(async x => {
+                             Index = await SelectDropDownInterop.GetSelectedIndex(js, Id);
+                             state.Properties[Id] = Index;
+                             if(Index == 0)
+                             {
+                                 await PropertyChanged.InvokeAsync("");
+                             }
+                             else
+                             {
+                                 await PropertyChanged.InvokeAsync((string)x.Value);
+                             }
+
+                         })">
+        <option value="@indx" selected>select ... </option>
+        @foreach (string item in Values)
+        {
+            indx++;
+            <option value="@item">@item</option>
+        }
+    </select>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public string CSS { get; set; }
+
+    [Parameter]
+    public string PropertyName { get; set; }
+
+    int counter = 0;
+    bool triggerOnValuesLoaded = false;
+    private string[] _values;
+    [Parameter]
+    public string[] Values
+    {
+        get { return _values; }
+        set {
+            _values = value;
+            if (_values.Length > 0 && counter == 0)
+            {
+                counter++;
+                triggerOnValuesLoaded = true;
+            }
+        }
+    }
+
+    [Parameter]
+    public int Index { get; set; } = -1;
+
+    [Parameter]
+    public EventCallback<string> PropertyChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnValuesLoaded { get; set; }
+
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(triggerOnValuesLoaded)
+        {
+            OnValuesLoaded.InvokeAsync(true);
+            triggerOnValuesLoaded = false;
+        }
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    protected override void OnInitialized()
+    {
+        //Console.WriteLine($"{nameof(PropertySelector)} - {nameof(OnInitialized)}");
+    }
+
+    public async void ChangeIndex(int indx)
+    {
+        //Console.WriteLine($"Property Selector id: {Id} , last index : {Index}");
+        if(Values.Length >= indx && indx > 0)
+        {
+            SelectDropDownInterop.ChangeSelectIndexById(js, Id, indx);
+            //Substract the first 'select ...' option
+            await PropertyChanged.InvokeAsync(Values[indx - 1]);
+        }
+    }
+
+    public static void ChangeToLastSavedIndex(PropertySelector selector, ForgeQueryState state)
+    {
+        string Id = selector.Id;
+        if (state.Properties.ContainsKey(Id))
+        {
+            var Index = (int)state.Properties[Id];
+            selector.ChangeIndex(Index);
+        }
+    }
+}
