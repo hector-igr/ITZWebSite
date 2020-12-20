@@ -77,7 +77,7 @@
         if (loadedChart && !string.IsNullOrEmpty(Category) && !string.IsNullOrEmpty(Property)
                 && (lastProperty != Property || lastGroup != PropertyGroup))
         {
-            ChangeChartData(ChartName, omni, forgeDomain.ForgeElems, Category,
+            ChangeChartData(ChartName, omni, forgeDomain.ForgeElemsView, Category,
                 Property, PropertyGroup);
             lastGroup = PropertyGroup; lastProperty = Property;
         }

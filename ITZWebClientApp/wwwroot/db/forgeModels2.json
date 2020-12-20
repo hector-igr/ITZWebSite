@@ -1,0 +1,46 @@
+[
+  //{
+  //  "id": 1,
+  //  "projectId": 1702,
+  //  "bucketKey": "newhgrmodels",
+  //  "objectKey": "EST BenitoJuarez.rvt",
+  //  "objectId": "urn:adsk.objects:os.object:newhgrmodels/EST%20BenitoJuarez.rvt",
+  //  "viewGuids": [
+  //    "c3ed66e5-b5b6-4fd6-88f7-543bc24b6b83"
+  //  ],
+  //  "schedules": [
+  //    {
+  //      "version": 1.0,
+  //      "address": "./models_metadata/EST BenitoJuarez_Schedule.json"
+  //    }
+  //  ]
+  //}
+  //{
+  //  "id": 1,
+  //  "projectId": 1702,
+  //  "bucketKey": "igrx",
+  //  "objectKey": "bjv02.rvt",
+  //  "objectId": "urn:adsk.objects:os.object:igrx/bjv02.rvt",
+  //  "viewGuids": [
+  //    "c3ed66e5-b5b6-4fd6-88f7-543bc24b6b83"
+  //  ],
+  //  "schedules": [
+  //    {
+  //      "version": 1.0,
+  //      "address": "./models_metadata/EST BenitoJuarez_Schedule.json"
+  //    }
+  //  ]
+  //}
+
+  {
+    //"id": 1,
+    "projectId": 1702,
+    "bucketKey": "igrx",
+    "schedules": [
+      {
+        "version": 1.0,
+        "address": "./models_metadata/igrx/bjv02_tasks.json"
+      }
+    ]
+  }
+]

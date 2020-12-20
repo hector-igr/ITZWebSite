@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ITZWebClientApp.Infraestructure.Data;
 using ITZWebClientApp.Infraestructure.StateManagement;
-using System.Net.Http.Json;
+
 using System.Net.Http;
 
 namespace ITZWebClientApp

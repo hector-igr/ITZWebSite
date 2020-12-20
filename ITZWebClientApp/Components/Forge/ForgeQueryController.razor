@@ -30,15 +30,11 @@
         padding-right:3px;*/
     }
 
-    .forgeFirstQueryLabel {
-        background-color: var(--webFavoriteColor);
-        color: white;
-    }
 </style>
 
 
-<div class="forgeQuery form-inline ">
-    <div class="input-group forgeDropdown mr-3">
+@*<div class="forgeQuery form-inline ">*@
+    <div class="input-group input-group-sm forgeDropdown mr-3">
         @*<InputSelect Id="qry_Categories" @bind-Value="Query" Class="form-control">
                 <option selected="selected">Query Type ... </option>
                 @foreach (QueryType queryType in Enum.GetValues(typeof(QueryType)))
@@ -49,9 +45,10 @@
         <div class="input-group-prepend">
             <label class="input-group-text forgeFirstQueryLabel" for="queryTypeSelector">Query</label>
         </div>
+
         <select id="queryTypeSelector" class="form-control qry_Categories custom-select" @onchange="(x => Query = (QueryType)Convert.ToInt32(x.Value))">
             <option value="-1">Select ... </option>
-            @foreach (QueryType queryType in Enum.GetValues(typeof(QueryType)))
+            @foreach (QueryType queryType in QueryTypes)
             {
                 @if (queryType != QueryType.None)
                 {
@@ -76,16 +73,26 @@
         <ForgeScheduleController @ref="@_scheduleController"
                                  Schedules="ForgeSchedules"
                                  OnScheduleSelected="@(x => OnScheduleChanged.InvokeAsync(x) )"
+                                 OnDateChanged="@(x=> OnDateChanged.InvokeAsync(x))"
                                  ></ForgeScheduleController>
     }
 
-</div>
+@*</div>*@
 
 
 @code {
 
+    [Parameter]
+    public QueryType[] QueryTypes { get; set; } = new QueryType[0];/* = Enum.GetValues(typeof(QueryType)).Cast<QueryType>().ToHashSet();*/
+
     //private int[] catIndex = new int[] { -1, -1, -1 };
     //private int[] scheduleIndex = new int[] { -1, -1, -1 };
+
+
+    public bool IsQueryByCategoriesActivated { get; set; } = true;
+
+    public bool IsQueryByScheduleAcitvated { get; set; } = true;
+
 
     [Parameter]
     public EventCallback<QueryType> OnQueryTypeChanged { get; set; }
@@ -115,6 +122,9 @@
 
     [Parameter]
     public EventCallback<string> OnCategoryChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime> OnDateChanged { get; set; }
 
     private ForgeCategoryController _categoryController = null;
     private ForgeScheduleController _scheduleController = null;

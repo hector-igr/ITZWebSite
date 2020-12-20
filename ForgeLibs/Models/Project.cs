@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,7 +15,8 @@ namespace ForgeLibs.Models
         public string Name { get; set; }
         public string CoverImageName { get; set; }
         public string Job { get; set; }
-        public bool Model { get; set; }
+        [JsonProperty(PropertyName = "Model")]
+        public string ModelRepo { get; set; }
         public int Importance { get; set; }
 		public string URL { get; set; }
 	}

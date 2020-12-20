@@ -19,7 +19,7 @@
     public string FileAddress { get; set; }
 
     [Parameter]
-    public EventCallback<string> OnRowSelected { get; set; }
+    public EventCallback<int> OnRowSelected { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -54,9 +54,10 @@
 
 
     [JSInvokable]
-    public async void SelectedRow(string name)
+    public async void SelectedRow(string taskId)
     {
-        await OnRowSelected.InvokeAsync(name);
+        Console.WriteLine(taskId);
+        await OnRowSelected.InvokeAsync(Convert.ToInt32(taskId));
     }
 }
 

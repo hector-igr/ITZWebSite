@@ -17,7 +17,7 @@ namespace ITZWebClientApp.Infraestructure.Data
 
         Task LoadDataAsync();
         ForgeModel GetForgeModelAsync (int id);
-        Task SaveForgeModelAsync(ForgeModel model);
-        Task<bool >DeleteForgeModelAsync(int id);
+        //Task SaveForgeModelAsync(ForgeModel model);
+        //Task<bool >DeleteForgeModelAsync(int id);
     }
 }

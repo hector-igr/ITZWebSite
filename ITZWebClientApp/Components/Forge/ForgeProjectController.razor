@@ -1,0 +1,121 @@
+﻿@using ITZWebClientApp.Infraestructure.Data;
+@using ForgeLibs.Models.Forge;
+@using ForgeLibs.Models;
+@using ForgeLibs;
+@using Newtonsoft.Json;
+@using Newtonsoft.Json.Linq;
+@using ITZWebClientApp.Interop; 
+
+@inject IItzRepository repo;
+@inject IJSRuntime js;
+
+@*<div class="forgeProjectSelector form-inline">*@
+    <div class="input-group input-group-sm px-2">
+        @*<select id="projectSelector" class="form-control" @onchange="(async x=>
+                                                                     {
+                                                                         int indx = Convert.ToInt32(x.Value);
+                                                                         SelectedProject = Projects.FirstOrDefault(y => y.Id == indx);
+                                                                         if(indx != -1)
+                                                                         {
+                                                                             await LoadModels(SelectedProject.ModelRepo);
+                                                                         }
+                                                                     })">
+            <option value="-1"> Select Project</option>
+            @foreach (Project project in Projects)
+            {
+                <option value="@project.Id">@project.Name</option>
+            }
+        </select>*@
+
+        <div class="input-group-prepend">
+            <label class="input-group-text forgeFirstQueryLabel">Model</label>
+        </div>
+
+        <select id="modelSelector" class="form-control custom-select" @onchange="@(async x=>
+                                                                   {
+                                                                       string objId = (string)x.Value;
+                                                                       SelectedModel = ForgeModels.FirstOrDefault(y => y.ObjectId == objId);
+                                                                       if(objId != "-1")
+                                                                       {
+                                                                           await OnModelChanged.InvokeAsync(SelectedModel);
+                                                                           await LoadViews(objId);
+                                                                       }
+                                                                   })">
+            <option value="-1">Select Model</option>
+            @foreach (ForgeModel model in ForgeModels)
+            {
+                <option value="@model.ObjectId">@model.ObjectKey</option>
+            }
+        </select>
+
+        <select id="viewSelector" class="form-control custom-select" @onchange="(async x=>
+                                                                  {
+                                                                      string guid = (string)x.Value;
+                                                                      SelectedView = ModelViews.FirstOrDefault(y=> y.Guid == guid );
+                                                                      if(!string.IsNullOrEmpty(guid))
+                                                                      {
+                                                                          await OnViewSelected.InvokeAsync(SelectedView);
+                                                                      }
+                                                                  })">
+            <option value="-1">Select View</option>
+            @foreach (ForgeView view in ModelViews)
+            {
+                <option value="@view.Guid">@view.Name</option>
+            }
+        </select>
+    </div>
+
+@*</div>*@
+
+@code {
+
+    [Parameter]
+    public string AccessToken { get; set; }
+    [Parameter]
+    public Project Project { get; set; }
+    [Parameter]
+    public ForgeModel SelectedModel { get; set; }
+
+    public ForgeView SelectedView { get; set; }
+
+
+    [Parameter]
+    public EventCallback<ForgeModel> OnModelChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<ForgeView> OnViewSelected { get; set; }
+
+    //Project[] Projects { get; set; } = Array.Empty<Project>();
+    ForgeModel[] ForgeModels { get; set; } = Array.Empty<ForgeModel>();
+    ForgeView[] ModelViews { get; set; } = Array.Empty<ForgeView>();
+
+    //int counter = 0;
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    if (counter == 0)
+    //    {
+    //        Projects = repo.Projects.Where(x => !string.IsNullOrEmpty(x.ModelRepo)).ToArray();
+    //    }
+    //}
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Project != null && !string.IsNullOrEmpty(AccessToken))
+        {
+            await LoadModels(Project.ModelRepo);
+        }
+        //return base.OnParametersSetAsync();
+    }
+
+    public async Task LoadModels(string modelRepo)
+    {
+        dynamic models = await ForgeUtils.GetObjects(AccessToken, modelRepo);
+        ForgeModels = ((JArray)models.items).ToObject<ForgeModel[]>().OrderBy(x=> x.BucketKey).ToArray();
+    }
+
+    public async Task LoadViews(string urn)
+    {
+        dynamic viewData = await ForgeUtils.GetForgeViews(AccessToken, urn);
+        ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x=> x.Role == "3d" ).OrderBy(x=> x.Name).ToArray();
+    }
+}

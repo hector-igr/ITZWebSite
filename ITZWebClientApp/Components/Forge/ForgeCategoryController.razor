@@ -128,8 +128,9 @@
     protected override Task OnParametersSetAsync()
     {
         //Console.WriteLine($"{nameof(ForgeCategoryController)} - {nameof(OnParametersSetAsync)} : {counter}");
-        if (counter++ == 0)
+        if (ForgeElements.Count() > 0 && counter++ == 0)
         {
+            Console.WriteLine("forge count " + ForgeElements.Count());
             LoadCategories();
         }
         return base.OnParametersSetAsync();

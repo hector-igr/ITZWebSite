@@ -13,6 +13,8 @@
 @using ForgeLibs.Models.Forge.Queries;
 @using ForgeLibs.Models.Charts; 
 @using Newtonsoft.Json; 
+@using System.Text.Json;
+@using System.Drawing; 
 
 @inject HttpClient client
 @inject IJSRuntime JSRuntime
@@ -89,14 +91,14 @@
 
 <style>
     .forge_query_form {
-        flex-basis: 70%;
+        flex-basis: 90%;
     }
 
     .forge_layout_switcher {
         display: flex;
         justify-content: right;
         /*        border:dotted;*/
-        flex-basis: 30%;
+        flex-basis: 10%;
     }
 </style>
 
@@ -114,17 +116,63 @@
         .gutter.gutter-vertical {
             cursor: row-resize;
         }
+</style
+
+<style>
+    .forgeFirstQueryLabel {
+        background-color: var(--webFavoriteColor);
+        color: white;
+    }
+
 </style>
 <LoadingScreen IsLoaded="_contentLoaded" @ref="loadingScreen" CssClass="@_loadingScreenClass"></LoadingScreen>
 
 <div class="forge_div">
     <CascadingValue Value="this">
-        <div class="forge_ribbon">
-            <div class="forge_query_form">
-                <ForgeQueryController ForgeElements="ForgeElems"
-                                      SelectedIds="@_selectedIDs"
-                                      OnChartDataChanged="@(x => {
-                                                                _barChart.UpdateChart(x);
+        <div class="forge_ribbon form-inline">
+            <div class="forge_query_form input-group">
+                <ForgeProjectController @ref="_forgeModelSelector"
+                                        Project="@_project"
+                                        AccessToken="@_modelAccessToken"
+                                        OnModelChanged="@( async x=>
+                                                           {
+                                                               //await LoadModelData(x);
+                                                               firstModelLoad = true;
+                                                           })"
+                                        OnViewSelected="@( async x=> {
+                                                               ForgeModel model = _forgeModelSelector.SelectedModel;
+                                                               bool viewDataLoaded = await LoadViewData(model, x);
+                                                               if(firstModelLoad)
+                                                               {
+                                                                   firstModelLoad = false;
+                                                                   _modelUrn64 = ForgeUtils.Base64Encode(model.ObjectId);
+                                                                   _viewGuid = x.Guid;
+                                                               }
+                                                               else
+                                                               {
+                                                                   _forgeViewer.ChangeModel(x.Guid);
+                                                               }
+
+                                                               if(viewDataLoaded)
+                                                               {
+                                                                    _queryTypes.Add(QueryType.ByCategory);
+                                                               }
+                                                               else
+                                                               {
+                                                                   _queryTypes.Remove(QueryType.ByCategory);
+                                                                   await _barChart.UpdateChart(BarChartData.EmptyBarChart());
+                                                                   _forgequeyController.Query = QueryType.None;
+                                                               }
+                                                           }
+                                        )"></ForgeProjectController>
+                @if (_queryTypes.Count > 0)
+                {
+                    <ForgeQueryController @ref="_forgequeyController"
+                                          ForgeElements="ForgeElemsView"
+                                          SelectedIds="@_selectedIDs"
+                                          QueryTypes="@_queryTypes.ToArray()"
+                                          OnChartDataChanged="@(async x => {
+                                                                await _barChart.UpdateChart(x);
                                                                 try
                                                                 {
                                                                     dynamic json = (dynamic)x.JSON;
@@ -152,7 +200,7 @@
                                                                             _forgeViewer.IsolateElements(string.Join(",", totalIds));
                                                                         }
                                                                         //Console.WriteLine($"FINISH ISOLATION AND CHANGE COLOR");
-                                                                        
+
                                                                     }
                                                                 }
                                                                 catch (Exception ex)
@@ -161,36 +209,135 @@
                                                                 }
 
                                                             } )"
-                                      OnCategoryChanged="@(async x => {
-                                                               Category = x;
-                                                               if(string.IsNullOrEmpty(Category))
-                                                               {
-                                                                   _forgeViewer.ResetOverrideColors();
-                                                                   _forgeViewer.ShowAll();
-                                                                   _forgeViewer.FitToView();
-                                                               }
-                                                               else
-                                                               {
-                                                                   var ids = ForgeElems.Where(y => y.Category == x).Select(y=> y.ObjectId);
-                                                                   _forgeViewer.IsolateElements(string.Join(",", ids));
-                                                               }
-                                                           })"
-                                      OnSelectIds="@(x => _forgeViewer.IsolateElements(x))"
-                                      OnScheduleChanged="@(async x=> {
-                                                               if (!string.IsNullOrEmpty(x.JSON))
-                                                               {
-                                                                   _jsgantt.LoadJsGanttData(x.Now, x.JSON);
-                                                                   ChangeSplitterSizes("bottonbar", new int[] { 70, 30 });
-                                                               }
-                                                               else
-                                                               {
-                                                                   _jsgantt.UnLoadJsGanttData();
-                                                                   ChangeSplitterSizes("bottonbar", new int[] { 100, 00 });
-                                                               }
-                                                                StateHasChanged();
-                                                           } )"
-                                      ForgeSchedules="@_forgeSchedules"
-                                      OnQueryTypeChanged="@(x=> {
+                                          OnCategoryChanged="@(async x => {
+                                                                   Category = x;
+                                                                   if(string.IsNullOrEmpty(Category))
+                                                                   {
+                                                                       _forgeViewer.ResetOverrideColors();
+                                                                       _forgeViewer.ShowAll();
+                                                                       _forgeViewer.FitToView();
+                                                                   }
+                                                                   else
+                                                                   {
+                                                                       var ids = ForgeElemsView.Where(y => y.Category == x).Select(y=> y.ObjectId);
+                                                                       _forgeViewer.IsolateElements(string.Join(",", ids));
+                                                                   }
+                                                               })"
+                                          OnSelectIds="@(x => _forgeViewer.IsolateElements(x))"
+                                          OnScheduleChanged="@(async x=> {
+                                                                   Console.WriteLine("SCHEDULE CHANGED");
+                                                                   if (!string.IsNullOrEmpty(x.JSON))
+                                                                   {
+                                                                       _jsgantt.LoadJsGanttData(x.Now, x.JSON);
+                                                                       ChangeSplitterSizes("bottonbar", new int[] { 70, 30 });
+                                                                   }
+                                                                   else
+                                                                   {
+                                                                       _jsgantt.UnLoadJsGanttData();
+                                                                       ChangeSplitterSizes("bottonbar", new int[] { 100, 00 });
+                                                                   }
+                                                                   _scheduleSelected = x;
+
+
+                                                                   IEnumerable<int> revitIds = _scheduleSelected.GetAllRevitIds();
+                                                                   Console.WriteLine($"all revit ids {revitIds.Count()}");
+                                                                   ObjectsNotMap = GetNoneLinkObjectsIds(revitIds).ToArray();
+                                                                   Console.WriteLine($"objects not map {ObjectsNotMap.Count()}");
+
+                                                                   StateHasChanged();
+                                                               } )"
+                                          ForgeSchedules="@_forgeSchedules"
+                                          OnDateChanged="@(x =>
+                                                           {
+                                                               Console.WriteLine("ON DATE CHANGED");
+
+                                                               //Console.WriteLine("Hide NOT MAP OBJETS");
+
+                                                               Stopwatch stopwatch = new Stopwatch();
+                                                               stopwatch.Start();
+                                                               _forgeViewer.Hide(ObjectsNotMap.ToArray());
+                                                               Console.WriteLine($"HIDE NOT MAP {stopwatch.Elapsed.TotalSeconds} sec");
+                                                               _forgeViewer.ResetOverrideColors();
+                                                               Console.WriteLine($"RESET OVERRIDE {stopwatch.Elapsed.TotalSeconds} sec");
+
+                                                               
+                                                               var present = _scheduleSelected.GetPresentTasks(x);
+                                                               //Console.WriteLine($"Now {x}");
+                                                               //Console.WriteLine("---------------");
+                                                               //foreach (var item in present)
+                                                               //{
+                                                               //    Console.WriteLine($"{item.pName} -> {item.pStart} : {item.pEnd}");
+                                                               //}
+                                                               //Console.WriteLine($"present : {present.Count()}");
+                                                               var presentIds = _scheduleSelected.GetTaskObjectsIds(present);
+                                                               //Console.WriteLine($"presentIds : {presentIds.Count()}");
+                                                               var revitIds = _scheduleSelected.GetRevitIds(presentIds.ToArray());
+                                                               //Console.WriteLine($"revitIds : {revitIds.Count()}");
+                                                               var objPresetnIds = GetObjectIds(revitIds).ToList();
+                                                               //Console.WriteLine($"objectIds : {objectIds.Count()}");
+                                                               string color = ChartUtils.ColorRgbaName(Color.Green);
+                                                               //_forgeViewer.ChangeColorElements(objectIds.ToArray(), color);
+                                                              
+                                                               Console.WriteLine($"GET PRESENT IDS {stopwatch.Elapsed.TotalSeconds} sec");
+
+
+                                                               var past = _scheduleSelected.GetPastTasks(x);
+                                                               //Console.WriteLine("---------------");
+                                                               //foreach (var item in past)
+                                                               //{
+                                                               //    Console.WriteLine($"{item.pName} -> {item.pStart} : {item.pEnd}");
+                                                               //}
+                                                               //Console.WriteLine($"past : {present.Count()}");
+                                                               var pastIds = _scheduleSelected.GetTaskObjectsIds(past);
+                                                               //Console.WriteLine($"pastIds : {pastIds.Count()}");
+                                                               revitIds = _scheduleSelected.GetRevitIds(pastIds.ToArray());
+                                                               //Console.WriteLine($"revitIds : {revitIds.Count()}");
+                                                               var objPastIds = GetObjectIds(revitIds);
+                                                               //Console.WriteLine($"objectIds : {objectIds.Count()}");
+
+                                                               //color = ChartUtils.ColorRgbaName(Color.Red);
+                                                               // _forgeViewer.ChangeColorElements(objectIds.ToArray(), color);
+                                                               
+                                                               Console.WriteLine($"GET PAST IDS {stopwatch.Elapsed.TotalSeconds} sec");
+
+                                                               var future = _scheduleSelected.GetFutureTasks(x);
+                                                               //Console.WriteLine("---------------");
+                                                               //foreach (var item in future)
+                                                               //{
+                                                               //    Console.WriteLine($"{item.pName} -> {item.pStart} : {item.pEnd}");
+                                                               //}
+                                                               //Console.WriteLine($"future : {future.Count()}");
+                                                               var futureIds = _scheduleSelected.GetTaskObjectsIds(future);
+                                                               //Console.WriteLine($"futureIds : {futureIds.Count()}");
+                                                               revitIds = _scheduleSelected.GetRevitIds(futureIds.ToArray());
+                                                               //Console.WriteLine($"revitIds : {revitIds.Count()}");
+                                                               var objeFutureIds = GetObjectIds(revitIds);
+                                                               //Console.WriteLine($"objectIds : {objectIds.Count()}");
+
+                                                               Console.WriteLine($"GET FUTURE IDS {stopwatch.Elapsed.TotalSeconds} sec");
+
+                                                               
+                                                               objPresetnIds.AddRange(objPastIds);
+
+                                                               Console.WriteLine($"APPEND IDS {stopwatch.Elapsed.TotalSeconds} sec");
+
+                                                               _forgeViewer.Show(objPresetnIds.ToArray());
+
+                                                               Console.WriteLine($"SHOW {stopwatch.Elapsed.TotalSeconds} sec");
+
+                                                               _forgeViewer.Hide(objeFutureIds.ToArray());
+
+                                                               Console.WriteLine($"HIDE {stopwatch.Elapsed.TotalSeconds} sec");
+                                                               Console.WriteLine($"FINISH!");
+
+                                                               //string str = string.Join(',', objectIds);
+                                                               //_forgeViewer.IsolateElements(str);
+
+
+                                                               //_forgeViewer.Hide(objectIds.ToArray());
+                                                           }
+                                          )"
+                                          OnQueryTypeChanged="@(x=> {
                                                                 switch(x)
                                                                   {
                                                                       case QueryType.None:
@@ -213,6 +360,8 @@
                                                                           }
                                                                   };
                                                             } )" />
+                }
+
             </div>
             <div class="forge_layout_switcher">
                 <button class="oi oi-arrow-bottom" @onclick="@(x => { SetSplitterToMin("main", false); UpdateResize(x); })"></button>
@@ -227,20 +376,31 @@
                                  ViewerId="view1"
                                  AccessToken="@_modelAccessToken"
                                  ProjectUrn64="@_modelUrn64"
+                                 ViewGuid="@_viewGuid"
                                  OnDocumentLoadSuccess="x=> _shoulRender = false"
                                  OnChangeSelection="@(x=> {
-                                                      _selectedIDs = string.Join(",", x);
-                                                      _selectedElement = ForgeElems.FirstOrDefault(y => y.ObjectId == x[0]);
-                                                      if(_selectedElement != null)
-                                                      {
-                                                          _selectedElement.GetChildren(ForgeElems);
-                                                          _selectedElement.GetParent(ForgeElems);
-                                                      }
-                                                  })" />
+                                                          _selectedIDs = string.Join(",", x);
+                                                          _selectedElement = ForgeElemsView.FirstOrDefault(y => y.ObjectId == x[0]);
+                                                          if(_selectedElement != null)
+                                                          {
+                                                              _selectedElement.GetChildren(ForgeElemsView);
+                                                              _selectedElement.GetParent(ForgeElemsView);
+                                                          }
+                                                      })" />
                 </div>
                 <div class="forge_botton">
                     @*<GanttChart></GanttChart>*@
-                    <JsGantt @ref="_jsgantt" Id="GanttChartDIV" OnRowSelected="@(x=> { })"></JsGantt>
+                    <JsGantt @ref="_jsgantt" Id="GanttChartDIV" OnRowSelected="@(x=> {
+
+                                                                                     if(_scheduleSelected.ForgeTaskMapping.TryGetValue(x, out int[] forgeElIds) && forgeElIds.Length > 0)
+                                                                                     {
+                                                                                         var ids = GetObjectIds(forgeElIds);
+                                                                                         string str = string.Join(',', ids);
+                                                                                         //Console.WriteLine(str);
+                                                                                         _forgeViewer.IsolateElements(str);
+                                                                                     }
+
+                                                                                 })"></JsGantt>
                 </div>
             </div>
 
@@ -266,7 +426,7 @@
                     <TabSet>
                         <Tab Title="Resumen">
                             <ForgeCategoryTable @ref="_tblCat"
-                                                ForgeElements="@ForgeElems"
+                                                ForgeElements="@ForgeElemsView"
                                                 Category="@Category"
                                                 OnItemSelected="@(x=> _forgeViewer?.IsolateElements(new int[] { x }))" />
                         </Tab>
@@ -285,7 +445,7 @@
     </CascadingValue>
 </div>
 
-@functions {
+@code {
 
 
     private int[] SavedIds = Array.Empty<int>();
@@ -304,46 +464,68 @@
     LoadingScreen loadingScreen;
     private bool _contentLoaded = false;
 
-    private string _projectName { get; set; }
+    //private string _projectName { get; set; }
+    private ForgeLibs.Models.Project _project { get; set; }
+    private List<QueryType> _queryTypes = new List<QueryType>();
+
     private string _selectedIDs { get; set; }
     private string _modelUrn64 { get; set; }
+    private string _viewGuid { get; set; }
     private string _modelAccessToken { get; set; }
     private bool _shoulRender = true;
     private ForgeViewer _forgeViewer;
+    private ForgeQueryController _forgequeyController = new ForgeQueryController();
+    private ForgeProjectController _forgeModelSelector;
     private JsGantt _jsgantt;
     private ForgeCategoryTable _tblCat;
     private BarChart _barChart;
     private ForgeElement _selectedElement;
+    private ForgeSchedule _scheduleSelected;
+    private Dictionary<string, int> _objMapping;
     public string Category { get; set; }
 
     [CascadingParameter]
     MainLayout layout { get; set; }
     [Parameter]
     public int ProjectId { get; set; }
-    public IEnumerable<ForgeElement> ForgeElems = Enumerable.Empty<ForgeElement>();
+    public IEnumerable<ForgeElement> ForgeElemsFull = Enumerable.Empty<ForgeElement>();
+    public IEnumerable<ForgeElement> ForgeElemsView = Enumerable.Empty<ForgeElement>();
 
+    private bool firstModelLoad = true;
     int counter = 0;
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine("ini Forge desktop");
         layout.Toggle();
 
-        //_contentLoaded = true;
         if (counter == 0)
         {
-            _projectName = repo.Projects.FirstOrDefault(x => x.Id == ProjectId).Name;
-            Console.WriteLine("project name " + _projectName);
-            ForgeModel model = repo.GetForgeModelAsync(ProjectId);
-            if (model != null)
+            _project = repo.Projects.FirstOrDefault(x => x.Id == ProjectId);
+            Console.WriteLine("project name " + _project.Name);
+            bool auth = await LoadForgeModelAuthInfo();
+            LoadSchedules();
+            if (_forgeSchedules.Length > 0)
             {
-                bool auth = await LoadForgeModelAuthInfo(model.ObjectId);
-                await Task.Delay(1000);
-                await LoadModelData(model);
-
+                _queryTypes.Add(QueryType.ByAdvance);
             }
+
+            //ForgeModel model = repo.GetForgeModelAsync(ProjectId);
+            //if (model != null)
+            //{
+            //    _modelUrn64 = ForgeUtils.Base64Encode(objectId);
+
+            //    await Task.Delay(1000);
+            //    await LoadModelData(model);
+
+            //}
+
+            await Task.Delay(1000);
+            _contentLoaded = true;
+
             await LoadSplitter("main", "forge_main", "forge_sidebar", false, 5, new int[] { 100, 00 });
             await LoadSplitter("sidebar", "forge_chart", "forge_table", true, 5, new int[] { 30, 70 });
             await LoadSplitter("bottonbar", "forge_viewer", "forge_botton", true, 5, new int[] { 100, 0 });
+            counter++;
         }
     }
 
@@ -353,12 +535,9 @@
         //return base.OnAfterRenderAsync(firstRender);
     }
 
-    public async Task<bool> LoadForgeModelAuthInfo(string objectId)
+    public async Task<bool> LoadForgeModelAuthInfo()
     {
-        _modelUrn64 = ForgeUtils.Base64Encode(objectId);
         //ForgeAuth auth = await http.GetJsonAsync<ForgeAuth>(@"https://localhost:44383/api/auth");
-
-
         //string uri = "https://www.dropbox.com/s/f63bysbygw3rrlw/access.json?dl=1";
         //HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, uri);
 
@@ -371,7 +550,8 @@
         //dynamic credentials = JsonConvert.DeserializeObject(response.Content.ReadAsStringAsync().Result);
         //Console.WriteLine(credentials);
 
-        ForgeAuth auth = await ForgeUtils.GetForgeAuth("a4Pg8Uq0WXDMO5ANelaKXywSAJAOvUsK", "Y510f0377670e4df", "data:read");
+        //ForgeAuth auth = await ForgeUtils.GetForgeAuth("a4Pg8Uq0WXDMO5ANelaKXywSAJAOvUsK", "Y510f0377670e4df", "data:read");
+        ForgeAuth auth = await ForgeUtils.GetForgeAuth("fjGGjnwIJTeZQ8S9cn2ULJ67Blx3i1pY", "CFFfztdAcz48QHAr", "data:read");
         if (auth != null)
         {
             Console.WriteLine("get auth from itz server ... OK");
@@ -385,15 +565,185 @@
         return false;
     }
 
-    public async Task LoadModelData(ForgeModel model)
+    public async Task LoadModelData_OLD(ForgeModel model, ForgeView view)
     {
+        string bucket = model.BucketKey;
+        string viewName = view.Name.Replace(" ", "").ToLower();
         Console.WriteLine("loading model data ....");
-        string fileName = model.ObjectKey + "Translate.txt";
-        string json = await client.GetStringAsync("models_metadata/" + fileName);
-        ForgeElems = ForgeElement.ParseForgeElements(json, 1000);
-        _contentLoaded = true;
-        Console.WriteLine("No Schedules : " + model.Schedules.Length);
-        _forgeSchedules = model.Schedules;
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(model.ObjectKey);
+        string address = $"models_metadata/{bucket}/{fileName}_{viewName}_felements.txt";
+        Console.WriteLine(address);
+        string json = await client.GetStringAsync(address);
+        if (!string.IsNullOrEmpty(json))
+        {
+            ForgeElemsFull = ForgeElement.ParseForgeElements(json, 1000);
+            _modelUrn64 = ForgeUtils.Base64Encode(model.ObjectId);
+            _viewGuid = view.Guid;
+
+            ForgeModel repoModel = repo.GetForgeModelAsync(ProjectId);
+            Console.WriteLine("No Schedules : " + repoModel.Schedules.Length);
+            _forgeSchedules = repoModel.Schedules;
+        }
+    }
+
+    public void LoadSchedules()
+    {
+        ForgeModel repoModel = repo.GetForgeModelAsync(ProjectId);
+        Console.WriteLine("No Schedules : " + repoModel.Schedules.Length);
+        _forgeSchedules = repoModel.Schedules;
+    }
+
+    public async Task<bool> LoadViewData(ForgeModel model, ForgeView view)
+    {
+        string bucket = model.BucketKey;
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(model.ObjectKey);
+        string viewName = view.Name.Replace(" ", "").ToLower();
+        string mapAddress = $"models_metadata/{bucket}/{fileName}_{viewName}_map.json";
+        HttpResponseMessage response = await client.GetAsync(mapAddress);
+        if (response.IsSuccessStatusCode)
+        {
+            string mapJson = await response.Content.ReadAsStringAsync();
+            _objMapping = System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, int>>(mapJson);
+            Stopwatch stopwatch = new Stopwatch();
+
+            stopwatch.Reset();
+            stopwatch.Start();
+            List<ForgeElement> fe = new List<ForgeElement>();
+            foreach (ForgeElement item in ForgeElemsFull)
+            {
+                if (_objMapping.ContainsKey(item.RevitId.ToString()))
+                {
+                    int? objectId = _objMapping[item.RevitId.ToString()];
+                    if (objectId != null)
+                    {
+                        item.ObjectId = objectId.Value;
+                        fe.Add(item);
+                    }
+                }
+            }
+
+            //if(fe.Count() == 0)
+            //{
+            //    foreach (var pair in _objMapping)
+            //    {
+            //        ForgeElement forgeElement = new ForgeElement()
+            //        {
+            //            RevitId = Convert.ToInt32(pair.Key),
+            //            ObjectId = pair.Value
+            //        };
+            //        fe.Add(forgeElement);
+            //    }
+            //}
+            //ForgeElemsView = fe.ToArray();
+
+            stopwatch.Stop();
+            Console.WriteLine($"MAPPING OBJECTS {stopwatch.Elapsed.TotalSeconds} sec ... {ForgeElemsFull.Count()} count");
+            Console.WriteLine("parsing forge elements ... end");
+
+            return true;
+        }
+        else
+        {
+            ForgeElemsView = new ForgeElement[0];
+        }
+
+        return false;
+    }
+
+    public async Task<bool> LoadModelData(ForgeModel model)
+    {
+        string bucket = model.BucketKey;
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(model.ObjectKey);
+
+        Console.WriteLine("loading model data ....");
+        string dbAddress = $"models_metadata/{bucket}/{fileName}_db.json";
+        HttpResponseMessage response = await client.GetAsync(dbAddress);
+        if(response.IsSuccessStatusCode)
+        {
+            string dbJson = await response.Content.ReadAsStringAsync();
+            Stopwatch stopwatch = new Stopwatch();
+            //if (!string.IsNullOrEmpty(dbJson) && !string.IsNullOrEmpty(mapJson))
+            {
+                //ForgeElems = ParseForgeElements(dbJson, map);
+
+                //{
+                //    stopwatch.Reset();
+                //    stopwatch.Start();
+                //    string dbJson = await client.GetStringAsync(dbAddress);
+                //    ForgeElems = System.Text.Json.JsonSerializer.Deserialize<ForgeElement[]>(dbJson);
+                //    stopwatch.Stop();
+                //    Console.WriteLine($"USING TEXT JSON SERIALIZER {stopwatch.Elapsed.TotalSeconds} sec ... {ForgeElems.Count()} count");
+                //}
+
+
+
+                //{
+                //    stopwatch.Reset();
+                //    stopwatch.Start();
+                //    ForgeElems = await client.GetJsonAsync<ForgeElement[]>(dbAddress);
+                //    stopwatch.Stop();
+                //    Console.WriteLine($"USING TEXT JSON client.GetJsonAsync {stopwatch.Elapsed.TotalSeconds} sec ... {ForgeElems.Count()} count");
+                //}
+
+
+                {
+                    stopwatch.Reset();
+                    stopwatch.Start();
+
+                    if (!string.IsNullOrEmpty(dbJson))
+                    {
+                        ForgeElemsFull = Utf8Json.JsonSerializer.Deserialize<ForgeElement[]>(dbJson);
+                    }
+                    else
+                    {
+                        ForgeElemsFull = new ForgeElement[0];
+                        return false;
+                    }
+                    stopwatch.Stop();
+                    Console.WriteLine($"USING Utf8Json.JsonSerializer {stopwatch.Elapsed.TotalSeconds} sec ... {ForgeElemsFull.Count()} count");
+
+                }
+
+                //    stopwatch.Reset();
+                //    stopwatch.Start();
+                //    string dbJson = await client.GetStringAsync(dbAddress);
+                //    ForgeElems = Newtonsoft.Json.JsonConvert.DeserializeObject<ForgeElement[]>(dbJson);
+                //    stopwatch.Stop();
+                //    Console.WriteLine($"USING Newtonsoft.JsonConvert {stopwatch.Elapsed.TotalSeconds} sec ... {ForgeElems.Count()} count");
+                //}
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    public static ForgeElement[] ParseForgeElements(string json, Dictionary<string, int> revitForgeMapping)
+    {
+        //ForgeElement[] fEls = JsonConvert.DeserializeObject<ForgeElement[]>(json);
+        ForgeElement[] fEls = Newtonsoft.Json.JsonConvert.DeserializeObject<ForgeElement[]>(json);
+
+        //string jsi = JsonConvert.SerializeObject(fEls);
+        //Console.WriteLine(jsi);
+
+        Console.WriteLine("mapping ids");
+        foreach (ForgeElement item in fEls)
+        {
+            if(revitForgeMapping.ContainsKey(item.RevitId.ToString()))
+            {
+                int? objectId = revitForgeMapping[item.RevitId.ToString()];
+                if (objectId != null)
+                {
+                    item.ObjectId = objectId.Value;
+                }
+
+            }
+
+        }
+        Console.WriteLine("mapping ids ... finish");
+        return fEls;
     }
 
     /// <summary>
@@ -403,14 +753,14 @@
     public void GetForgeElement(int objectId)
     {
         //Console.WriteLine($"ForgeDomain.GetForgeElement({objectId})");
-        ForgeElement forgeElement = this.ForgeElems.FirstOrDefault(x => x.ObjectId == objectId);
+        ForgeElement forgeElement = this.ForgeElemsView.FirstOrDefault(x => x.ObjectId == objectId);
         //Console.WriteLine($"{forgeElement?.RevitId}");
         if (forgeElement != null)
         {
             _selectedElement = forgeElement;
             _forgeViewer.IsolateElements(forgeElement.ObjectId.ToString());
-            _selectedElement.GetChildren(ForgeElems);
-            _selectedElement.GetParent(ForgeElems);
+            _selectedElement.GetChildren(ForgeElemsView);
+            _selectedElement.GetParent(ForgeElemsView);
             StateHasChanged();
         }
     }
@@ -443,4 +793,32 @@
         _forgeViewer.Resize();
     }
 
+
+    int[] ObjectsNotMap = new int[0];
+
+    public IEnumerable<int> GetObjectIds(IEnumerable<int> revitIds)
+    {
+        foreach (int revitId in revitIds)
+        {
+            if (_objMapping.TryGetValue(revitId.ToString(), out int r))
+            {
+                yield return r;
+            }
+        }
+    }
+
+    public IEnumerable<int> GetNoneLinkObjectsIds(IEnumerable<int> revitIds)
+    {
+        Console.WriteLine($"GetNoneLinkObjectsIds()");
+        var viewRevitIds = _objMapping.Select(x => Convert.ToInt32(x.Key));
+        Console.WriteLine($"allObjectIds : {viewRevitIds.Count()}");
+        var missing = viewRevitIds.Except(revitIds);
+        Console.WriteLine($"Missing : {missing.Count()}");
+
+        foreach (int m in missing)
+        {
+            yield return _objMapping[m.ToString()];
+        }
+
+    }
 }

@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
-
+    [DebuggerDisplay("{RevitId} : {ObjectId}")]
     public class ForgeElement
     {
         public int RevitId { get; set; }
@@ -24,20 +24,24 @@ namespace ForgeLibs.Models.Forge
         /// </summary>
         //public int NodeId { get; set; }
         public int ObjectId { get; set; }
-        //public string ExternalId { get; set; }
-        public string Category { get; set; }
+		//public string ExternalId { get; set; }
 
-        public string TypeName { get; set; }
+		public string OriginalCategory { get; set; }
+		public string Category { get; set; }
+		public string FileName { get; set; }
+		public string TypeName { get; set; }
         public string Name { get; set; }
         public string FullName { get; set; }
 		public string OmmiCode { get; set; }
 		public ForgeElement Parent { get; set; }
-        public IEnumerable<ForgeElement> Children { get; set; }
-        public Dictionary<string, object> Properties { get; set; }
+		public int ParentId { get; set; }
+		public IEnumerable<ForgeElement> Children { get; set; }
+		public IEnumerable<int> ChildrenId { get; set; }
+		public Dictionary<string, object> Properties { get; set; }
         public IEnumerable<ForgeTableByCategoryVM> Grouping { get; set; }
         public ForgeTableByCategoryVM ElementProperties { get; set; }
 
-        public static string SerializeForgeElements(IEnumerable<ForgeElement> forgeElements)
+        public static string SerializeForgeElementsTable(IEnumerable<ForgeElement> forgeElements)
         {
             StringBuilder sb = new StringBuilder();
             string[] headers = new string[] { "RevitId","ObjectId","Category","OmniCode" , "TypeName","Name","FullName","Parent_RevitId","Properties","Children"};
@@ -279,22 +283,27 @@ namespace ForgeLibs.Models.Forge
                 {
                     var str = name.Split('[', ']');
                     var id = Convert.ToInt32(str[1]);
-                    if (name.ToUpper().Contains("FLOOR"))
+
+                    string tempName = name.ToUpper();
+                    if (tempName.Contains("FLOOR"))
                     {
                         category = "Losas";
                     }
-                    else if (name.ToUpper().Contains("WALL"))
+                    else if (tempName.Contains("WALL"))
                     {
                         category = "Muros";
                     }
-                    else if (name.ToUpper().Contains("RAILING"))
+                    else if (tempName.Contains("RAILING"))
                     {
                         category = "Barandal";
                     }
-                    else if (name.ToUpper().Contains("STAIR"))
+                    else if (tempName.Contains("STAIR"))
                     {
                         category = "Escalera";
                     }
+                    
+
+
                     string typeName = str[0];
                     string fullName = "";
                     if (properties.ContainsKey("Type Name"))
@@ -326,6 +335,27 @@ namespace ForgeLibs.Models.Forge
             return forgeElements;
         }
 
+        public static Dictionary<int, int> RevitIdForgeIdDic(string json)
+		{
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            dynamic desJson = JsonConvert.DeserializeObject(json);
+            var collection = desJson["data"]["collection"];
+            Stopwatch watch = Stopwatch.StartNew();
+            foreach (dynamic item in collection)
+            {
+                string name = item.name;
+                if (name.Contains('[') && name.Contains(']'))
+                {
+                    var str = name.Split('[', ']');
+                    var id = Convert.ToInt32(str[1]);
+                    dic[id] = item.objectid;
+                }
+
+                watch.Stop();
+            }
+            return dic;
+        }
+
         public void LoadProperties(OmniClassRepository repo)
         {
             this.ElementProperties = ForgeTableByCategoryVM.GetModelByCategory(repo, new ForgeElement[] { this }, this.Category);
@@ -353,7 +383,6 @@ namespace ForgeLibs.Models.Forge
                     str = str.Replace("_", "");
                     var parentId = Convert.ToInt32(str);
                     this.Parent = elements.FirstOrDefault(x => x.RevitId == parentId);
-
                 }
             }
         }

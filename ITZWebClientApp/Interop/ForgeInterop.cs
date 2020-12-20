@@ -1,4 +1,6 @@
-﻿using Microsoft.JSInterop;
+﻿using ITZWebClientApp.Components.Forge;
+using ITZWebClientApp.Interfaces;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,12 +16,21 @@ namespace ITZWebClientApp.Interop
         //    this.JS = js;
         //}
 
-        public static ValueTask<object> LoadDocument(IJSRuntime js, string viewId, string token, string urn, object forgeViewer)
+        public static ValueTask<object> LoadDocument(IJSRuntime js, string viewId, string accessToken, string urn, string viewguid, object forgeViewer)
         {
-            return js.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, 
-                urn, DotNetObjectReference.Create(forgeViewer));
+            return js.InvokeAsync<object>("forgeFunctions.initialize", viewId, accessToken, 
+                urn, viewguid, DotNetObjectReference.Create(forgeViewer));
         }
 
+        public static ValueTask<object> TearDown(IJSRuntime js, string viewId)
+		{
+            return js.InvokeAsync<object>("forgeFunctions.tearDown", viewId);
+        }
+
+        public static ValueTask<object> LoadModel(IJSRuntime js, string viewId, string viewguid, ForgeViewer forgeViewer)
+		{
+            return js.InvokeAsync<object>("forgeFunctions.loadModel", viewId, viewguid, DotNetObjectReference.Create(forgeViewer));
+        }
         //public Task<object> LoadDocument(string viewId, string token, string urn, string onSelectHandlers)
         //{
         //    return JS.InvokeAsync<object>("forgeFunctions.initialize", viewId, token, urn, onSelectHandlers);
@@ -28,6 +39,16 @@ namespace ITZWebClientApp.Interop
         public static ValueTask<object> IsolateElement(IJSRuntime js, string viewerId, int[] ids)
         {
             return js.InvokeAsync<object>("forgeFunctions.isolateElements", viewerId, ids);
+        }
+
+        public static ValueTask<object> ShowElements(IJSRuntime js, string viewerId, int[] ids)
+        {
+            return js.InvokeAsync<object>("forgeFunctions.show", viewerId, ids);
+        }
+
+        public static ValueTask<object> HideElements(IJSRuntime js, string viewerId, int[] ids)
+        {
+            return js.InvokeAsync<object>("forgeFunctions.hide", viewerId, ids);
         }
 
         public static ValueTask<object> ChangeColorElement(IJSRuntime js, string viewerId, int[] ids, string rgbStr)

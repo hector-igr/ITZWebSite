@@ -166,6 +166,10 @@ SetSplitterToMin = function (splitterName, indexToExpand) {
 
 
 
+
+
+
+
 var ganttEl;
 var ttask;
 

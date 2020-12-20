@@ -11,23 +11,25 @@
 @namespace ITZWebClientApp.Components.Forge
 
 <style>
-    .changeColors-button{
-/*        background-color:red;*/
+    .changeColors-button {
+        /*        background-color:red;*/
     }
+
         .changeColors-button:before {
             content: "\f042"; /* this is your text. You can also use UTF-8 character codes as I do here */
             font-family: FontAwesome;
-            font-size:23px;
+            font-size: 23px;
         }
+
     .resetColors-button {
-/*        background-color: green;*/
+        /*        background-color: green;*/
     }
+
         .resetColors-button:before {
             content: "\f12d"; /* this is your text. You can also use UTF-8 character codes as I do here */
             font-family: FontAwesome;
             font-size: 23px;
         }
-
 </style>
 
 <div id="@ViewerId" style="position: relative;
@@ -35,6 +37,10 @@
         width: 100%;
         /*background-color: #F0F8FF;*/
     "> </div>
+
+@*<button id="MyAwesomeLockButton">Lock it!</button>
+<button id="MyAwesomeUnlockButton">Unlock it!</button>*@
+
 @code {
 
     [Parameter]
@@ -45,6 +51,8 @@
 
     [Parameter]
     public string ProjectUrn64 { get; set; }
+    [Parameter]
+    public string ViewGuid { get; set; }
 
     [Parameter]
     public EventCallback<bool> OnDocumentLoadSuccess { get; set; }
@@ -52,15 +60,19 @@
     [Parameter]
     public EventCallback<int[]> OnChangeSelection { get; set; }
 
+    [Parameter]
+    public EventCallback OnModelLoaded { get; set; }
+
     bool shouldRedner = true;
     protected override async Task OnParametersSetAsync()
     {
-        if (!string.IsNullOrEmpty(AccessToken) && !string.IsNullOrEmpty(ProjectUrn64) && shouldRedner)
+        if (!string.IsNullOrEmpty(AccessToken) && !string.IsNullOrEmpty(ProjectUrn64) && !string.IsNullOrEmpty(ViewGuid) && shouldRedner)
         {
             //Console.WriteLine("token : " + AccessToken);
             //Console.WriteLine("urn64 : " + ProjectUrn64);
+            //Console.WriteLine("viewGuid : " + ViewGuid);
 
-            await ForgeInterop.LoadDocument(js, ViewerId, AccessToken, ProjectUrn64, this);
+            await ForgeInterop.LoadDocument(js, ViewerId, AccessToken, ProjectUrn64, ViewGuid, this);
         }
     }
 
@@ -99,7 +111,15 @@
     public void OnLoadInstanceSuccess()
     {
         OnDocumentLoadSuccess.InvokeAsync(true);
+        Console.WriteLine("OnLoadInstanceSuccess!!!");
         shouldRedner = false;
+    }
+
+    [JSInvokable]
+    public void IsModelLoaded()
+    {
+        OnModelLoaded.InvokeAsync(true);
+        Console.WriteLine("MODEL LOADED!!!");
     }
 
     //[JSInvokable]
@@ -128,5 +148,21 @@
     public void FitToView(int[] ids = null)
     {
         ForgeInterop.FitToView(js, ViewerId, ids);
+    }
+
+    public void ChangeModel(string guid)
+    {
+        ForgeInterop.TearDown(js, ViewerId);
+        ForgeInterop.LoadModel(js, ViewerId, guid, this);
+    }
+
+    public void Show(int[] ids)
+    {
+        ForgeInterop.ShowElements(js, ViewerId, ids);
+    }
+
+    public void Hide(int[] ids)
+    {
+        ForgeInterop.HideElements(js, ViewerId, ids);
     }
 }
