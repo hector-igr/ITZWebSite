@@ -38,12 +38,21 @@
             width: 100%;
             /*                table-layout: fixed;*/
         }
-</style>
 
+    .assem-item,
+    .fa-chevron-down,
+    .fa-chevron-up {
+        cursor: pointer;
+    }
+</style>
+@if(Element == null)
+{
+    <h4>Select an Object</h4>
+}
 <table>
     <thead>
         <tr>
-            <th>
+            <th style="width:1rem">
                 @if (Element.Parent != null)
                 {
                     <a @onclick=@(x=> { OnParentSelection.InvokeAsync(Element.Parent.ObjectId); } )>
@@ -58,7 +67,8 @@
                 }
             </th>
             <th>
-                <a @onclick=@(x=> OnItemSelection.InvokeAsync(Element.ObjectId.ToString()) )>@Element.Name</a>
+                @{ var elName = $"{Element.Name} [{Element.RevitId}]"; }
+                <a class="assem-item" @onclick=@(x=> OnItemSelection.InvokeAsync(Element.ObjectId.ToString()) )>@elName</a>
             </th>
         </tr>
 
@@ -68,7 +78,13 @@
             {
                 <td>
                     <b>@property : </b>
-                    <span>@Element.GetPropertyValue(property)</span>
+                    @{ 
+                        string propVal = Element.GetPropertyValue(property, true);
+                        string unit = Element.GetUnit(property);
+                        propVal = double.TryParse(propVal, out double val) ? $"{val.ToString("0.00")} {unit}" : propVal;
+                        string v = $"{propVal}";
+                        }
+                    <span>@v</span>
                 </td>
             }
         </tr>
@@ -77,15 +93,15 @@
         @foreach (ForgeTableByCategoryVM group in Element.Grouping)
         {
             <tr>
-                <td colspan="10">
+                <td>
                     <table>
                         @{
                             string guid = string.Join("-", group.Elements.Select(x => x.ObjectId));
-                            if (!ExpandGroup.ContainsKey(guid)) ExpandGroup[guid] = true;
+                            if (!ExpandGroup.ContainsKey(guid)) ExpandGroup[guid] = false;
                             string tag = NetStandardsUtils.RandomWord();
                             <thead>
                                 <tr>
-                                    <td>
+                                    <td style="width:2rem">
                                         @if (group.Elements.Count() > 0)
                                         {
                                             @if (ExpandGroup[guid])
@@ -100,7 +116,6 @@
                                                     <span class="fa fa-chevron-down"></span>
                                                 </a>
                                             }
-
                                         }
                                     </td>
                                     <td id="@Element.ObjectId">
@@ -110,7 +125,7 @@
                                     </td>
                                     @foreach (string property in group.Properties)
                                     {
-                                        <td><b>@property</b> :<span>@ForgeElement.CalculateTotal(group.Elements, property)</span></td>
+                                        <td style="width:30%"><b>@property</b> :<span>@ForgeElement.CalculateTotal(group.Elements, property)</span></td>
                                     }
                                 </tr>
                             </thead>
@@ -122,25 +137,34 @@
                                     {
                                         ForgeElement item = elements[i];
                                         string str = (i + 1).ToString("00");
-                                        <tr id="@item.ObjectId" groupId=@tag>
-                                            <td>
-                                                @if (item.Children?.Count() > 0)
-                                                {
-                                                    <button onclick=@($"Expand('{@item.ObjectId}')")>+</button>
-                                                }
-                                                else
-                                                {
-                                                    @str
-                                                }
-                                            </td>
-                                            <td>
-                                                <a @onclick=@(x=> OnItemSelection.InvokeAsync(item.ObjectId.ToString()))>@item.Name</a>
-                                            </td>
-                                            @foreach (string property in group.Properties)
-                                            {
-                                                <td>@item.GetPropertyValue(property)</td>
-                                            }
-                                        </tr>
+                                <tr id="@item.ObjectId" groupId=@tag>
+                                    <td style="width:3rem">
+                                        @if (item.Children?.Count() > 0)
+                                        {
+                                            <button onclick=@($"Expand('{@item.ObjectId}')")>+</button>
+                                        }
+                                        else
+                                        {
+                                            @str
+                                        }
+                                    </td>
+                                    <td>
+                                        @{string childName = $"{item.Name} [{item.RevitId}]"; }
+                                        <a class="assem-item" @onclick=@(x=> OnItemSelection.InvokeAsync(item.ObjectId.ToString()))>@childName</a>
+                                    </td>
+                                    @foreach (string property in group.Properties)
+                                    {
+                                        string val = item.GetPropertyValue(property, true);
+                                        if (double.TryParse(val, out double dbl))
+                                        {
+                                            <td class="assem-item" style="width:30%">@dbl.ToString("0.00")</td>
+                                        }
+                                        else
+                                        {
+                                            <td  class="assem-item" style="width:30%">@val</td>
+                                        }
+                                    }
+                                </tr>
                                     }
                                 }
                             </tbody>
@@ -169,12 +193,11 @@
     {
         //Console.WriteLine("ForgeItemTable.OnParametersSet()");
         LoadProperties(Element, omni);
-        StateHasChanged();
+        //StateHasChanged();
     }
 
     public void LoadProperties(ForgeElement element, OmniClassRepository omniClassRepository)
     {
-
         //Console.WriteLine("ForgeItemTable.LoadProperties()");
         element.LoadGroups(omniClassRepository);
         //Console.WriteLine("Groups :" + element.Grouping.Count());

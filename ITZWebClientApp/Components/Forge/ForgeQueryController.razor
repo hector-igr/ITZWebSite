@@ -1,9 +1,10 @@
 ﻿@using ForgeLibs.Data;
 @using ForgeLibs.Models.Forge;
-@using ITZWebClientApp.Pages; 
+@using ITZWebClientApp.Pages;
 @using ITZWebClientApp.Infraestructure;
 @using ForgeLibs.Models.Charts;
 @using ForgeLibs.Models.Forge.Queries;
+@using ITZWebClientApp.Interop;
 
 @inject IJSRuntime js
 @inject HttpClient http;
@@ -29,106 +30,68 @@
         /*        padding-left:3px;
         padding-right:3px;*/
     }
-
 </style>
 
 
-@*<div class="forgeQuery form-inline ">*@
-    <div class="input-group input-group-sm forgeDropdown mr-3">
-        @*<InputSelect Id="qry_Categories" @bind-Value="Query" Class="form-control">
-                <option selected="selected">Query Type ... </option>
-                @foreach (QueryType queryType in Enum.GetValues(typeof(QueryType)))
-                {
-                    <option value="@queryType">@queryType</option>
-                }
-            </InputSelect>*@
-        <div class="input-group-prepend">
-            <label class="input-group-text forgeFirstQueryLabel" for="queryTypeSelector">Query</label>
-        </div>
 
-        <select id="queryTypeSelector" class="form-control qry_Categories custom-select" @onchange="(x => Query = (QueryType)Convert.ToInt32(x.Value))">
-            <option value="-1">Select ... </option>
-            @foreach (QueryType queryType in QueryTypes)
-            {
-                @if (queryType != QueryType.None)
-                {
-                    <option value="@((int)queryType)">@queryType</option>
-                }
-            }
-        </select>
+<div class="input-group input-group-sm forgeDropdown mr-3">
+    <div class="input-group-prepend">
+        <label class="input-group-text forgeFirstQueryLabel" for="queryTypeSelector">Query</label>
     </div>
 
-    @if (_query == QueryType.ByCategory)
-    {
-        <ForgeCategoryController @ref="@_categoryController" 
-                                 ForgeElements="@ForgeElements" 
-                                 OnCategoryChanged="@(x=> OnCategoryChanged.InvokeAsync(x))" 
-                                 OnChartDataChanged="@(x=> { OnChartDataChanged.InvokeAsync(x); })"
+    <select id="queryTypeSelector" class="form-control qry_Categories custom-select" @onchange="(x => Query = (QueryType)Convert.ToInt32(x.Value))">
+        <option value="-1">Select ... </option>
+        @foreach (QueryType queryType in QueryTypes)
+        {
+            @if (queryType != QueryType.None)
+            {
+                <option value="@((int)queryType)">@queryType</option>
+            }
+        }
+    </select>
+</div>
 
-                                 ></ForgeCategoryController>
-    }
+@if (_query == QueryType.ByCategory)
+{
+    <ForgeCategoryController @ref="@_categoryController"
+                             ForgeElements="@ForgeElements"
+                             OnCategoryChanged="@(x=> OnCategoryChanged.InvokeAsync(x))"
+                             OnChartDataChanged="@(x=> { OnChartDataChanged.InvokeAsync(x); })"></ForgeCategoryController>
+}
 
-    @if (_query == QueryType.ByAdvance)
-    {
-        <ForgeScheduleController @ref="@_scheduleController"
-                                 Schedules="ForgeSchedules"
-                                 OnScheduleSelected="@(x => OnScheduleChanged.InvokeAsync(x) )"
-                                 OnDateChanged="@(x=> OnDateChanged.InvokeAsync(x))"
-                                 ></ForgeScheduleController>
-    }
-
-@*</div>*@
-
+@if (_query == QueryType.ByAdvance)
+{
+    <ForgeScheduleController @ref="@_scheduleController"
+                             Schedules="ForgeSchedules"
+                             OnScheduleSelected="@(x => OnScheduleChanged.InvokeAsync(x) )"
+                             OnDateChanged="@(x=> OnDateChanged.InvokeAsync(x))"></ForgeScheduleController>
+}
 
 @code {
-
-    [Parameter]
-    public QueryType[] QueryTypes { get; set; } = new QueryType[0];/* = Enum.GetValues(typeof(QueryType)).Cast<QueryType>().ToHashSet();*/
-
-    //private int[] catIndex = new int[] { -1, -1, -1 };
-    //private int[] scheduleIndex = new int[] { -1, -1, -1 };
-
-
-    public bool IsQueryByCategoriesActivated { get; set; } = true;
-
-    public bool IsQueryByScheduleAcitvated { get; set; } = true;
-
-
-    [Parameter]
-    public EventCallback<QueryType> OnQueryTypeChanged { get; set; }
-
-    [Parameter]
-    public IEnumerable<ForgeElement> ForgeElements { get; set; } = Array.Empty<ForgeElement>();
-
-    [Parameter]
-    public ForgeSchedule[] ForgeSchedules { get; set; } = Array.Empty<ForgeSchedule>();
-
-    [Parameter]
-    public EventCallback<ForgeSchedule> OnScheduleChanged { get; set; }
-
-    [Parameter]
-    public string SelectedIds { get; set; }
-
-    public Dictionary<QueryType, List<string>> QueryParameters { get; set; }
-
-    [CascadingParameter]
-    public ForgeDesktop forgeDomain { get; set; }
-
-    [Parameter]
-    public EventCallback<string> OnSelectIds { get; set; }
-
-    [Parameter]
-    public EventCallback<BarChartData> OnChartDataChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<string> OnCategoryChanged { get; set; }
-
-    [Parameter]
-    public EventCallback<DateTime> OnDateChanged { get; set; }
 
     private ForgeCategoryController _categoryController = null;
     private ForgeScheduleController _scheduleController = null;
 
+    [Parameter]
+    public string SelectedIds { get; set; }
+    [Parameter]
+    public QueryType[] QueryTypes { get; set; } = new QueryType[0];
+    [Parameter]
+    public IEnumerable<ForgeElement> ForgeElements { get; set; } = Array.Empty<ForgeElement>();
+    [Parameter]
+    public ForgeSchedule[] ForgeSchedules { get; set; } = Array.Empty<ForgeSchedule>();
+    [Parameter]
+    public EventCallback<QueryType> OnQueryTypeChanged { get; set; }
+    [Parameter]
+    public EventCallback<ForgeSchedule> OnScheduleChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> OnSelectIds { get; set; }
+    [Parameter]
+    public EventCallback<BarChartData> OnChartDataChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> OnCategoryChanged { get; set; }
+    [Parameter]
+    public EventCallback<DateTime> OnDateChanged { get; set; }
     private QueryType _query = QueryType.None;
     [Parameter]
     public QueryType Query
@@ -139,39 +102,17 @@
             if (_query != value)
             {
                 OnQueryTypeChanged.InvokeAsync(value);
+                _query = value;
+                StateHasChanged();
             }
-            _query = value;
-            switch (_query)
-            {
-                case QueryType.ByAdvance:
-                    {
-
-                        //OnChartDataChanged.InvokeAsync(BarChartData.EmptyBarChart());
-                    }
-                    break;
-
-                case QueryType.ByCategory:
-                    {
-                        //if (_categoryController != null)
-                        //{
-                        //    _categoryController.LoadCategories();
-                        //}
-
-                    }
-                    break;
-
-                default:
-                    {
-                        //OnChartDataChanged.InvokeAsync(BarChartData.EmptyBarChart());
-                    }
-                    break;
-            }
-            if (_categoryController != null)
-            {
-                //_categoryController.SelectedCategory = "";
-                //_categoryController.Reset();
-            }
-            StateHasChanged();
+        }
+    }
+    public void Reset()
+    {
+        SelectDropDownInterop.ChangeSelectIndexById(js, "queryTypeSelector", 0);
+        if(_categoryController != null)
+        {
+            _categoryController.Reset();
         }
     }
 }

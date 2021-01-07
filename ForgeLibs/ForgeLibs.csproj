@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <Folder Include="Attributes\" />
+    <Folder Include="Infraestructure\Debug\" />
   </ItemGroup>
 
 </Project>

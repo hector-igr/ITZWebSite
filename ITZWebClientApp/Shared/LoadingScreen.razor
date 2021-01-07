@@ -1,58 +1,67 @@
 ﻿<style>
+    .cover-content {
+        text-align: center;
+        height:60%;
+    }
 
+    .spinner {
+        /*  margin: 100px auto;*/
+        /*  width: 50px;*/
+        height: 15%;
+        text-align: center;
+        /*  font-size: 10px;*/
+    }
 
-.spinner {
-/*  margin: 100px auto;*/
-/*  width: 50px;*/
-  height:15%;
-  text-align: center;
-/*  font-size: 10px;*/
-}
+        .spinner > div {
+            background-color: #333;
+            height: 100%;
+            width: 6px;
+            display: inline-block;
+            -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+            animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        }
 
-.spinner > div {
-  background-color: #333;
-  height: 100%;
-  width: 6px;
-  display: inline-block;
+        .spinner .rect2 {
+            -webkit-animation-delay: -1.1s;
+            animation-delay: -1.1s;
+        }
 
-  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-  animation: sk-stretchdelay 1.2s infinite ease-in-out;
-}
+        .spinner .rect3 {
+            -webkit-animation-delay: -1.0s;
+            animation-delay: -1.0s;
+        }
 
-.spinner .rect2 {
-  -webkit-animation-delay: -1.1s;
-  animation-delay: -1.1s;
-}
+        .spinner .rect4 {
+            -webkit-animation-delay: -0.9s;
+            animation-delay: -0.9s;
+        }
 
-.spinner .rect3 {
-  -webkit-animation-delay: -1.0s;
-  animation-delay: -1.0s;
-}
+        .spinner .rect5 {
+            -webkit-animation-delay: -0.8s;
+            animation-delay: -0.8s;
+        }
 
-.spinner .rect4 {
-  -webkit-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
+    @@-webkit-keyframes sk-stretchdelay {
+        0%, 40%, 100% {
+            -webkit-transform: scaleY(0.4)
+        }
 
-.spinner .rect5 {
-  -webkit-animation-delay: -0.8s;
-  animation-delay: -0.8s;
-}
+        20% {
+            -webkit-transform: scaleY(1.0)
+        }
+    }
 
-@@-webkit-keyframes sk-stretchdelay {
-  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-  20% { -webkit-transform: scaleY(1.0) }
-}
+    @@keyframes sk-stretchdelay {
+        0%, 40%, 100% {
+            transform: scaleY(0.4);
+            -webkit-transform: scaleY(0.4);
+        }
 
-@@keyframes sk-stretchdelay {
-  0%, 40%, 100% {
-    transform: scaleY(0.4);
-    -webkit-transform: scaleY(0.4);
-  }  20% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
-  }
-}
+        20% {
+            transform: scaleY(1.0);
+            -webkit-transform: scaleY(1.0);
+        }
+    }
 
 
 
@@ -69,6 +78,8 @@
     }
 
 
+
+
     .space_grid {
         position: absolute;
         border-color: red;
@@ -80,20 +91,23 @@
         background-color: white;
         animation: intro 3.4s, backChange 6.8s infinite ease-in;
         transition-delay: 3.4s;
+        
     }
 
     .cover_grid {
         /*        background: url('/GaleriaTlalpan3A.jpg') no-repeat center center fixed;*/
         grid-area: logo;
-/*        background-image: url('media/index/GaleriaTlalpan3A.jpg');*/
-        background-size: contain;
+        /*        background-image: url('media/index/GaleriaTlalpan3A.jpg');*/
+        /*        background-size: contain;*/
         background-position: center;
         background-repeat: no-repeat;
+        -webkit-mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 0%, transparent 50%);
+        mask-image: radial-gradient(ellipse 100% 100% at 50% 50%, black 0%, transparent 50%);
     }
 
     .cover {
         position: absolute;
-        background-image: url('media/index/GaleriaTlalpan3A.jpg');
+/*        background-image: url('media/index/GaleriaTlalpan3A.jpg');*/
         background-repeat: no-repeat;
         height: 100%;
         width: 100%;
@@ -113,7 +127,6 @@
         }
 
         100% {
-            /*            background-image: url('media/index/galeria tlalpan 3A.png');*/
             background-image: linear-gradient(0,white, white);
             /*            visibility: hidden;
             opacity: 0.0;*/
@@ -133,30 +146,31 @@
 
 
 
-@if (IsLoaded)
-{
-    @ChildContent
-}
-else
+@if (!IsLoaded)
 {
     <div class="@CssClass">
         <div class="space_grid">
             @*<div class="loader"></div>*@
-            <div class="cover_grid" style="background-image: url('/GaleriaTlalpan3A.jpg'); ">
+            <div class="cover_grid" style="background-image: url('@BackgroundImage'); background-size:@BackgroundPosition ">
             </div>
 
             <div style="grid-area: spinner;">
-                <div class="spinner">
+                <div class="spinner" style="margin:30px">
                     <div class="rect1"></div>
                     <div class="rect2"></div>
                     <div class="rect3"></div>
                     <div class="rect4"></div>
                     <div class="rect5"></div>
                 </div>
+                <div class="cover-content">
+                    @ChildContent
+                </div>
             </div>
         </div>
     </div>
+    
 }
+
 
 @code {
 
@@ -164,7 +178,13 @@ else
     public bool IsLoaded { get; set; }
     [Parameter]
     public string CssClass { get; set; }
+    [Parameter]
+    public string MainInstruction { get; set; }
+    [Parameter]
+    public string BackgroundImage { get; set; } = "/GaleriaTlalpan3A.jpg";
 
+    [Parameter]
+    public string BackgroundPosition { get; set; } = "contain";
 
     [Parameter]
     public RenderFragment ChildContent { get; set; }

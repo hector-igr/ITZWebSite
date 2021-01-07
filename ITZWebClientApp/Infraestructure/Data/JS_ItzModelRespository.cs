@@ -29,7 +29,7 @@ namespace ITZWebClientApp.Infraestructure.Data
 
         public async Task LoadDataAsync()
         {
-            Console.WriteLine("JS_ItzModelRespository.LoadDataAsync()");
+            //Console.WriteLine("JS_ItzModelRespository.LoadDataAsync()");
             projects = JsonConvert.DeserializeObject<Project[]>(await client.GetStringAsync("/db/hgr_projects3.json"));
             models = JsonConvert.DeserializeObject<ForgeModel[]>(await client.GetStringAsync("/db/forgeModels2.json"));
             //models = await client.GetJsonAsync<ForgeModel[]>("/db/forgeModels2.json");

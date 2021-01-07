@@ -15,92 +15,93 @@
                           Values="_versions"
                           CSS="form-control custom-select"
                           PropertyChanged="@(async x=> {
-                                             int index = await Interop.SelectDropDownInterop.GetSelectedIndex(js, "_schduleVer");
-                                             if (index > 0)
-                                             {
-                                                 _selectedSchedule = Schedules[index-1];
-                                                 await UpdateScheduleParameters();
-                                             }
-                                             else
-                                             {
-                                                 await OnScheduleSelected.InvokeAsync(new ForgeSchedule());
-                                                 MinDate = null;
-                                                 MaxDate = null;
-                                                 StateHasChanged();
-                                             }
-                                         })"
+                                                 int index = await Interop.SelectDropDownInterop.GetSelectedIndex(js, "_schduleVer");
+                                                 if (index > 0)
+                                                 {
+                                                     _selectedSchedule = Schedules[index-1];
+                                                     await UpdateScheduleParameters(_selectedSchedule);
+                                                     await OnScheduleSelected.InvokeAsync(_selectedSchedule);
+                                                 }
+                                                 else
+                                                 {
+                                                     await OnScheduleSelected.InvokeAsync(new ForgeSchedule());
+                                                     _minDate = null;
+                                                     _maxDate = null;
+                                                     StateHasChanged();
+                                                 }
+                                             })"
                           OnValuesLoaded="@(x => {
                                         PropertySelector.ChangeToLastSavedIndex(_versionSelector, state);
                                     })"></PropertySelector>
     </div>
 }
 
-
 <ForgeDatePicker @ref="_datePicker"
                  Id="forgeScheduleDate"
                  Name="Date"
                  Value="@Now"
-                 MinDate="@MinDate"
-                 MaxDate="@MaxDate"
-                 OnDateChange="@(x => { Now = DateTime.Parse(x); ChangeTodayDate(Now); OnDateChanged.InvokeAsync(Now); })"></ForgeDatePicker>
-<ForgeDatePicker @ref="_startDatePicker"
-                 Id="forgeScheduleFirstDate"
-                 Value="@MinDate"
-                 MinDate="@MinDate"
-                 MaxDate="@MaxDate"
-                 Name="First Date"
-                 OnDateChange="@(x => { StartDate = DateTime.Parse(x);  ChangeDateRange(StartDate, EndDate); })"></ForgeDatePicker>
-<ForgeDatePicker @ref="_endDatePicker"
-                 Id="forgeScheduleLastDate"
-                 Value="@MaxDate"
-                 MinDate="@MinDate"
-                 MaxDate="@MaxDate"
-                 Name="Last Date"
-                 OnDateChange="@(x => { EndDate = DateTime.Parse(x);  ChangeDateRange(StartDate, EndDate); })"></ForgeDatePicker>
+                 MinDate="@_minDate"
+                 MaxDate="@_maxDate"
+                 OnDateChange="@(x => {
+                                     Now = DateTime.Parse(x);
+                                     _selectedSchedule.Now = Now;
+                                     _sliderValue = GetRangeValue(_minDate.Value, _maxDate.Value, Now);
+                                 })"></ForgeDatePicker>
 
 <div class="input-group input-group-sm px-4">
-    <input id="dateRange" type="range" min="0" max="1" @bind="SliderValue" step=".01" />
-    @*<p>@MyProperty </p>*@
+    <input id="dateRange" type="range" min="0" max="1" step=".01" 
+           value="@_sliderValue" 
+           @onchange="x=>
+                      {
+                          Now = GetDate(_startDate, _endDate, Convert.ToDouble(x.Value));
+                          _selectedSchedule.Now = Now;
+                      }" />
 </div>
 
+<ForgeDatePicker @ref="_startDatePicker"
+                 Id="forgeScheduleFirstDate"
+                 Value="@_startDate"
+                 MinDate="@_minDate"
+                 MaxDate="@_maxDate"
+                 Name="First Date"
+                 OnDateChange="@(x => { _startDate = DateTime.Parse(x);  ChangeDateRange(_startDate, _endDate); })"></ForgeDatePicker>
 
+<ForgeDatePicker @ref="_endDatePicker"
+                 Id="forgeScheduleLastDate"
+                 Value="@_endDate"
+                 MinDate="@_minDate"
+                 MaxDate="@_maxDate"
+                 Name="Last Date"
+                 OnDateChange="@(x => { _endDate = DateTime.Parse(x);  ChangeDateRange(_startDate, _endDate); })"></ForgeDatePicker>
 
 @code {
 
-    private double _SliderValue = .01;
-
-    public double SliderValue
+    private double _sliderValue = .00;
+    private DateTime _now = DateTime.Now;
+    public DateTime Now
     {
-        get { return _SliderValue; }
-        set { _SliderValue = value; Now = GetDate(value).Value; OnDateChanged.InvokeAsync(Now); }
+        get {
+            return _now;
+        }
+        set {
+            _now = value;
+            OnDateChanged.InvokeAsync(_now);
+        }
     }
-
-
-    public string MyProperty { get; set; }
-
-    public DateTime Now { get; set; } = DateTime.Now;
-    public DateTime? MinDate { get; set; }
-    public DateTime? MaxDate { get; set; }
-
-    public DateTime StartDate;
-    public DateTime EndDate;
-
-
+    private DateTime? _minDate { get; set; }
+    private DateTime? _maxDate { get; set; }
+    private DateTime _startDate { get; set; }
+    private DateTime _endDate { get; set; }
     private PropertySelector _versionSelector = null;
     private ForgeSchedule _selectedSchedule = null;
-
     private ForgeDatePicker _datePicker = null;
     private ForgeDatePicker _startDatePicker = null;
     private ForgeDatePicker _endDatePicker = null;
-
     private string[] _versions = Array.Empty<string>();
-
     [Parameter]
     public ForgeSchedule[] Schedules { get; set; } = Array.Empty<ForgeSchedule>();
-
     [Parameter]
     public EventCallback<ForgeSchedule> OnScheduleSelected { get; set; }
-
     [Parameter]
     public EventCallback<DateTime> OnDateChanged { get; set; }
 
@@ -109,14 +110,13 @@
         if (firstDate.HasValue && lastDate.HasValue)
         {
             _selectedSchedule.FilterJSON(firstDate.Value, lastDate.Value);
-            //OnScheduleSelected.InvokeAsync(_selectedSchedule);
+            OnScheduleSelected.InvokeAsync(_selectedSchedule);
         }
     }
 
     protected override async Task OnParametersSetAsync()
     {
         _versions = Schedules.Select(x => x.Version.ToString("0.00")).ToArray();
-
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -124,39 +124,53 @@
         if(firstRender && _versions.Count() == 1)
         {
             _selectedSchedule = Schedules[0];
-            await UpdateScheduleParameters();
+            await UpdateScheduleParameters(_selectedSchedule);
+            await OnScheduleSelected.InvokeAsync(_selectedSchedule);
         }
     }
 
-    public void ChangeTodayDate(DateTime date)
+    /// <summary>
+    /// Update Parameters of Min, Max and Load JSON data from selected schedule
+    /// </summary>
+    /// <returns></returns>
+    public async Task UpdateScheduleParameters(ForgeSchedule forgeSchedule)
     {
-        _selectedSchedule.Now = date;
-        //OnScheduleSelected.InvokeAsync(_selectedSchedule);
-    }
-
-    public async Task UpdateScheduleParameters()
-    {
-        await _selectedSchedule.LoadjSONfromAddress(client);
-        await OnScheduleSelected.InvokeAsync(_selectedSchedule);
-        MinDate = _selectedSchedule.FirstDate;
-        MaxDate = _selectedSchedule.LastDate;
-        StartDate = MinDate.Value;
-        EndDate = MaxDate.Value;
+        await forgeSchedule.LoadjSONfromAddress(client);
+        _minDate = forgeSchedule.FirstDate;
+        _maxDate = forgeSchedule.LastDate;
+        _startDate = _minDate.Value;
+        _endDate = _maxDate.Value;
         StateHasChanged();
     }
 
-    public DateTime? GetDate(double number)
+    /// <summary>
+    /// Get date from a two dates and a double value
+    /// </summary>
+    /// <param name="number"></param>
+    /// <returns></returns>
+    public DateTime GetDate(DateTime minDate, DateTime maxDate, double number)
     {
         //Console.WriteLine(MinDate.Value);
         //Console.WriteLine($"CHANGE DATE NUmBER {number}");
 
-        TimeSpan? timeRange = MaxDate - MinDate;
-        if(timeRange != null)
-        {
-            TimeSpan a = timeRange.Value * number;
-            DateTime date = MinDate.Value + a;
-            return date;
-        }
-        return null;
+        TimeSpan timeRange = maxDate - minDate;
+        TimeSpan a = timeRange * number;
+        DateTime date = minDate + a;
+        return date;
+    }
+
+    /// <summary>
+    /// Get a double value from a date between a two min max dates
+    /// </summary>
+    /// <param name="minDate"></param>
+    /// <param name="maxDate"></param>
+    /// <param name="date"></param>
+    /// <returns></returns>
+    public double GetRangeValue(DateTime minDate, DateTime maxDate, DateTime date)
+    {
+        TimeSpan timeRange = maxDate - minDate;
+        TimeSpan soan = date - _minDate.Value;
+        double r = soan.TotalSeconds / timeRange.TotalSeconds;
+        return r;
     }
 }

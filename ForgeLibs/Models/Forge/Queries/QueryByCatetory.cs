@@ -49,7 +49,9 @@ namespace ForgeLibs.Models.Forge.Queries
 		public string[] GetParametersByCategories()
 		{
 			string omniNumber = Omni.GetOmniClassNumberByClassFullTitle(Category);
+			Console.WriteLine($"omni number : {omniNumber}");
 			var parameters = Omni.GetParameters(omniNumber).ToList();
+			Console.WriteLine($"parameters : {string.Join(",", parameters)}");
 			parameters.Insert(0, "Count");
 			return parameters.ToArray();
 		}

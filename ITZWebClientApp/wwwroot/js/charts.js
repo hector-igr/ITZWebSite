@@ -12,6 +12,17 @@
         var config = {
             type: barType,
             options: {
+                legend: {
+                    
+                },
+                onHover: function (e, elements) {
+                    //e.target.style.cursor = 'pointer';
+                    if (elements[0]) {
+                        e.currentTarget.style.cursor = "pointer";
+                    } else {
+                        e.currentTarget.style.cursor = "default";
+                    }
+                },
                 scales: {
                     yAxes: [{
                         scaleLabel: {
@@ -100,14 +111,14 @@
             var name = chartJS.activeCharts[i]["chartName"];
             if (name === chartName) {
                 chartJS.activeCharts[i]["myChart"] = new Chart(ctx, config);
-                console.log('js_charts.setBarChart() ... reloaded');
+                //console.log('js_charts.setBarChart() ... reloaded');
                 return true;
             }
         }
         if (found === false) {
             var myChart = new Chart(ctx, config);
             chartJS.activeCharts.push({ viewElId, chartName, myChart });
-            console.log('js_charts.setBarChart() ... loaded');
+            //console.log('js_charts.setBarChart() ... loaded');
             return true;
         }
 

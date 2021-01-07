@@ -53,8 +53,7 @@ namespace ITZWebClientApp.Interop
 
         public static ValueTask<object> ChangeColorElement(IJSRuntime js, string viewerId, int[] ids, string rgbStr)
         {
-            return js.InvokeAsync<object>("forgeFunctions.changeColor", 
-                viewerId, ids, rgbStr);
+            return js.InvokeAsync<object>("forgeFunctions.changeColor", viewerId, ids, rgbStr);
         }
 
         public static ValueTask<object> Resize(IJSRuntime js, string viewId)

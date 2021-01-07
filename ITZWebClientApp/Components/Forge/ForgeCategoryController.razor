@@ -23,13 +23,13 @@
                                          _forgeQuery.Category = x;
                                          _forgeQuery.Property = "";
                                          _forgeQuery.Group = "";
-                                         var data = BarChartData.EmptyBarChart();
-                                         OnChartDataChanged.InvokeAsync(data);
                                          _parameters = _forgeQuery.GetParametersByCategories().ToArray();
                                          _groups = _forgeQuery.GetGroupParametersByCategories().ToArray();
                                          SelectDropDownInterop.ChangeSelectIndexById(js, _propertySelectorId, 0);
                                          SelectDropDownInterop.ChangeSelectIndexById(js, _groupSelectorId, 0);
-
+                                         var data = BarChartData.EmptyBarChart();
+                                         OnChartDataChanged.InvokeAsync(data);
+                                         OnCategoryChanged.InvokeAsync(SelectedCategory);
                                      })"
                   OnValuesLoaded="@(x => {
                                         PropertySelector.ChangeToLastSavedIndex(_catSelector, state);
@@ -65,7 +65,6 @@
                     Values="_groups"
                     CSS="form-control custom-select"
                     PropertyChanged="@(x => {
-
                                             _forgeQuery.Group = x;
                                             if (x == "-1")
                                             {
@@ -77,16 +76,7 @@
                                           PropertySelector.ChangeToLastSavedIndex(_groupSelector, state);
                                       })"></PropertySelector>
 
-
-
 @code {
-
-    //[Parameter]
-    //public int CatIndex { get; set; }
-    //[Parameter]
-    //public int ParamIndex { get; set; }
-    //[Parameter]
-    //public int GroupIndex { get; set; }
 
     private string _catSelectorId = "selector_Cat";
     private string _propertySelectorId = "selector_param";
@@ -110,10 +100,10 @@
         get { return _selectedCategory; }
         set
         {
-            OnCategoryChanged.InvokeAsync(value);
             if (_selectedCategory != value)
             {
                 _selectedCategory = value;
+                
             }
         }
     }
@@ -141,18 +131,15 @@
         _forgeQuery = new QueryByCatetory(ForgeElements, omni);
         _categories = _forgeQuery.Categories.ToArray();
     }
-
     public void Reset()
     {
         SelectDropDownInterop.ChangeSelectIndexById(js, _propertySelectorId, 0);
         SelectDropDownInterop.ChangeSelectIndexById(js, _groupSelectorId, 0);
     }
-
     public void PrintObject(string message, object obj)
     {
         Console.WriteLine($"{message} : {JsonConvert.SerializeObject(obj)}");
     }
-
     protected override void OnInitialized()
     {
         //Console.WriteLine($"{nameof(ForgeCategoryController)} - {nameof(OnInitialized)}");

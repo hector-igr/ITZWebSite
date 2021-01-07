@@ -12,7 +12,7 @@ namespace ForgeLibs.Data
     public class OmniClassRepository
     {
         public const string OmniClassPath = @"models_metadata/OmniClass.txt";
-        public const string OmniClassAbsolutePath = @"D:\Desarrollos\ASPNETCORE\ForgeViewer\ForgeViewerClient\wwwroot\models_metadata/OmniClass.txt";
+        public const string OmniClassAbsolutePath = @"D:\Desarrollos\ASPNETCORE\ITZWebSite\ITZWebClientApp\wwwroot\models_metadata\OmniClass.txt";
 
         public const string OmniClassTitle = "OmniClass Title";
         public const string OmniClassNumber = "OmniClass Number";
@@ -44,12 +44,12 @@ namespace ForgeLibs.Data
             _table = StringToDataTable(str, '\t');
             if (!string.IsNullOrEmpty(str))
             {
-                Console.WriteLine("Load Omni File Success");
+                //Console.WriteLine("Load Omni File Success");
                 return true;
             }
             else
             {
-                Console.WriteLine("Load Omni File Failed");
+                //Console.WriteLine("Load Omni File Failed");
                 return false;
             }
         }
@@ -60,12 +60,12 @@ namespace ForgeLibs.Data
             _table = StringToDataTable(str, '\t');
             if(!string.IsNullOrEmpty(str))
 			{
-                Console.WriteLine("Load Omni File Success");
+                //Console.WriteLine("Load Omni File Success");
                 return true;
 			}
 			else
 			{
-                Console.WriteLine("Load Omni File Failed");
+                //Console.WriteLine("Load Omni File Failed");
                 return false;
 			}
         }
@@ -123,7 +123,7 @@ namespace ForgeLibs.Data
                             //add fully category name using the hierarchy three of the omninclass number
                             string omNumber = (string)row[OmniClassNumber];
                             int level = Convert.ToInt32(row[OmniHierarchy]);
-                            if (catHierarchy.Count >= level)
+                            if (catHierarchy.Count >= level - 1)
                             {
                                 catHierarchy = catHierarchy.Take(level - 2).ToList();
                             }

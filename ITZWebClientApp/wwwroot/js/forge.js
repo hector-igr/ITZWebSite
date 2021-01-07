@@ -38,6 +38,7 @@ window.forgeFunctions = {
 
             //v7.0
             viewer = new Autodesk.Viewing.GuiViewer3D(containerId, config3d);
+            debugViewer = viewer;
             viewer.itzdesktop = dotNetInstance;
             function onDocumentLoadFailure_v7() {
                 console.error('Failed fetching Forge manifest');
@@ -215,7 +216,7 @@ window.forgeFunctions = {
     },
 
     isolateElements: function (viewId, ids) {
-        console.log("js_forge.isolateElements() ");
+        //console.log("js_forge.isolateElements() ");
 
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
@@ -225,7 +226,7 @@ window.forgeFunctions = {
                 //viewer.isolateById(ids);
                 viewer.isolate(ids);
                 viewer.fitToView(ids);
-                console.log("js_forge.isolateElements() ... finish");
+                //console.log("js_forge.isolateElements() ... finish");
             }
         }
     },
@@ -249,17 +250,22 @@ window.forgeFunctions = {
     },
 
     changeColor: function (viewId, ids, rgbString) {
-        //console.log("js_forge.changeColor() ");
+        console.group("js_forge.changeColor() ")
         for (var i = 0; i < forgeViewApp.length; i++) {
             var register = forgeViewApp[i];
             if (register["viewId"] === viewId) {
+                //console.log("viewId found!");
                 var viewer = register["viewer"];
                 var color = forgeFunctions.changeRGBAStringToThreeVector4(rgbString);
                 for (var c = 0; c < ids.length; c++) {
+                    //console.log(color);
                     viewer.setThemingColor(ids[c], color);
+                    //viewer.setThemingColor(ids[c], new THREE.Vector4(0, 1, 1, 1));
+                    console.log("changing theme color : " + rgbString +  "... ok");
                 }
             }
         }
+        console.groupEnd();
     },
 
     resetOverrideColors: function (viewId) {

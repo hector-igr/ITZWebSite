@@ -4,68 +4,70 @@
 @using ForgeLibs;
 @using Newtonsoft.Json;
 @using Newtonsoft.Json.Linq;
-@using ITZWebClientApp.Interop; 
+@using ITZWebClientApp.Interop;
+@using Console = ITZWebClientApp.Interop.Debug.ConsoleITZ;
+
 
 @inject IItzRepository repo;
 @inject IJSRuntime js;
 
-@*<div class="forgeProjectSelector form-inline">*@
-    <div class="input-group input-group-sm px-2">
-        @*<select id="projectSelector" class="form-control" @onchange="(async x=>
-                                                                     {
-                                                                         int indx = Convert.ToInt32(x.Value);
-                                                                         SelectedProject = Projects.FirstOrDefault(y => y.Id == indx);
-                                                                         if(indx != -1)
-                                                                         {
-                                                                             await LoadModels(SelectedProject.ModelRepo);
-                                                                         }
-                                                                     })">
-            <option value="-1"> Select Project</option>
-            @foreach (Project project in Projects)
-            {
-                <option value="@project.Id">@project.Name</option>
-            }
-        </select>*@
+<style>
+    .popover-body {
+        font-weight: 400;
+        color: red;
+        /*        background: var(--webFavoriteColor) !important;*/
+    }
 
-        <div class="input-group-prepend">
-            <label class="input-group-text forgeFirstQueryLabel">Model</label>
-        </div>
+    /*        .popover.bottom .arrow:after {
+            border-bottom-color: var(--webFavoriteColor);
+        }*/
+</style>
 
-        <select id="modelSelector" class="form-control custom-select" @onchange="@(async x=>
-                                                                   {
-                                                                       string objId = (string)x.Value;
-                                                                       SelectedModel = ForgeModels.FirstOrDefault(y => y.ObjectId == objId);
-                                                                       if(objId != "-1")
-                                                                       {
-                                                                           await OnModelChanged.InvokeAsync(SelectedModel);
-                                                                           await LoadViews(objId);
-                                                                       }
-                                                                   })">
-            <option value="-1">Select Model</option>
-            @foreach (ForgeModel model in ForgeModels)
-            {
-                <option value="@model.ObjectId">@model.ObjectKey</option>
-            }
-        </select>
+<div class="input-group input-group-sm px-2">
+    <div class="input-group-prepend">
+        <label class="input-group-text forgeFirstQueryLabel">Model</label>
+    </div>
 
-        <select id="viewSelector" class="form-control custom-select" @onchange="(async x=>
-                                                                  {
-                                                                      string guid = (string)x.Value;
-                                                                      SelectedView = ModelViews.FirstOrDefault(y=> y.Guid == guid );
-                                                                      if(!string.IsNullOrEmpty(guid))
-                                                                      {
-                                                                          await OnViewSelected.InvokeAsync(SelectedView);
-                                                                      }
-                                                                  })">
+    <select id="modelSelector" class="form-control custom-select"
+            @onchange="@(async x=>
+                        {
+                            string objId = (string)x.Value;
+                            if(objId != "-1")
+                            {
+                                SelectedModel = ForgeModels.FirstOrDefault(y => y.ObjectId == objId);
+                                viewIsLoaded = false;
+                            }
+                        })">
+        <option value="-1">Select Model</option>
+        @foreach (ForgeModel model in ForgeModels)
+        {
+            <option value="@model.ObjectId">@model.ObjectKey</option>
+        }
+    </select>
+    @if (SelectedModel != null)
+    {
+        <select id="viewSelector" class="form-control custom-select" disabled data-toggle="popover" data-content="Select" data-placement="bottom" data-container="body"
+                @onchange="@(async x=> {
+                                 string guid = (string)x.Value;
+                                 SelectedView = ModelViews.FirstOrDefault(y=> y.Guid == guid);
+                                 if(!string.IsNullOrEmpty(guid))
+                                 {
+                                     await OnViewSelected.InvokeAsync(SelectedView);
+                                     if(viewIsLoaded == false)
+                                     {
+                                         await HidePopper("viewSelector");
+                                         viewIsLoaded = true;
+                                     }
+                                 }
+                             })">
             <option value="-1">Select View</option>
             @foreach (ForgeView view in ModelViews)
             {
                 <option value="@view.Guid">@view.Name</option>
             }
         </select>
-    </div>
-
-@*</div>*@
+    }
+</div>
 
 @code {
 
@@ -73,49 +75,82 @@
     public string AccessToken { get; set; }
     [Parameter]
     public Project Project { get; set; }
+    private ForgeModel _SelectedModel;
     [Parameter]
-    public ForgeModel SelectedModel { get; set; }
+    public ForgeModel SelectedModel
+    {
+        get { return _SelectedModel; }
+        set
+        {
+            _SelectedModel = value;
+            new Task(async () =>
+            {
+                await OnModelChanged.InvokeAsync(SelectedModel);
+                await LoadViews(SelectedModel.ObjectId);
 
-    public ForgeView SelectedView { get; set; }
-
-
+            }).Start();
+        }
+    }
     [Parameter]
     public EventCallback<ForgeModel> OnModelChanged { get; set; }
-
     [Parameter]
     public EventCallback<ForgeView> OnViewSelected { get; set; }
-
-    //Project[] Projects { get; set; } = Array.Empty<Project>();
+    public ForgeView SelectedView { get; set; }
     ForgeModel[] ForgeModels { get; set; } = Array.Empty<ForgeModel>();
     ForgeView[] ModelViews { get; set; } = Array.Empty<ForgeView>();
-
-    //int counter = 0;
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    if (counter == 0)
-    //    {
-    //        Projects = repo.Projects.Where(x => !string.IsNullOrEmpty(x.ModelRepo)).ToArray();
-    //    }
-    //}
+    bool viewIsLoaded = false;
 
     protected override async Task OnParametersSetAsync()
     {
-        if(Project != null && !string.IsNullOrEmpty(AccessToken))
+        if (Project != null && !string.IsNullOrEmpty(AccessToken))
         {
             await LoadModels(Project.ModelRepo);
         }
-        //return base.OnParametersSetAsync();
     }
 
     public async Task LoadModels(string modelRepo)
     {
         dynamic models = await ForgeUtils.GetObjects(AccessToken, modelRepo);
-        ForgeModels = ((JArray)models.items).ToObject<ForgeModel[]>().OrderBy(x=> x.BucketKey).ToArray();
+        ForgeModels = ((JArray)models.items).ToObject<ForgeModel[]>().OrderBy(x => x.BucketKey).ToArray();
+        //Console.WriteLine($"Load Models .. {ForgeModels.Count()}");
     }
 
+    int c = 0;
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (ForgeModels.Count() == 1 && c++ == 0)
+        {
+            SelectDropDownInterop.DisableDropdown(js, "modelSelector");
+            SelectDropDownInterop.ChangeSelectIndexById(js, "modelSelector", 1);
+            SelectedModel = ForgeModels.First();
+            await RegisterPopper("viewSelector");
+        }
+
+    }
     public async Task LoadViews(string urn)
     {
+        Console.OpenGroup($"{nameof(LoadViews)}");
         dynamic viewData = await ForgeUtils.GetForgeViews(AccessToken, urn);
-        ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x=> x.Role == "3d" ).OrderBy(x=> x.Name).ToArray();
+        ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x => x.Role == "3d").OrderBy(x => x.Name).ToArray();
+        Console.WriteLine("modelviews ... ");
+        Console.WriteLine(ModelViews);
+        SelectDropDownInterop.EnableDropdown(js, "viewSelector");
+        if (viewIsLoaded == false)
+        {
+            await ShowPopper("viewSelector");
+        }
+        Console.CloseGroup();
+    }
+    public async Task ShowPopper(string id)
+    {
+        await js.InvokeVoidAsync("Popper.show", "#" + id);
+    }
+    public async Task HidePopper(string id)
+    {
+        await js.InvokeVoidAsync("Popper.hide", "#" + id);
+    }
+    public async Task RegisterPopper(string id)
+    {
+        await js.InvokeVoidAsync("Popper.register", "#" + id);
     }
 }

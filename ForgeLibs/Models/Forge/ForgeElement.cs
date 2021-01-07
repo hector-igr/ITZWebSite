@@ -15,10 +15,25 @@ using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
-    [DebuggerDisplay("{RevitId} : {ObjectId}")]
-    public class ForgeElement
-    {
+    public class ForgeElementMin
+	{
         public int RevitId { get; set; }
+        public string OriginalCategory { get; set; }
+        public string Category { get; set; }
+        public Dictionary<string, object> Properties { get; set; }
+        public string FileName { get; set; }
+        //public string TypeName { get; set; }
+        public string Name { get; set; }
+        public string FullName { get; set; }
+        public string OmmiCode { get; set; }
+        public IEnumerable<int> ChildrenId { get; set; }
+        public int ParentId { get; set; }
+    }
+
+    [DebuggerDisplay("{RevitId} : {ObjectId}")]
+    public class ForgeElement : ForgeElementMin
+    {
+        
         /// <summary>
         /// Node Id from the serialize data in the forge platform
         /// </summary>
@@ -26,102 +41,94 @@ namespace ForgeLibs.Models.Forge
         public int ObjectId { get; set; }
 		//public string ExternalId { get; set; }
 
-		public string OriginalCategory { get; set; }
-		public string Category { get; set; }
-		public string FileName { get; set; }
-		public string TypeName { get; set; }
-        public string Name { get; set; }
-        public string FullName { get; set; }
-		public string OmmiCode { get; set; }
 		public ForgeElement Parent { get; set; }
-		public int ParentId { get; set; }
-		public IEnumerable<ForgeElement> Children { get; set; }
-		public IEnumerable<int> ChildrenId { get; set; }
-		public Dictionary<string, object> Properties { get; set; }
+
+        public IEnumerable<ForgeElement> Children { get; set; } = Enumerable.Empty<ForgeElement>();
+		
         public IEnumerable<ForgeTableByCategoryVM> Grouping { get; set; }
         public ForgeTableByCategoryVM ElementProperties { get; set; }
 
-        public static string SerializeForgeElementsTable(IEnumerable<ForgeElement> forgeElements)
-        {
-            StringBuilder sb = new StringBuilder();
-            string[] headers = new string[] { "RevitId","ObjectId","Category","OmniCode" , "TypeName","Name","FullName","Parent_RevitId","Properties","Children"};
-            sb.AppendLine(string.Join("\t", headers));
-            foreach (ForgeElement elem in forgeElements)
-            {
-                try
-                {
-                    List<string> properties = new List<string>();
-                    foreach (var property in elem.Properties)
-                    {
-                        properties.Add($"{property.Key}:::{property.Value}");
-                    }
-                    string dic = string.Join(";", properties);
-                    string children_Nodeld = string.Join(";", elem.Children?.Select(x => x.RevitId));
-                    object[] values = new object[] { elem.RevitId, elem.ObjectId, elem.Category, elem.OmmiCode, elem.TypeName, elem.Name, elem.FullName, elem.Parent?.RevitId, dic, children_Nodeld };
-                    sb.AppendLine(string.Join("\t", values));
-                }
-                catch (Exception ex)
-                {
+        //public static string SerializeForgeElementsTable(IEnumerable<ForgeElement> forgeElements)
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    string[] headers = new string[] { "RevitId","ObjectId","Category","OmniCode" , "TypeName","Name","FullName","Parent_RevitId","Properties","Children"};
+        //    sb.AppendLine(string.Join("\t", headers));
+        //    foreach (ForgeElement elem in forgeElements)
+        //    {
+        //        try
+        //        {
+        //            List<string> properties = new List<string>();
+        //            foreach (var property in elem.Properties)
+        //            {
+        //                properties.Add($"{property.Key}:::{property.Value}");
+        //            }
+        //            string dic = string.Join(";", properties);
+        //            string children_Nodeld = string.Join(";", elem.Children?.Select(x => x.RevitId));
+        //            object[] values = new object[] { elem.RevitId, elem.ObjectId, elem.Category, elem.OmmiCode, elem.TypeName, elem.Name, elem.FullName, elem.Parent?.RevitId, dic, children_Nodeld };
+        //            sb.AppendLine(string.Join("\t", values));
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                }
+        //        }
                 
-            }
-            return sb.ToString();
-        }
+        //    }
+        //    return sb.ToString();
+        //}
 
-        public static ForgeElement ParseForgeElement(string line)
-        {
-            object[] values = line.Split('\t');
-            try
-            {
-                string properties = values[8].ToString();
-                string[] propertyValues = properties.Split(';');
-                Dictionary<string, object> dic = new Dictionary<string, object>();
-                char[] delimiters = new char[] { ':', ':', ':' };
-                foreach (var value in propertyValues)
-                {
-                    var pair = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-                    if (pair.Length > 1)
-                    {
-                        string key = pair[0];
-                        string v = pair.Length > 1 ? pair[1] : "";
-                        if (!string.IsNullOrWhiteSpace(v)) dic.Add(key, v);
-                    }
-                }
+        //public static ForgeElement ParseForgeElement(string line)
+        //{
+        //    object[] values = line.Split('\t');
+        //    try
+        //    {
+        //        string properties = values[8].ToString();
+        //        string[] propertyValues = properties.Split(';');
+        //        Dictionary<string, object> dic = new Dictionary<string, object>();
+        //        char[] delimiters = new char[] { ':', ':', ':' };
+        //        foreach (var value in propertyValues)
+        //        {
+        //            var pair = value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        //            if (pair.Length > 1)
+        //            {
+        //                string key = pair[0];
+        //                string v = pair.Length > 1 ? pair[1] : "";
+        //                if (!string.IsNullOrWhiteSpace(v)) dic.Add(key, v);
+        //            }
+        //        }
 
-                ForgeElement forgeElement = new ForgeElement()
-                {
+        //        ForgeElement forgeElement = new ForgeElement()
+        //        {
                     
-                    RevitId = Convert.ToInt32(values[0]),
-                    ObjectId = Convert.ToInt16(values[1]),
-                    Category = values[2].ToString(),
-                    OmmiCode = values[3].ToString(),
-                    TypeName = values[4].ToString(),
-                    Name = values[5].ToString(),
-                    FullName = values[6].ToString(),
-                    Properties = dic
-                };
-                return forgeElement;
+        //            RevitId = Convert.ToInt32(values[0]),
+        //            ObjectId = Convert.ToInt16(values[1]),
+        //            Category = values[2].ToString(),
+        //            OmmiCode = values[3].ToString(),
+        //            TypeName = values[4].ToString(),
+        //            Name = values[5].ToString(),
+        //            FullName = values[6].ToString(),
+        //            Properties = dic
+        //        };
+        //        return forgeElement;
                 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-            }
-            return null;
-        }
+        //    }
+        //    return null;
+        //}
 
-        public static IEnumerable<ForgeElement> ParseForgeElements(IEnumerable<string> lines)
-        {
-            foreach (string line in lines)
-            {
-                if (!string.IsNullOrEmpty(line))
-                {
-                    ForgeElement forgeElement = ParseForgeElement(line);
-                    yield return forgeElement;
-                }
-            }
-        }
+        //public static IEnumerable<ForgeElement> ParseForgeElements(IEnumerable<string> lines)
+        //{
+        //    foreach (string line in lines)
+        //    {
+        //        if (!string.IsNullOrEmpty(line))
+        //        {
+        //            ForgeElement forgeElement = ParseForgeElement(line);
+        //            yield return forgeElement;
+        //        }
+        //    }
+        //}
 
         ///// <summary>
         ///// BLAZOR NOT SUPPORTS THREADING :(
@@ -156,66 +163,66 @@ namespace ForgeLibs.Models.Forge
         //    return forgeElements;
         //}
 
-        public static List<ForgeElement> ParseForgeElements(string str, int maxElements = int.MaxValue)
-        {
-            List<ForgeElement> forgeElements = new List<ForgeElement>();
-            var lines = str.Split('\n').ToList();
-            lines.RemoveAt(0);
-            Console.WriteLine($"Parsing '{lines.Count}' forge elements");
-            if (maxElements != int.MaxValue)
-			{
-                Console.WriteLine($"Parsing limit to '{maxElements}'");
-                lines = lines.Take(maxElements).ToList();
-            }
+   //     public static List<ForgeElement> ParseForgeElements(string str, int maxElements = int.MaxValue)
+   //     {
+   //         List<ForgeElement> forgeElements = new List<ForgeElement>();
+   //         var lines = str.Split('\n').ToList();
+   //         lines.RemoveAt(0);
+   //         Console.WriteLine($"Parsing '{lines.Count}' forge elements");
+   //         if (maxElements != int.MaxValue)
+			//{
+   //             Console.WriteLine($"Parsing limit to '{maxElements}'");
+   //             lines = lines.Take(maxElements).ToList();
+   //         }
 
-            forgeElements.AddRange(ParseForgeElements(lines));
-            //for (int i = 1; i < lines.Length; i++)
-            //{
-            //    string line = lines[i];
-            //    if (!string.IsNullOrEmpty(line))
-            //    {
-            //        ForgeElement forgeElement = ParseForgeElement(line);
-            //        forgeElements.Add(forgeElement);
-            //    }
-            //    //if(i % maxElements == 0)
-            //    //{
-            //    //    Console.WriteLine($"\tline : {i}");
-            //    //    break;
-            //    //}
-            //}
+   //         forgeElements.AddRange(ParseForgeElements(lines));
+   //         //for (int i = 1; i < lines.Length; i++)
+   //         //{
+   //         //    string line = lines[i];
+   //         //    if (!string.IsNullOrEmpty(line))
+   //         //    {
+   //         //        ForgeElement forgeElement = ParseForgeElement(line);
+   //         //        forgeElements.Add(forgeElement);
+   //         //    }
+   //         //    //if(i % maxElements == 0)
+   //         //    //{
+   //         //    //    Console.WriteLine($"\tline : {i}");
+   //         //    //    break;
+   //         //    //}
+   //         //}
 
-            ////Console.WriteLine($"line : {i}");
-            ////foreach (ForgeElement el in forgeElements)
-            ////{
-            ////    el.GetParent(forgeElements);
-            ////    el.GetChildren(forgeElements);
-            ////}
+   //         ////Console.WriteLine($"line : {i}");
+   //         ////foreach (ForgeElement el in forgeElements)
+   //         ////{
+   //         ////    el.GetParent(forgeElements);
+   //         ////    el.GetChildren(forgeElements);
+   //         ////}
 
-            return forgeElements;
-        }
+   //         return forgeElements;
+   //     }
 
-        public static async Task<List<ForgeElement>> ParseForgeElementsAsync(string str)
-        {
-            List<ForgeElement> forgeElements = new List<ForgeElement>();
-            var lines = str.Split('\n').ToList();
-            Console.WriteLine($"lines : {lines.Count}");
-            lines.RemoveAt(0);
-			for (int l = 0; l < lines.Count; l++)
-			{
-                string line = lines[l];
-                ForgeElement forgeElement = ParseForgeElement(line);
-                forgeElements.Add(forgeElement);
-                if (l % 100 == 0)
-				{
-                    Console.WriteLine("Yielding ... " + forgeElements.Count);
-                    await Task.Yield();
-				}
-            }
+   //     public static async Task<List<ForgeElement>> ParseForgeElementsAsync(string str)
+   //     {
+   //         List<ForgeElement> forgeElements = new List<ForgeElement>();
+   //         var lines = str.Split('\n').ToList();
+   //         Console.WriteLine($"lines : {lines.Count}");
+   //         lines.RemoveAt(0);
+			//for (int l = 0; l < lines.Count; l++)
+			//{
+   //             string line = lines[l];
+   //             ForgeElement forgeElement = ParseForgeElement(line);
+   //             forgeElements.Add(forgeElement);
+   //             if (l % 100 == 0)
+			//	{
+   //                 Console.WriteLine("Yielding ... " + forgeElements.Count);
+   //                 await Task.Yield();
+			//	}
+   //         }
 
-            lines = lines.ToList();
-            forgeElements.AddRange(ParseForgeElements(lines));
-            return forgeElements;
-        }
+   //         lines = lines.ToList();
+   //         forgeElements.AddRange(ParseForgeElements(lines));
+   //         return forgeElements;
+   //     }
 
 
         /// <summary>
@@ -319,7 +326,7 @@ namespace ForgeLibs.Models.Forge
                         Name = name,
                         Properties = properties,
                         RevitId = id,
-                        TypeName = typeName,
+                        //TypeName = typeName,
                         FullName = fullName,
                         OmmiCode = omniCode
                     };
@@ -364,8 +371,11 @@ namespace ForgeLibs.Models.Forge
         public void LoadGroups(OmniClassRepository repo)
         {
             List<ForgeTableByCategoryVM> viewModels = new List<ForgeTableByCategoryVM>();
+            //Console.WriteLine("LoadGroups()");
+            Stopwatch stopwatch = Stopwatch.StartNew();
             var groups = this.Children.GroupBy(x => x.Category);
-            Console.WriteLine("LoadGroups()" + groups.Count());
+            //Console.WriteLine("LoadGroups() .. " + groups.Count() + " ... " + stopwatch.Elapsed.TotalSeconds);
+            stopwatch.Stop();
             foreach (var grp in groups)
             {
                 viewModels.Add(ForgeTableByCategoryVM.GetModelByCategory(repo, grp, grp.Key));
@@ -375,37 +385,18 @@ namespace ForgeLibs.Models.Forge
 
         public void GetParent(IEnumerable<ForgeElement> elements)
         {
-            if (this.Properties.ContainsKey("AS_ParentId"))
-            {
-                string str = this.Properties["AS_ParentId"].ToString();
-                if (!string.IsNullOrEmpty(str))
-                {
-                    str = str.Replace("_", "");
-                    var parentId = Convert.ToInt32(str);
-                    this.Parent = elements.FirstOrDefault(x => x.RevitId == parentId);
-                }
+            if(this.Parent == null && this.ParentId != -1)
+			{
+                this.Parent = elements.FirstOrDefault(x => x.RevitId == this.ParentId);
             }
         }
 
         public void GetChildren(IEnumerable<ForgeElement> elements)
         {
-            List<ForgeElement> children = new List<ForgeElement>();
-            if (this.Properties.ContainsKey("AS_ChildrenId"))
-            {
-                string str = this.Properties["AS_ChildrenId"].ToString();
-                var values = str.Split(',');
-                foreach (string item in values)
-                {
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        var id = item.Replace("_", "");
-                        var childId = Convert.ToInt32(id);
-                        ForgeElement el = elements.FirstOrDefault(x => x.RevitId == childId);
-                        if(el != null) children.Add(el);
-                    }
-                }
+            if(this.Children.Count() == 0 && this.ChildrenId.Count() > 0)
+			{
+                this.Children = elements.Where(x => this.ChildrenId.Any(y=> y == x.RevitId));
             }
-            this.Children = children;
         }
 
         public string GetPropertyValue(string property, bool removeUnit = false)
@@ -415,8 +406,10 @@ namespace ForgeLibs.Models.Forge
                 string value = this.Properties[property].ToString();
                 if (removeUnit)
                 {
-                    Regex regex = new Regex(@"(-|\+|-\s|\+\s)?[0-9.]+");
-                    string numb = regex.Match(value).Value;
+                    //Regex regex = new Regex(@"(-|\+|-\s|\+\s)?[0-9.]+");
+                    //string numb = regex.Match(value).Value;
+                    //Console.WriteLine(value);
+                    string numb = value.Split(' ').FirstOrDefault();
                     return numb;
                 }
                 else
@@ -454,7 +447,7 @@ namespace ForgeLibs.Models.Forge
             if (forgeElements.Count() == 0 || string.IsNullOrEmpty(property)) return "";
             string unit = "";
 
-            foreach (var item in forgeElements)
+            foreach (ForgeElement item in forgeElements)
             {
                 string str = item.GetPropertyValue(property, true);
                 if (!string.IsNullOrEmpty(str))
@@ -466,8 +459,13 @@ namespace ForgeLibs.Models.Forge
             var val = forgeElements.First().GetPropertyValue(property, false);
             if (!string.IsNullOrEmpty(val))
             {
-                unit = val.Replace(regex.Match(val).Value, "");
-            }
+				//unit = val.Replace(regex.Match(val).Value, "");
+                var vals = val.Split(' ');
+				if (vals.Count() == 2)
+				{
+					unit = vals[1];
+				}
+			}
             return $"{total.ToString("#,#.##")} {unit}";
         }
     }

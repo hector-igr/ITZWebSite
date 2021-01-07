@@ -28,8 +28,8 @@ MX.01.03.02.01	Pernos	5	-2009030
 MX.01.03.02.02	Placas	5	-2009030	Area	T,AD_BuildingZone
 MX.01.04	Losas	3	-2000032	Volume,Area	Level,AD_BuildingZone
 MX.01.04.01	Concreto	4	-2000032	Volume,Area	Level,AD_BuildingZone
-MX.01.04.01.01	Concreto-Sitio	5	-2000032	Volume,Area	Level,AD_BuildingZone
-MX.01.04.01.02	Concreto-Prefabricada	5	-2000032	Volume,Area	Level,AD_BuildingZone
+MX.01.04.01.01	Sitio	5	-2000032	Volume,Area	Level,AD_BuildingZone
+MX.01.04.01.02	Prefabricada	5	-2000032	Volume,Area	Level,AD_BuildingZone
 MX.01.05	Cabezales	3	-2000151		
 MX.01.05.01	Accesorios	4	-2000151		
 MX.01.05.01.01	Tope Sismico	5	-2000151		
@@ -38,7 +38,7 @@ MX.01.05.01.03	Neopreno	5	-2000151
 MX.01.05.01.04	Banco de Acero	5	-2000151		
 MX.01.05.02	Muro Respaldo	4	-2000151		
 MX.01.05.02.01	Muro Respaldo Mensula	5	-2000151		
-MX.01.06	Muros	3		Area,Volume	Base Constraint,AD_BuildingZone,Width
+MX.01.06	Muros	3		Area,Volume	Base Constraint,AD_BuildingZone,Width,Base Level
 MX.01.07	Escalera	3			
 MX.01.08	Contension	3			
 MX.01.08.01	Ademes	4	-2000151	Area	

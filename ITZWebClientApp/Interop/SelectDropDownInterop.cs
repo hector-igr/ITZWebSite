@@ -22,5 +22,16 @@ namespace ITZWebClientApp.Interop
 		{
 			await js.InvokeVoidAsync("ChangeSelectIndexByClass", classId, indx);
 		}
+
+		public static async void DisableDropdown(IJSRuntime js, string id)
+		{
+			await js.InvokeVoidAsync("DisableById", id);
+		}
+
+		public static async void EnableDropdown(IJSRuntime js, string id)
+		{
+			await js.InvokeVoidAsync("EnableById", id);
+		}
+
 	}
 }

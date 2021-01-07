@@ -102,8 +102,9 @@ namespace ForgeLibs.Models.Forge
 					else
 					{
                         //Console.WriteLine("SECOND BLOCK");
-                        data = preFilteredElems.Where(x => !string.IsNullOrEmpty(x.GetPropertyValue(property, true)))
-                            .Where(x => x.Properties[groupby] != null)
+                        data = preFilteredElems
+                            .Where(x => !string.IsNullOrEmpty(x.GetPropertyValue(property, true)))
+                            .Where(x => x.Properties.Keys.Contains(groupby))
                             .GroupBy(x => x.Properties[groupby].ToString())
                             .OrderBy(x => x.Key)
                             .ToDictionary(x => x.Key, y => y.Sum(z =>
@@ -113,7 +114,8 @@ namespace ForgeLibs.Models.Forge
                                 return dbl;
                             }));
                         //Console.WriteLine("SECOND BLOCK . . . . ");
-                        ids = preFilteredElems.Where(x => x.Properties[groupby] != null).GroupBy(x => x.Properties[groupby].ToString())
+                        ids = preFilteredElems.Where(x => x.Properties.Keys.Contains(groupby))
+                            .GroupBy(x => x.Properties[groupby].ToString())
                             .OrderBy(x => x.Key)
                             .ToDictionary(x => x.Key, y => y.Select(z => z.ObjectId));
                     }

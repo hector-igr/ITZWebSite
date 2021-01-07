@@ -39,7 +39,7 @@
     "schedules": [
       {
         "version": 1.0,
-        "address": "./models_metadata/igrx/bjv02_tasks.json"
+        "address": "./models_metadata/igrx/STR_BJV03_tasks.json"
       }
     ]
   }

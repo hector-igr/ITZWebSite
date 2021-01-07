@@ -7,7 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 using ITZWebClientApp.Infraestructure.Data;
 using ITZWebClientApp.Infraestructure.StateManagement;
 
+using Serilog;
+using Serilog.Core;
 using System.Net.Http;
+using Microsoft.JSInterop;
 
 namespace ITZWebClientApp
 {
@@ -16,7 +19,6 @@ namespace ITZWebClientApp
         public static async Task Main(string[] args)
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            
             builder.RootComponents.Add<App>("app");
             builder.Services.AddBaseAddressHttpClient();
             builder.Services.AddSingleton<ForgeLibs.Data.OmniClassRepository>();
@@ -30,14 +32,13 @@ namespace ITZWebClientApp
             var repo = host.Services.GetRequiredService<IItzRepository>();
             await repo.LoadDataAsync();
 
-   //         var cat = omni.GetCategory("MX.03.01");
-   //         Console.WriteLine(cat);
-			//var prop = omni.GetParameters("MX.03.01")[0];
-			//Console.WriteLine(prop);
-			//var prop2 = omni.GetGroupingParameters("MX.03.01")[0];
-			//Console.WriteLine(prop2);
-
-			await host.RunAsync();
+            //         var cat = omni.GetCategory("MX.03.01");
+            //         Console.WriteLine(cat);
+            //var prop = omni.GetParameters("MX.03.01")[0];
+            //Console.WriteLine(prop);
+            //var prop2 = omni.GetGroupingParameters("MX.03.01")[0];
+            //Console.WriteLine(prop2);
+            await host.RunAsync();
         }
     }
 }

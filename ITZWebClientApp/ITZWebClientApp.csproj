@@ -19,6 +19,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Serilog" Version="2.10.1-dev-01265" />
     <PackageReference Include="Utf8Json.ImmutableCollection" Version="1.3.7" />
   </ItemGroup>
 
@@ -34,7 +35,7 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\ForgeQuery\" />
-    <Folder Include="wwwroot\lib\jsgantt\" />
+    <Folder Include="wwwroot\js\jsgantt\" />
     <Folder Include="wwwroot\media\extendedInfo\" />
     <Folder Include="wwwroot\media\index\" />
     <Folder Include="wwwroot\media\projects\" />

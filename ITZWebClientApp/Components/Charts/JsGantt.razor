@@ -6,6 +6,36 @@
 /*        background-color:red;
         border:dotted;*/
     }
+
+    .gmainleft {
+        flex-basis:40%;
+    }
+
+    .gantt * {
+        scrollbar-width: thin;
+        /*    scrollbar-color: blue orange;*/
+        scrollbar-color: var(--webFavoriteColor) rgba(39, 38, 38, 0.00);
+    }
+
+    .gantt *::-webkit-scrollbar {
+        width: 8px;
+        height:8px;
+    }
+
+    .gantt *::-webkit-scrollbar-track {
+        background: rgba(39, 38, 38, 0.00);
+    }
+
+    .gantt *::-webkit-scrollbar-thumb {
+        background-color: var(--webFavoriteColor);
+/*        border-radius: 20px;*/
+        border: 3px solid rgba(39, 38, 38, 0.00);
+    }
+
+
+    .gtaskname:hover {
+        cursor: pointer;
+    }
 </style>
 
 <div style="position:relative; height:100%;" class="gantt" id="@Id"></div>
@@ -31,32 +61,38 @@
         if (firstRender)
         {
             await LoadJsGantt(DateTime.Now);
+            //await ChangeJsGanttDate(DateTime.Now);
         }
     }
 
     public async ValueTask LoadJsGantt(DateTime know)
     {
-        await js.InvokeVoidAsync("LoadJsGantt", Id, DotNetObjectReference.Create(this), know);
+        await js.InvokeVoidAsync("JsGantt.Load", Id, DotNetObjectReference.Create(this), know);
     }
 
-    public async void LoadJsGanttData(DateTime know, string json)
+    public async void LoadData(DateTime know, string json)
     {
         if (!string.IsNullOrEmpty(json))
         {
-            await js.InvokeVoidAsync("LoadJsGanttData", json, know);
+            await js.InvokeVoidAsync("JsGantt.LoadData", json, know);
         }
     }
 
-    public async void UnLoadJsGanttData()
+    public async ValueTask ChangeDate(DateTime date)
     {
-        await js.InvokeVoidAsync("UnloadJsGanttData");
+        //Debug.WriteLine("JsGantt.ChangeDate");
+        await js.InvokeVoidAsync("JsGantt.ChangeDate", date);
+        //await js.InvokeVoidAsync("JsGantt.ChangeDate", Id, DotNetObjectReference.Create(this), know);
     }
 
+    public async void UnloadData()
+    {
+        await js.InvokeVoidAsync("JsGantt.UnloadData");
+    }
 
     [JSInvokable]
     public async void SelectedRow(string taskId)
     {
-        Console.WriteLine(taskId);
         await OnRowSelected.InvokeAsync(Convert.ToInt32(taskId));
     }
 }

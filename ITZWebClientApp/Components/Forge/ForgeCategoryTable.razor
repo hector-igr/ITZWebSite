@@ -25,7 +25,7 @@
 
     tbody {
         display: block;
-        height: calc(100% - 80px);
+/*        height: calc(100% - 80px);*/
     }
 
         thead, tbody tr {
@@ -42,13 +42,21 @@
     .rowUnselected {
         background-color: white;
     }
+
+    .fa-chevron-down,
+    .fa-chevron-up {
+        cursor: pointer;
+    }
 </style>
 
 @if (Model != null)
 {
+   
     var groups = Model.GroupElementsByFullName();
     <table>
+        <h5>@Category</h5>
         <thead id='forgeTableHead'>
+            
             <tr>
                 <td>
                     <p><b>Conteo</b></p>
@@ -68,7 +76,7 @@
 
             @foreach (var group in groups)
             {
-                if (!ExpandGroup.ContainsKey(group.Key)) ExpandGroup[group.Key] = true;
+                if (!ExpandGroup.ContainsKey(group.Key)) ExpandGroup[group.Key] = false;
                 string tag = NetStandardsUtils.RandomWord();
                 string js_ContractGroup = $"tableExpander.contractGroup(event, '{tag}')";
                 @if (group.Count() > 0)
@@ -87,9 +95,7 @@
                                     <span class="fa fa-chevron-down"></span>
                                 </a>
                             }
-                            <b>@group.Key</b>
-
-
+                            <b>@group.Key</b> <span>(@group.Count())</span>
                         </td>
                     </tr>
                     <tr>
@@ -100,7 +106,7 @@
                         }
                     </tr>
                 }
-                @if (ExpandGroup[group.Key] && true)
+                @if (ExpandGroup[group.Key])
                 {
                     @foreach (ForgeElement item in group)
                     {
@@ -112,7 +118,16 @@
                             </td>
                             @foreach (string property in Model.Properties)
                             {
-                                <td>@item.GetPropertyValue(property, true)</td>
+                                string value = item.GetPropertyValue(property, true);
+                                @if(!string.IsNullOrEmpty(value))
+                                {
+                                    double dbl = double.Parse(value);
+                                <td>@dbl.ToString("0.00")</td>
+                                }
+                                else
+                                {
+                                    <td>@value</td>
+                                }
                             }
                         </tr>
                     }
@@ -169,8 +184,7 @@
         //Console.WriteLine("Forge Elements Count : " + ForgeElements.Count().ToString());
         if (!string.IsNullOrEmpty(Category))
         {
-            Model = ForgeTableByCategoryVM
-                .GetModelByCategory(omni, ForgeElements, Category);
+            Model = ForgeTableByCategoryVM.GetModelByCategory(omni, ForgeElements, Category);
         }
         else
         {
