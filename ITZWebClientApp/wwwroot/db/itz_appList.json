@@ -1,25 +1,28 @@
-// ARCHIVO COPIA DE APPSBIM HELP
 {
   "apps": [
     {
       "group": "Annotation Apps",
       "name": "MoveTagsToCenter",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Annotation Apps",
       "name": "SpotDuplication",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Annotation Apps",
       "name": "FaceDimensions",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Grid Apps",
       "name": "OrderGrids",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
 
     },
 
@@ -40,14 +43,16 @@
     {
       "group": "Formwork Apps",
       "name": "FW_BySideFaces",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
 
 
     {
       "group": "View Apps",
       "name": "FilterByParemeterValues",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 5
     },
 
 
@@ -60,24 +65,28 @@
     {
       "group": "Floor Apps",
       "name": "SplitFloors",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Floor Apps",
       "name": "FloorEdgeOffset",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
 
 
     {
       "group": "Wall Apps",
       "name": "WallCovering",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Wall Apps",
       "name": "EdgeWall",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Wall Apps",
@@ -90,67 +99,83 @@
     {
       "group": "Data Apps",
       "name": "Consecutive",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Data Apps",
       "name": "ImportDataFromExcel",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
 
     {
       "group": "Data Apps",
       "name": "CopyParameters",
-      "clients": "ITZ"
+      "clients": "ITZ,ITZ",
+      "rating": 1
     },
     {
       "group": "Data Apps",
       "name": "TransferParameterValues",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Data Apps",
       "name": "ExportDataToExcel",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
-
+    {
+      "group": "Data Apps",
+      "name": "ExcelUtilities",
+      "clients": "ITZ",
+      "rating": 5
+    },
 
     {
       "group": "Element Apps",
       "name": "ChangeLevel",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Element Apps",
       "name": "LinkAdaptiveComponents",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Element Apps",
       "name": "OnePointPosition",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Element Apps",
       "name": "AdaptComponents2P",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Element Apps",
       "name": "MoveByPoint",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Element Apps",
       "name": "ComponentProjectPosition",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
 
     {
       "group": "Family Apps",
       "name": "CopyProfileParameters",
-      "clients": "ITZ"
-
+      "clients": "ITZ",
+      "rating": 1
     },
 
 
@@ -163,34 +188,39 @@
     {
       "group": "Documentation Apps",
       "name": "DimSections",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
 
 
     {
       "group": "Family Instance Apps",
       "name": "CutConnectedElements",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
 
 
     {
       "group": "Framing Apps",
       "name": "FramingBearings",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
 
 
     {
       "group": "Sheets Apps",
       "name": "DuplicateSheet",
-      "clients": "RZM"
+      "clients": "ITZ,RZM",
+      "rating": 1
     },
 
     {
       "group": "Schedule Apps",
       "name": "ExportSchedules",
-      "clients": "ITZ,ITISA"
+      "clients": "ITZ,ITISA",
+      "rating": 1
     },
 
 
@@ -205,163 +235,194 @@
     {
       "group": "Bridge Apps",
       "name": "AreaReinforcementCombos",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "BeamGrids",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "BoundingBoxSections",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "Bridge",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "BridgeFramingTap",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "CubesArray",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "DiaphragmDucts",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "DiaphragmPosition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "FacesToFloors",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "FormWorkAdjustments",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "FoundationPosition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "FramePosition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "FramingInterDiaphragm",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "GridProjection",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "LinkRebar",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "Neoprenes",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "PierCapPosition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "PurgeRebarShape",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "RebarCut",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "RebarEdition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "RebarModel",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "RebarPlaceHolder",
       "clients": "ITZ,Triada",
-      "rating": 5,
+      "rating": 5
     },
     {
       "group": "Bridge Apps",
       "name": "RebarPlaceHoldersLong",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "RebarTransfer",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "ScopeAndSections",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "SetMesh",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "StrandsWires",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "SupportPosition",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Bridge Apps",
       "name": "TransferDrawing",
-      "clients": "ITZ,Triada"
+      "clients": "ITZ,Triada",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "InvertRebarHooks",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "RebarDimension",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "RebarArcInterpolation",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
@@ -372,17 +433,20 @@
     {
       "group": "Rebar Apps",
       "name": "RebarExplode",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "SwitchRebarHooks",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "RebarViews",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
 
     },
     {
@@ -394,27 +458,52 @@
     {
       "group": "Rebar Apps",
       "name": "SplitRebarSet",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "AddBarAlongSegment",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "EdgeReinforcement",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "BarToStirrup",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
     },
     {
       "group": "Rebar Apps",
       "name": "RebarOnFace",
-      "clients": "ITZ"
+      "clients": "ITZ",
+      "rating": 1
+    },
+    {
+      "group": "Project Apps",
+      "name": "ImportTaskDataByRules",
+      "clients": "ITZ",
+      "rating": 5
     }
   ],
+  "renderPaths": [
+    {
+      "clientId": "RZM",
+      "path": "D:\\Desarrollos\\ASPNETCORE\\AppsHelp\\bin\\StaticPages\\RZM"
+    },
+    {
+      "clientId": "ITISA",
+      "path": "D:\\Desarrollos\\ASPNETCORE\\AppsHelp\\bin\\StaticPages\\ITISA"
+    },
+    {
+      "clientId": "ITZ",
+      "path": "D:\\Desarrollos\\Revit API\\ITZBim\\bin\\Help"
+    }
+  ]
 }

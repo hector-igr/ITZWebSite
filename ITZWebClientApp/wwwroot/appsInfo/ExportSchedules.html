@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <div class="page-header">
+        <h1>Export Schedules</h1>
+            <p>Exporta las tablas alojadas en planos que cumplan las condiciones o criterios mas adelante mencionados</p>
+    </div>
+    <br />
+    <div>
+        
+
+<style>
+    .tableZone {
+        border-color: black;
+        padding: 15px;
+        background-color: #f7f7f9;
+        margin-bottom: 30px;
+    }
+
+    table, td {
+        border: solid;
+        border-width: thin;
+        border-color: black;
+    }
+
+    tr {
+        background-color: white
+    }
+
+    .hgr {
+        border: solid;
+        border-width: 1px;
+        border-color: rgb(77, 77, 77);
+        border-radius: 3px;
+        background-color: white;
+        margin-bottom: 10px;
+    }
+
+        .hgr .row:nth-child(2n) {
+            border-top: solid;
+            border-color: rgb(128, 128, 128);
+            border-width: 1px;
+        }
+
+        .hgr .col:nth-child(2n) {
+            /*border:solid;
+        border-width:thin;
+        margin:0px;*/
+            background-color: rgba(128, 128, 128, 0.08);
+            /*padding:0px;*/
+        }
+</style>
+<h3>Requisitos</h3><div>
+    <div class="tableZone">
+        <h4>Criterio de Tablas</h4>
+        <div class="card-deck">
+            <div class="card border-success mb-3">
+                <div class="card-header text-success">
+                    Titulo de Tabla
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        El titulo de la Tabla necesariamente tiene que empezar con la palabras escritas para ser candidata a exportar
+                    </p>
+                </div>
+            </div>
+            <div class="card border-primary mb-3">
+                <div class="card-header text-primary">Nombre de Columna</div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Nombre de la columna que debe estar en la tabla, incluyendo si existiese sobre-escritura en el encabezado.
+                    </p>
+                </div>
+            </div>
+            <div class="card border-secondary mb-3">
+                <div class="card-header text-secondary small">Nombre de Columna en Salida</div>
+                <div class="card-body">
+                    <p class="card-text">
+                        Nombre de columna en archivos exportados a TXT.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Accesorio
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Proyecto</div><div class="text-secondary small">Proyecto</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Nombre</div><div class="text-secondary small">Nombre</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Codigo de Plano</div><div class="text-secondary small">Plano</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Aligerante
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Volumen (m3)</div><div class="text-secondary small">Volumen</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Concreto Spancrete
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Elemento</div><div class="text-secondary small">Elemento</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Base</div><div class="text-secondary small">Ancho/Base</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Altura</div><div class="text-secondary small">Alto/Espesor</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Largo</div><div class="text-secondary small">Largo</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Volumen</div><div class="text-secondary small">Volumen</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Piezas</div><div class="text-secondary small">Piezas</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Volumen Total</div><div class="text-secondary small">VolumenTotal</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Longitud Total</div><div class="text-secondary small">VolumenTotal</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Ducto
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Tipo</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Elemento
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Proyecto</div><div class="text-secondary small">Proyecto</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Nombre</div><div class="text-secondary small">Nombre</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Codigo de Plano</div><div class="text-secondary small">Plano</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Elemento</div><div class="text-secondary small">Elemento</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Piezas</div><div class="text-secondary small">Piezas</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Listado de Estribos
+                                </div>
+                                <div>
+                                    Listado de Varilla
+                                </div>
+                                <div>
+                                    Listado de Grapa
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">No Varilla</div><div class="text-secondary small">NoVarilla</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Pzas</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Drllo (cm)</div><div class="text-secondary small">Desarrollo</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Long. Total (cm)</div><div class="text-secondary small">LongitudTotal</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso Total(kg)</div><div class="text-secondary small">PesoTotal</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Vol. de Acero</div><div class="text-secondary small">VolumenAcero</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Malla Electrosoldada
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Tipo</div><div class="text-secondary small">Tipo</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Area</div><div class="text-secondary small">Area</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Placa
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">E(cm)</div><div class="text-secondary small">E</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">B(cm)</div><div class="text-secondary small">B</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">No.Pzas</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso (kg)</div><div class="text-secondary small">Peso</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Secuencia
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Elemento</div><div class="text-secondary small">Elemento</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Nivel</div><div class="text-secondary small">Nivel</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Loc</div><div class="text-secondary small">Localizacion</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Frente</div><div class="text-secondary small">Frente</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Secuencia de Montaje</div><div class="text-secondary small">Secuencia</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Toron
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Tipo</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Longitud</div><div class="text-secondary small">LongitudTotal</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso Total</div><div class="text-secondary small">PesoAcero</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Toron Spancrete
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Elemento</div><div class="text-secondary small">Elemento</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Tipo</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad Torones</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Long de la Varilla</div><div class="text-secondary small">LongitudVarilla</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso Total Acero</div><div class="text-secondary small">PesoAcero</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">No. Piezas</div><div class="text-secondary small">Piezas</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso Total</div><div class="text-secondary small">PesoTotal</div>
+                        </div>
+                </div>
+            </div>
+            <div class="container hgr">
+                <div class="row">
+                    <div class="col">
+                        <div class="text-success ">
+                                                            <div>
+                                    Tubo
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col">
+                            <div class="text-primary">Clave</div><div class="text-secondary small">Clave</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Cantidad</div><div class="text-secondary small">Cantidad</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Desarrollo</div><div class="text-secondary small">Desarrollo</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-primary">Peso Total</div><div class="text-secondary small">Peso</div>
+                        </div>
+                </div>
+            </div>
+
+        <div class="alert alert-primary">
+            <ul>
+                <li>No importa si los campos están en mayúsculas o minúsculas</li>
+            </ul>
+        </div>
+    </div>
+
+
+</div>
+    </div>
+
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

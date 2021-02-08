@@ -1,40 +1,58 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Spot Duplication</h1>
+            <p>Duplica Spot Coordinates o Spot Elevation en el mismo segmento del mismo tipo de instancia dentro de la vista actual.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/nsu5i2wcpzew24r/SpotDuplication.mp4?dl=1" autoplay=""></video></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/nsu5i2wcpzew24r/SpotDuplication.mp4?dl=1" controls="controls"></video></div><br />
 <h3>Opciones</h3><div>
-    <table class="table table-md">
-        <tbody>
-            <tr>
-                <th>Elbow Offset</th>
-                <td>Offset horizontal del codo de la cota</td>
-            </tr>
-            <tr>
-                <th>Text Offset</th>
-                <td>Offset de el codo al texto</td>
-            </tr>
-            <tr>
-                <th>Height Offset</th>
-                <td>Altura desde el origen al codo</td>
-            </tr>
-        </tbody>
-    <colgroup><col width="200"/></colgroup></table>
+    <table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Elbow Offset</td>
+<td>Offset horizontal del codo de la cota.</td>
+</tr>
+<tr>
+<td>Text Offset</td>
+<td>Offset de el codo al texto.</td>
+</tr>
+<tr>
+<td>Height Offset</td>
+<td>Altura desde el origen al codo.</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 <div class='alert alert-warning'><h3>Notas</h3><div>
     <ul>
-        <li>Si el spot seleccionado no contiene flecha, omite esta automaticamente en las copias.</li>
-    </ul>
+<li>Si el spot seleccionado no contiene flecha, omite esta automáticamente en las copias.</li>
+</ul>
+
 </div></div><br />
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

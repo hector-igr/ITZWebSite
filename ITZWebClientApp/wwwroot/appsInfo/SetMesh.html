@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Generar Malla</h1>
+            <p>Convierte lineas modelo utilizando un archivo CSV con información de la pendiente y kilometraje en puntos de rasante dentro de una familia de masa.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/amjkuhxqxcod45v/SetMesh.mp4?dl=1" autoplay=""></video></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/amjkuhxqxcod45v/SetMesh.mp4?dl=1" controls="controls"></video></div><br />
 <h3>Requisitos</h3><div>
     <ul>
-        <li><b>Curva Central</b> o conjunto de curvas</li>
-        <li><b>Curva Derecha</b> o conjunto de curvas</li>
-        <li><b>Curva Izquierda</b> o conjunto de curvas</li>
-        <li>Cuando se utilizan varias curvas tienen que estar unidas en sus extremos</li>
-        <li>
-            Seleccionar archivo CSV
-            <ul>
-                <li>Las columnas tienen que tener la información en el siguiente orden</li>
-                <li>
-                    <ol>
-                        <li>Distancia del kilómetro en metros</li>
-                        <li>Altura del punto</li>
-                        <li>Pendiente del lado derecho en unidades de porcentaje pero omitiendo el símbolo</li>
-                        <li>Pendiente del lado izquierdo en unidades de porcentaje pero omitiendo el símbolo</li>
-                    </ol>
-                </li>
-                <li>La primera hilera puede tener encabezado</li>
-                <li>La primera hilera es omitida de la información</li>
-            </ul>
-        </li>
-        <li>
-            Click en un punto cerca de la linea central en el cual seria el kilómetro inicial indicado
-            en la segunda hilera del CSV
-        </li>
-    </ul>
+<li><strong>Curva Central</strong> o conjunto de curvas.</li>
+<li><strong>Curva Derecha</strong> o conjunto de curvas.</li>
+<li><strong>Curva Izquierda</strong> o conjunto de curvas.</li>
+<li>Cuando se utilizan varias curvas tienen que estar unidas en sus extremos.</li>
+<li>Seleccionar archivo CSV</li>
+<li>Las columnas tienen que tener la información en el siguiente orden
+<ol>
+<li>Distancia del kilómetro en metros.</li>
+<li>Altura del punto.</li>
+<li>Pendiente del lado derecho en unidades de porcentaje pero omitiendo el símbolo.</li>
+<li>Pendiente del lado izquierdo en unidades de porcentaje pero omitiendo el símbolo.</li>
+</ol>
+</li>
+<li>La primera hilera puede tener encabezado.</li>
+<li>La primera hilera es omitida de la información.</li>
+<li>Click en un punto cerca de la linea central en el cual seria el kilómetro inicial indicado en la segunda hilera del CSV.</li>
+</ul>
+
 </div>
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

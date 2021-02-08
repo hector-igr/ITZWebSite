@@ -1,35 +1,44 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Calcular Dovelas</h1>
+            <p>Ajusta la Familia <b>TRB_DVL_EB_01</b> utilizando lineas que ajustan su altura dorsal, frontal y patin inferior</p>
+    </div>
+    <br />
     <div>
         
-    <div class="Requerimientos">
-        <ul>
-            <li>Seleccionar instancias de familia <b>TRB_DVL_EB_01</b> que se encuentren por arriba a las .</li>
-            <li>Seleccionar tres conjuntos de lineas <b>Lecho Superior</b>, <b>Lecho Inferior</b> y <b>Lecho de Patin Inferior</b>, de preferencia que esten interconectadas en sus extremos y no translapadas.</li>
-            <li>
-                Los parametros mas importantes son :
-                <ul>
-                    <li><b>TRB_L</b> : Longitud de la Trabe</li>
-                    <li><b>PRF_DVL_DOR_Off</b> : Offset Dorsal - Diferencia entre el centro superior de la pieza hacia la parte dorsal</li>
-                    <li><b>PRF_DVL_FRN_Off</b> : Offset Frontal - Diferencia entre el centro superior de la pieza hacia la parte frontal</li>
 
-                    <li><b>ALG_H Dor</b> : Altura de Aligeramiento Dorsal</li>
-                    <li><b>ALG_H Frn</b> : Altura de Aligeramiento Frontal</li>
+<h3>Requisitos</h3><div>
+    <ul>
+<li>Seleccionar instancias de familia <strong>TRB_DVL_EB_01</strong> que se encuentren por arriba a las</li>
+<li>Seleccionar tres conjuntos de lineas <strong>Lecho Superior</strong>, <strong>Lecho Inferior</strong> y <strong>Lecho de Patin Inferior</strong>, de preferencia que estén interconectadas en sus extremos y no traslapadas.</li>
+<li>Los parámetros mas importantes son :
+<ul>
+<li><strong>TRB_L</strong> : Longitud de la Trabe</li>
+<li><strong>PRF_DVL_DOR_Off</strong> : Offset Dorsal - Diferencia entre el centro superior de la pieza hacia la parte dorsal</li>
+<li><strong>PRF_DVL_FRN_Off</strong> : Offset Frontal - Diferencia entre el centro superior de la pieza hacia la parte frontal</li>
+<li><strong>ALG_H Dor</strong> : Altura de Aligeramiento Dorsal</li>
+<li><strong>ALG_H Frn</strong> : Altura de Aligeramiento Frontal</li>
+<li><strong>TRB_H Dor</strong> : Altura Dorsal</li>
+<li><strong>TRB_H Frn</strong> : Altura Frontal</li>
+</ul>
+</li>
+</ul>
 
-                    <li><b>TRB_H Dor</b> : Altura Dorsal </li>
-                    <li><b>TRB_H Frn</b> : Altura Frontal </li>
-                </ul>
-            </li>
-        </ul>
+</div>
     </div>
-    </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

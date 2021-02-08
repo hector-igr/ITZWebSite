@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Colocar Diafragmas</h1>
+            <p>Usa familias de categoría <b>Generic Model</b> para colocar Diafragmas en los ejes de diafragmas y de apoyo.</p>
+    </div>
+    <br />
     <div>
-        <div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/1wanlsygkd67a6n/DiaphragmPosition.mp4?dl=1" autoplay=""></video></div><br />
+        
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/498753887?title=0&amp;byline=0&amp;portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
 <h3>Procedimiento</h3><div>
-    <ul class="table table-responsive">
-        <li>
-            <p>Dentro de <b>configuración</b> en la ficha <b>Diafragmas</b> mapear los siguientes parámetros</p>
-            <table class="table table-condensed" class="table table-md">
-                <tr>
-                    <td>Tipo de Diafragma</td>
-                    <td>Type para los diafragmas</td>
-                </tr>
-                <tr>
-                    <td>Angulo</td>
-                    <td>Angulo con respecto la vertical para la pendiente del diafragma</td>
-                </tr>
-                <tr>
-                    <td>Esviaje Derecho y Izquierdo</td>
-                    <td>Esviaje para ajustar el diafragma en sus laterales</td>
-                </tr>
-                <tr>
-                    <td>Longitud</td>
-                    <td>Longitud del diafragma</td>
-                </tr>
-            <colgroup><col width="200"/></colgroup></table>
-        </li>
-        <li>Seleccionar los ejes de diafragma a calcular</li>
-    </ul>
+    <ul>
+<li>Dentro de <strong>configuración</strong> en la ficha <strong>Diafragmas</strong> mapear los siguientes parámetros.
+<ul>
+<li><strong>Tipo de Diafragma</strong> :           Type para los diafragmas.</li>
+<li><strong>Angulo</strong> :                      Angulo con respecto la vertical para la pendiente del diafragma.</li>
+<li><strong>Esviaje Derecho y Izquierdo</strong> : Esviaje para ajustar el diafragma en sus laterales.</li>
+<li><strong>Longitud</strong> :                    Longitud del diafragma.</li>
+</ul>
+</li>
+<li>Seleccionar los ejes de diafragma a calcular.</li>
+</ul>
+
 </div>
 <div class="alert alert-info">
-    La familia genérica tiene que contener la palabra <b>Diafragma</b> dentro de <b>Type Comments</b> para que permita ser seleccionada.
+    <p>La familia genérica tiene que contener la palabra <strong>Diafragma</strong> dentro de <strong>Type Comments</strong> para que permita ser seleccionada.</p>
+
 </div>
 <div class="alert alert-warning">
-    Si el esvio esta invertido seleccionar la casilla <b>Invertir Curva</b> en <b>Eje de Proyecto</b>.
+    <p>Si el esviaje esta invertido seleccionar la casilla <strong>Invertir Curva</strong> en <strong>Eje de Proyecto</strong>.</p>
+
 </div>
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

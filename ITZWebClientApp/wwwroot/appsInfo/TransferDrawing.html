@@ -1,37 +1,49 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Transferir Trabes</h1>
+            <p>Aplicacion para transferir las trabes indicadas a otro proyecto para su documentacion.</p>
+    </div>
+    <br />
     <div>
         
-    <div class="alert alert-warning">
-        <p>Por el momento esta diseñada para trabajar con trabes tipo cajon.</p>
-        <p>Si la longitud de la trabe sobrepasa el espacio papel se tendra que ajustar manualmente los viewports</p>
-    </div>
+<div class="alert alert-warning">
+    <p>Por el momento esta diseñada para trabajar con trabes tipo cajón.
+Si la longitud de la trabe sobrepasa el espacio papel se tendrá que ajustar manualmente los viewports.</p>
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/pt6g8fkbybqvuqx/TransferFraming.mp4?dl=1" autoplay=""></video></div><br />
+</div>
+
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/pt6g8fkbybqvuqx/TransferFraming.mp4?dl=1" controls="controls"></video></div><br />
 <h3>Procedimiento</h3><div>
     <ul>
-        <li>Seleccionar las trabes a exportar</li>
-        <li>Seleccionar archivo plantilla</li>
-    </ul>
-    <div class="alert alert-warning">
-        La plantilla tiene que tener los siguientes requerimientos:
-        <ul>
-            <li>Contener una familia de tipo TitleBlock nombrada <b>600x1600_Trabes</b></li>
-            <li>Contener una tabla nombrada <b>Plantilla Acero de Elemento</b></li>
-            <li>Asegurarse que no contenga grids, vistas, tablas o sheets cuyos nombres pudiesen repetirse a la hora de crear los elementos</li>
-            <li>Las trabes deben de tener los siguientes parametros <b>Ang Vertical</b>, <b>Esviaje D</b> y <b>Esviaje I</b></li>
+<li>Seleccionar las trabes a exportar.</li>
+<li>Seleccionar archivo plantilla.</li>
+</ul>
 
-        </ul>
+    <div class="alert alert-warning">
+        <p>La plantilla tiene que tener los siguientes requerimientos:</p>
+<ul>
+<li>Contener una familia de tipo TitleBlock nombrada <strong>600x1600_Trabes</strong>.</li>
+<li>Contener una tabla nombrada <strong>Plantilla Acero de Elemento</strong>.</li>
+<li>Asegurarse que no contenga grids, vistas, tablas o sheets cuyos nombres pudiesen repetirse a la hora de crear los elementos.</li>
+<li>Las trabes deben de tener los siguientes parametros <strong>Ang Vertical</strong>, <strong>Esviaje D</strong> y <strong>Esviaje I</strong></li>
+</ul>
+
     </div>
 </div>
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

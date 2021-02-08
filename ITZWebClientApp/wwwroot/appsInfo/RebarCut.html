@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Cortar Varillas</h1>
+            <p>Permite cortar varilla utilizando la geometría en donde se hospeda.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/fiy1s2xd76rkuzg/RebarCut.mp4?dl=1" autoplay=""></video></div><br />
-<p>Opciones de Corte</p>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/502362876?title=0&amp;byline=0&amp;portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+<h4 id="opciones-de-corte">Opciones de Corte</h4>
 <ul>
-    <li><b>Auto</b>. Corta las varillas utilizando la geometria de la familia en la que esta hospedado.</li>
-    <li><b>Face</b>. Corta las varillas que intersectan con la <b>cara seleccionada</b>, utilizando la geometria de la familia en la que esta hospedado.</li>
-    <li><b>Open</b>. Corta las varillas utilizando la geometria de la familia en la que esta hospedado. Los estribos que se cortaron se mantendran con los <b>extremos abiertos</b>.</li>
-    <li><b>Close</b>. Corta las varillas utilizando la geometria de la familia en la que esta hospedado. El estribos cortados se <b>cierran en sus dos extremos</b> <b class="label label-danger">Presenta por el momento problemas</b> </li>
-    <li><b>Unjoin</b>. <b>Explota las varillas</b> en donde intersecta con la geometria de la familia en la que esta hospedado. Los estribos que estan <b>fuera son eliminados</b></li>
+<li><strong>Auto.</strong> Corta las varillas utilizando la geometría de la familia en la que esta hospedado.</li>
+<li><strong>Face.</strong> Corta las varillas que interceptan con la <strong>cara seleccionada</strong>, utilizando la geometría de la familia en la que esta hospedado.</li>
+<li><strong>Open.</strong> Corta las varillas utilizando la geometría de la familia en la que esta hospedado. Los estribos que se cortaron se mantendrán con los <strong>extremos abiertos</strong>.</li>
+<li><strong>Close.</strong> Corta las varillas utilizando la geometría de la familia en la que esta hospedado. El estribos cortados se <strong>cierran en sus dos extremos</strong> <b class="label label-danger">Presenta por el momento problemas</b></li>
+<li><strong>Unjoin.</strong> <strong>Explota las varillas</strong> en donde intercepta con la geometría de la familia en la que esta hospedado. Los estribos que están <strong>fuera son eliminados</strong></li>
 </ul>
-<p>La aplicacion por default seleccionara todas las varillas hospedadas en los elementos seleccionados.</p>
+<p>La aplicación por default seleccionara todas las varillas hospedadas en los elementos seleccionados.</p>
 <ul>
-    <li><b>Select Individual Rebars</b>. Si se selecciona esta opcion, solo se cortaran las varillas seleccionadas</li>
-    <li><b>Only Visible Rebars</b>. Solo las varillas visibles en la vista actual</li>
+<li><strong>Select Individual Rebars.</strong> Si se selecciona esta opción, solo se cortaran las varillas seleccionadas.</li>
+<li><strong>Only Visible Rebars.</strong> Solo las varillas visibles en la vista actual.</li>
 </ul>
+
+
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

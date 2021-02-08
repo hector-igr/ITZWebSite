@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ForgeLibs.Models
+﻿namespace ForgeLibs.Models
 {
 	public class AppInfo
 	{

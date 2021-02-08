@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <div class="page-header">
+        <h1>Import Data From Excel</h1>
+            <p>Importa la informacion de una o varias hojas de Excel a uno o multiples archivos rvt</p>
+    </div>
+    <br />
+    <div>
+        
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/xgipjqxuxbgsgao/ImporFromExcel.mp4?dl=1" controls="controls"></video></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/wt33dw1u922djcs/ExportAndImportToExcel.mp4?dl=1" controls="controls"></video></div><br />
+<h3>Requisitos</h3><div>
+    <ul>
+<li><strong>Esta app funciona con Excel 2016</strong></li>
+<li>Excel puede estar abierto, si no la app ejecutara excel en segundo plano, extraerá la información y enumerara las hojas adecuadas.</li>
+<li>La app solo puede actualizar parámetros de instancia.</li>
+<li>Para documentos hospedados en bim 360 solo se puede importar abriendo primero el documento en Revit</li>
+<li>En modelos enlazados (links) la app descargara el modelo, abrirá el modelo, actualizara los datos, guarda los cambios y volverá a cargar el modelo en el documento actual, por lo tanto <strong>cualquier cambio ejecutado en modelos enlazados (links) NO ES REVERSIBLE</strong></li>
+<li><strong>Tablas</strong>
+<ol>
+<li>Para que la app reconozca las tablas en excel se necesita que la tabla tenga el encabezado &quot;Id&quot; en la primera celda.</li>
+<li>La tabla debe de estar separada por una columna en blanco y una fila en blanco donde acaben los datos.</li>
+<li>Los parámetros en revit tienen que ser editables por el usuario.</li>
+<li>Parámetros de longitud.</li>
+</ol>
+</li>
+</ul>
+
+</div>
+
+
+<h3>Procedimiento</h3><div>
+    <img src="https://www.dropbox.com/s/ktbmyml3d0ettu5/ImportFromExcel_01.png?dl=1" />
+    <table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open File</td>
+<td>Selecciona el archivo de Excel a utilizar, checar los requisitos del archivo</td>
+</tr>
+<tr>
+<td>Mapping</td>
+<td>Espacio donde se enumeran y seleccionan los archivos rvt que seran utilizados por la app para actualizar sus datos con el archivo de Excel. La rutas son mapeados utilizado los revit links existentes dentro del documento actual.</td>
+</tr>
+<tr>
+<td>Mapping: Include</td>
+<td>Seleccionar que archivos rvt seran actualizados</td>
+</tr>
+<tr>
+<td>Mapping: FileName</td>
+<td>Nombre del archivo rvt que sera actualizado.</td>
+</tr>
+<tr>
+<td>Mapping: FullPath</td>
+<td>Ruta del archivo rvt a actualizar.</td>
+</tr>
+<tr>
+<td>Sheets To Import</td>
+<td>Hojas del archivo de Excel seleccionado.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+
+    </div>
+
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

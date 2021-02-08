@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
-    public class ForgeSchedule
+	public class ForgeSchedule
     {
         public DateTime Now { get; set; } = DateTime.Now;
         public DateTime? FirstDate { get; set; }

@@ -9,12 +9,16 @@
 @inject IJSRuntime JSRuntime
 @inject HttpClient client
 
-<main class="container">
-    <h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>
+    <main class="container">
+        <style>
+            img {
+                width: auto
+            }
+        </style>
 
-    @((MarkupString)$"{Html}")
-</main>
-
+        @*<h1>@ForgeLibs.NetStandardsUtils.AddSpace(Name)</h1>*@
+        @((MarkupString)$"{Html}")
+    </main>
 
 @code {
 

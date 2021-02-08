@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <div class="page-header">
+        <h1>Utilidades de Excel</h1>
+            <p>Exporta la informacion de uno o varios modelos rvt por categorias a un archivo de excel divididos en pestañas</p>
+    </div>
+    <br />
+    <div>
+        
+    <h2 id="select-on-revit">Select On Revit</h2>
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/60o84a9xlgkfo88/DU_ExportToExcel02.mp4?dl=1" controls="controls"></video></div><br />
+<p>En la vista actual selecciona y separa visualmente los objetos seleccionados en excel.
+<b>Notas:</b></p>
+<ul>
+<li>Se necesita que la hoja de excel contenga guid o id valido.</li>
+<li>Los elementos a seleccionar tienen que estar dentro de la vista actual.</li>
+<li>No funciona para elementos en Revit Links.</li>
+</ul>
+<h2 id="update-on-revit">Update on Revit</h2>
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/4s3giyathjhrzcb/DU_ExportToExcel03.mp4?dl=1" controls="controls"></video></div><br />
+Actualiza los parámetros seleccionados en las celdas dentro de el documento actual de Revit.
+<b>Notas:</b>
+<ul>
+<li>El parámetro a actualizar tiene que ser de Escritura.</li>
+<li>El elemento seleccionado tiene que estar dentro de la sección actual de Revit.</li>
+<li>No opera en elementos en Revit Links.</li>
+</ul>
+<h2 id="override-color-on-revit">Override Color On Revit</h2>
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/xb9sai17cm62j4d/DU_ExportToExcel04.mp4?dl=1" controls="controls"></video></div><br />
+Genera un "Override" de hatch solido dentro de Revit con el color seleccionado desde Excel
+<b>Notas:</b>
+* Excel tiene que contener una columna con encabezado "Color".
+* Soporta Formatos Condicionales de Excel.
+<h2 id="set-code-on-revit">Set Code On Revit</h2>
+<p>Utilidad para hacer mas eficiente el copiado del código de una tabla a objectos de Revit.
+<b>Nota:</b></p>
+<ul>
+<li>El código a transferir tiene que tener como nombre &quot;Partida&quot; o &quot;Code&quot;.</li>
+</ul>
+
+
+
+
+
+
+
+    </div>
+
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

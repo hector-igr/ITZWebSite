@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <div class="page-header">
+        <h1>Auto Link Task By Rules</h1>
+            <p>Auto vincula tareas de MS-Project utilizando reglas estipuladas dentro de cada tarea.</p>
+    </div>
+    <br />
+    <div>
+            
+    <p>Las reglas se hacen en estructura jerárquica utilizando el campo <strong>Text1</strong>, esto permite mayor flexibilidad en la escritura de la regla ya que un cambio en la formula parental cambia el sentido de todas las reglas en las subtareas.</p>
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/ijawc5cx1zu5ree/ImportTaskDataByRules.mp4?dl=1" controls="controls"></video></div><br />
+Pueden existir varios tipos de consulta dentro del árbol jerárquico:
+<h5 id="categoría">Categoría.</h5>
+<ul>
+<li>Se Escriben dentro de corchetes <em>eg[Generic Models]</em>.</li>
+<li>La regla tomara como categoría valida a la mas próxima en sentido <strong>ascendente</strong> a la tarea a formular.</li>
+<li>Las categorías son los mismos valores dentro de la base de datos de Revit. Para que sea valida tiene que ser una categoría &quot;consultable&quot; es decir que se pueda consultar en un tabla de revit.</li>
+</ul>
+<h5 id="condiciones">Condiciones</h5>
+<ul>
+<li>La condición tiene que ser acompañada del nombre del <strong>[parámetro condición valor]</strong> ex(Name==DoorA)</li>
+<li>La app contiene la opción de mapear el nombre de parámetros para diversas categorías. Por ejemplo la categoría &quot;Wall&quot; no contiene el parámetro &quot;Level&quot; sin embargo tiene el parámetro <strong>Base Constraint</strong> y la categoría &quot;Structural Framing&quot; solo contiene <strong>Reference Level</strong>, con el mapeo solo seria necesario escribir <strong>Level</strong> y la consulta integraría los parámetros mapeados. El archivo se encuentra dentro del directorio de instalación de la app con nombre <strong>itz_CategoryFormulaReinterpreter.json</strong>.</li>
+<li><mark><strong>==</strong>  igual a. </mark>    <em>eg(Level==Sotano).</em></li>
+<li><mark><strong>&lt;=</strong> menor igual.</mark> <em>eg(Volume&lt;=1000).</em></li>
+<li><mark><strong>&gt;=</strong> mayor igual.</mark> <em>eg(Length&gt;=100).</em></li>
+<li><mark><strong>!=</strong> no igual a.</mark> <em>eg(Zona!=Edificio A).</em></li>
+<li><mark><strong>.sw</strong> empieza con.</mark> <em>eg(Name.sw=CNX).</em></li>
+<li><mark><strong>.ew</strong> termina en.</mark> <em>eg(Name.ew=COL).</em></li>
+<li><mark><strong>.c=</strong> contiene.</mark> <em>eg(Comments.c=Checar).</em></li>
+</ul>
+<h5 id="puertas-lógicas">Puertas Lógicas</h5>
+<ul>
+<li><mark><strong>|</strong> o.</mark> <em>eg(&quot;Level==PB | Level==N1&quot; encuentra objectos en nivel PB o en nivel N1).</em></li>
+<li><mark><strong>&amp;</strong> y.</mark> <em>eg(&quot;Level==N4 &amp; Zona==A&quot; encuentra objectos en nivel N4 y que estén en la Zona A).</em></li>
+</ul>
+<h5 id="activar-partes">Activar Partes</h5>
+<ul>
+<li>[Parts] Activa todas las tareas dentro de esa rama jerárquica integre objetos que contengan partes</li>
+</ul>
+<hr />
+<p>Hay dos tipos de vinculación, completa o parcial. Ambas son disparadas desde Ms-Project.</p>
+<ul>
+<li>Tareas Completas. Click en menu del ribbon en la pestaña ITZ y en el botón <strong>Link By Rule</strong></li>
+<li>Tareas Seleccionadas. Click derecho sobre una o mas tareas y click en <strong>Link Revit By Rule</strong></li>
+</ul>
+<hr />
+<p>Al termino de la ejecución de la app en Revit se capturaran la siguiente información por parámetros.</p>
+<ul>
+<li>AC_MSProjecId. Project Unique Id.</li>
+<li>AC_TaskName. WBS y Nombre de la Tarea.</li>
+<li>AC_BL_Start. Inicio de la Tarea.</li>
+<li>AC_BL_Finish. Fin de la Tarea.</li>
+<li>AC_TaskActive. Tarea Activa.</li>
+</ul>
+<div class='alert alert-warning'><h3>Notas</h3><div>
+    Los parámetros deben de estar presentes, en caso contrario la app tratara cargar los parámetros pero antes necesitara estar dado de alta un shared parameter valido.
+</div></div><br />
+
+    </div>
+
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

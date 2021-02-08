@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ForgeLibs.Models
 {
-    public class Project
+	public class Project
     {
         public int Id { get; set; }
         public int Year { get; set; }

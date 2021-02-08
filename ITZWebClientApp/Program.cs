@@ -6,11 +6,16 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using ITZWebClientApp.Infraestructure.Data;
 using ITZWebClientApp.Infraestructure.StateManagement;
-
+using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
 using System.Net.Http;
 using Microsoft.JSInterop;
+using ForgeLibs.Configuration;
+using System.Configuration;
+using System.Reflection;
+using Microsoft.Extensions.Configuration.Json;
+
 
 namespace ITZWebClientApp
 {
@@ -20,25 +25,52 @@ namespace ITZWebClientApp
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
-            builder.Services.AddBaseAddressHttpClient();
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton<ForgeLibs.Data.OmniClassRepository>();
             builder.Services.AddSingleton<IItzRepository, JS_ItzModelRespository>();
             builder.Services.AddSingleton<ForgeQueryState>();
 
-            var host = builder.Build();
-            var omni = host.Services.GetRequiredService<ForgeLibs.Data.OmniClassRepository>();
-            await omni.LoadFileAsync();
+			//AD OTHER CONFIG FILES
+			//var http = new HttpClient()
+			//{
+			//	BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+			//};
+			//using var response = await http.GetAsync("someOtherSettings.json");
+			//using var stream = await response.Content.ReadAsStreamAsync();
+			//builder.Configuration.AddJsonStream(stream);
 
-            var repo = host.Services.GetRequiredService<IItzRepository>();
-            await repo.LoadDataAsync();
+			await LoadConfig_1(builder);
+		}
 
-            //         var cat = omni.GetCategory("MX.03.01");
-            //         Console.WriteLine(cat);
-            //var prop = omni.GetParameters("MX.03.01")[0];
-            //Console.WriteLine(prop);
-            //var prop2 = omni.GetGroupingParameters("MX.03.01")[0];
-            //Console.WriteLine(prop2);
-            await host.RunAsync();
-        }
-    }
+		private static async Task LoadConfig_1(WebAssemblyHostBuilder builder)
+		{
+			ITZ_WebConfig webConfig = builder.Configuration.GetSection("DbFiles").Get<ITZ_WebConfig>();
+			builder.Services.AddSingleton(x => webConfig);
+
+			WebAssemblyHost host = builder.Build();
+			var repo = host.Services.GetRequiredService<IItzRepository>();
+			await repo.LoadDataAsync(webConfig);
+
+			var omni = host.Services.GetRequiredService<ForgeLibs.Data.OmniClassRepository>();
+			await omni.LoadFileAsync();
+			await host.RunAsync();
+		}
+
+		//TRY TO USE IOPTIONS .. FAILED
+		private static async Task LoadConfig_2(WebAssemblyHostBuilder builder)
+		{
+			ITZ_WebConfig webConfig = builder.Configuration.GetSection("DbFiles").Get<ITZ_WebConfig>();
+			Console.WriteLine(webConfig.ProjectMediaInfo);
+			builder.Services.Configure<ITZ_WebConfig>(x => builder.Configuration.Bind(webConfig));
+
+			WebAssemblyHost host = builder.Build();
+
+			var repo = host.Services.GetRequiredService<IItzRepository>();
+			await repo.LoadDataAsync(webConfig);
+
+			var omni = host.Services.GetRequiredService<ForgeLibs.Data.OmniClassRepository>();
+			await omni.LoadFileAsync();
+			await host.RunAsync();
+		}
+	}
 }

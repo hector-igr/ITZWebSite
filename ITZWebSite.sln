@@ -8,6 +8,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ForgeViewerServer", "ForgeViewerServer\ForgeViewerServer.csproj", "{E81EB4B8-416F-4B79-B4C4-8AEB1CCD5024}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITZWebClientApp", "ITZWebClientApp\ITZWebClientApp.csproj", "{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132} = {CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PrePostBildUtils", "..\..\NETCore\PrePostBildUtils\PrePostBildUtils.csproj", "{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +39,12 @@ Global
 		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Revit AddinManager|Any CPU.ActiveCfg = Release|Any CPU
 		{6F80BDAB-0B22-42B6-9BAC-DF06FB8B4EE8}.Revit AddinManager|Any CPU.Build.0 = Release|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Revit AddinManager|Any CPU.ActiveCfg = Release|Any CPU
+		{CFD5ADE2-0A8D-4483-B6C3-1A44ED29E132}.Revit AddinManager|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

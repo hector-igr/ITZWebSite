@@ -1,0 +1,35 @@
+﻿
+
+table {
+    width: calc(100% - 20px);
+    margin: 10px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+    table thead tr {
+/*        background-color: #ffd800*/
+    }
+    table tbody tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+    table tbody tr:nth-child(even) {
+        border-top: thin solid #bdbdbd;
+/*        border-bottom: thin solid #bdbdbd;*/
+    }
+
+    table td:nth-child(1) {
+        font-weight:600;
+    }
+
+
+h3 {
+    margin-top: 2.5rem;
+}
+
+h2 {
+    margin-top: 2rem;
+}
+
+.alert h3 {
+    margin-top: 0.0rem;
+}

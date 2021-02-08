@@ -1,63 +1,64 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Transfer Parameter Values</h1>
+            <p>Utilidad para transferir y copiar valores dentro de un parámetro hacia otro.</p>
+    </div>
+    <br />
     <div>
         
-
+    <ul>
+<li><strong>Directa.</strong> Transfiere un parámetro de:
 <ul>
-    <li>
-        <b>Directa.</b> Transfiere un parámetro de:
-        <ul>
-            <li>Texto a texto.</li>
-            <li>Numérico a texto.</li>
-            <li>Numérico a numérico.</li>
-        </ul>
-    </li>
-    <li><b>Formula.</b> Permite transferir el resultado de la formula hacia el parámetro a pegar</li>
+<li>Texto a texto.</li>
+<li>Numérico a texto.</li>
+<li>Numérico a numérico.</li>
 </ul>
-
+</li>
+<li><strong>Formula.</strong> Permite transferir el resultado de la formula hacia el parámetro a pegar.</li>
+</ul>
 <img class="temp" src="https://www.dropbox.com/s/9d6x20289ufi1nc/TransferParameterValues001.jpg?dl=1" />
-<p class="encabezados">Instrucciones</p>
-<p><b>Save.</b> Salva la consulta</p>
-<p><b>Delete.</b> Borra la consulta</p>
-<p><b>Categories.</b> Listado de categorías admitidas</p>
-<p><b>Transfer From.</b>Enumera los parámetros de instancia y tipo dentro de la categoría seleccionada.</p>
-<p><b>Transfer To.</b> Enumera los parámetros posibles a recibir el valor.</p>
-<p><b>Formula.</b> Casilla de texto para la expresión, el programa solo acepta funciones aritméticas sencillas (*-+/%)</p>
-<p><b>Reglas.</b></p>
+<h4 id="instrucciones">Instrucciones</h4>
+<p><strong>Save.</strong> Salva la consulta.</p>
+<p><strong>Delete.</strong> Borra la consulta.</p>
+<p><strong>Categories.</strong> Listado de categorías admitidas.</p>
+<p><strong>Transfer From.</strong> Enumera los parámetros de instancia y tipo dentro de la categoría seleccionada.</p>
+<p><strong>Transfer To.</strong> Enumera los parámetros posibles a recibir el valor.</p>
+<p><strong>Formula.</strong> Casilla de texto para la expresión, el programa solo acepta funciones aritméticas sencillas (*-+/%)</p>
+<p><strong>Reglas.</strong></p>
 <ul>
-    <li>El parámetro tiene que estar en comillas dobles (“ ”) .</li>
-    <li>
-        Si se desea concatenar texto utilizar comillas sencillas (‘ ‘).
-        <p><img class="fillheight" src="" /></p>
-    </li>
+<li>El parámetro tiene que estar en comillas dobles (“ ”).</li>
+<li>Si se desea concatenar texto utilizar comillas sencillas (‘ ‘).
+<img src="https://www.dropbox.com/s/fvi2dkgp24k878a/TransferParameterValues002.png?dl=1" /></li>
 </ul>
-<p><b>Rounding.</b> Si el valor devuelto por la fórmula es numérico  el valor es redondeado de acuerdo al  número escrito 2</p>
+<p><strong>Rounding.</strong> Si el valor devuelto por la fórmula es numérico  el valor es redondeado de acuerdo al  número escrito 2.</p>
+<p><strong>Filters</strong></p>
+<ul>
+<li><strong>ParameterName.</strong> Parámetro para filtrar.</li>
+<li><em>Condition.</em>* Condición de filtrado.</li>
+<li><strong>Value.</strong> Valor de filtrado.</li>
+<li><strong>Operator.</strong></li>
+<li><strong>And.</strong> Filtra los elementos que cumplen todas las condiciones en forma consecutiva siempre y cuando los demás renglones contengan “and”.</li>
+<li><strong>Or.</strong> Anexa los elementos sobre los ya filtrados si es que hay  renglones antecesores.</li>
+</ul>
+<p><strong>Active Filters.</strong> Activa los filtros.</p>
+<p><strong>Check sin nombre.</strong> Aísla los objetos a transferir parámetros dentro de la vista actual.</p>
+<p><strong>Nota.</strong> La aplicación excluye los elementos que tengan la condición indicada dentro de DataApps Configuration. Por el momento solo está dado de alta el parámetro “Validado” si no se desea filtrar por dicha propiedad escoger “(none)”.
+<img src="https://www.dropbox.com/s/oo3uslg1cu4lkl5/TransferParameterValues003.png?dl=1" /></p>
 
-<p><b>Filters.</b></p>
-<ul>
-    <li><b>ParameterName.</b> Parametro para filtrar</li>
-    <li><b>Condition.</b> Condicion de filtrado</li>
-    <li><b>Value.</b> Valor de filtrado</li>
-    <li>
-        <b>Operator.</b>
-        <ul>
-            <li><b>And.</b> Filtra los elementos que cumplen todas las condiciones en forma consecutiva siempre y cuando los demás renglones contengan “and”</li>
-            <li><b>Or.</b> Anexa los elementos sobre los ya filtrados si es que hay  renglones antecesores.</li>
-        </ul>
-    </li>
-</ul>
-<p><b>Active Filters.</b> Activa los filtros</p>
-<p><b>Check sin nombre.</b> Aisla los objetos a transferir parámetros dentro de la vista actual</p>
-<p><b>Nota.</b> La aplicación excluye los elementos que tengan la condición indicada dentro de DataApps Configuration. Por el momento solo está dado de alta el parámetro “Validado” si no se desea filtrar por dicha propiedad escoger “(none)”.</p>
-<img src="" />
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

@@ -1,8 +1,6 @@
-﻿using ForgeLibs.Models;
-
+﻿
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +14,7 @@ using System.Linq;
 
 namespace ForgeLibs
 {
-    public class ForgeUtils
+	public class ForgeUtils
     {
         public static string Base64Encode(string plainText)
         {

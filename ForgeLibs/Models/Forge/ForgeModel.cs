@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Linq;
-using Newtonsoft.Json;
-using System.Threading.Tasks;
-using System.IO;
-using Newtonsoft.Json.Linq;
-
-namespace ForgeLibs.Models.Forge
+﻿namespace ForgeLibs.Models.Forge
 {
-    public class ForgeModel
+	public class ForgeModel
     {
         //public int Id { get; set; }
         public int ProjectId { get; set; }

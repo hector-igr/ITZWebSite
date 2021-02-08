@@ -1,5 +1,7 @@
-﻿using ForgeLibs.Models;
+﻿using ForgeLibs.Configuration;
+using ForgeLibs.Models;
 using ForgeLibs.Models.Forge;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -15,7 +17,8 @@ namespace ITZWebClientApp.Infraestructure.Data
         IEnumerable<MediaMetadata> ImageInfo { get; }
         IEnumerable<AppInfo> AppsInfo { get; }
 
-        Task LoadDataAsync();
+        Task LoadDataAsync(IConfiguration config);
+        Task LoadDataAsync(ITZ_WebConfig config);
         ForgeModel GetForgeModelAsync (int id);
         //Task SaveForgeModelAsync(ForgeModel model);
         //Task<bool >DeleteForgeModelAsync(int id);

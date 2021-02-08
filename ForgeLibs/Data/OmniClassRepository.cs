@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Linq;
 using System.Net.Http;
 using System.IO;
@@ -9,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ForgeLibs.Data
 {
-    public class OmniClassRepository
+	public class OmniClassRepository
     {
         public const string OmniClassPath = @"models_metadata/OmniClass.txt";
         public const string OmniClassAbsolutePath = @"D:\Desarrollos\ASPNETCORE\ITZWebSite\ITZWebClientApp\wwwroot\models_metadata\OmniClass.txt";

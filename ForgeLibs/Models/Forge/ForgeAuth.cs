@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace ForgeLibs.Models.Forge
+﻿namespace ForgeLibs.Models.Forge
 {
-    public class ForgeAuth
+	public class ForgeAuth
     {
         public string Access_Token { get; set; }
         public string Token_Type { get; set; }

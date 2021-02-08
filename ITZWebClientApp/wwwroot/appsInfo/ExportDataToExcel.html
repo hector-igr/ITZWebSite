@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
+
+<body>
+    
+    <div class="page-header">
+        <h1>Export Data To Excel</h1>
+            <p>Exporta la informacion de uno o varios modelos rvt por categorias a un archivo de excel divididos en pestañas</p>
+    </div>
+    <br />
+    <div>
+        
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/ofdhnzy83plqr7j/ExportToExcel_New_01.mp4?dl=1" controls="controls"></video></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/2zfb3g7lp3qtiqy/ExportToExcel_Update_01.mp4?dl=1" controls="controls"></video></div><br />
+
+<h3>Requisitos</h3><div>
+    <ul>
+<li><p><strong>Esta app funciona con Excel 2016</strong></p>
+</li>
+<li><p>Excel y el archivo a escribir tienen que estar cerrados</p>
+</li>
+<li><p>Si se desea utilizar un archivo existente es importante que el nombre de las hojas concuerden con las categorías de revit, y cada hoja debe de existir la celda <strong>id</strong> como columna inicial y las columnas <strong>file</strong> y <strong>status</strong>.</p>
+</li>
+<li><p>La tabla con los archivos debe de estar delimitada por una columna vacía al lado derecho y un fila vacía al final de el ultimo registro.
+<img style="width:100%" src="https://www.dropbox.com/s/clhceu2guxewqzj/ExportToExcel03.png?dl=1" /></p>
+</li>
+<li><p>Para archivos en BIM 360 solo puede exportar el archivo abierto.</p>
+</li>
+</ul>
+
+</div>
+
+
+<h3>Procedimiento</h3><div>
+    <div class="row">
+        <div class="col">
+            <img src="https://www.dropbox.com/s/7ebg8ohiddxg9lb/ExportToExcel01.png?dl=1" />
+        </div>
+        <div class="col">
+            <img src="https://www.dropbox.com/s/2dku7bw20yu6io3/ExportToExcel02.png?dl=1" />
+        </div>
+    </div>
+    <table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Excel File</td>
+<td>Selecciona el archivo de Excel a utilizar, checar los requisitos del archivo.</td>
+</tr>
+<tr>
+<td>Parameters: Categories</td>
+<td>Categorías a exportar.</td>
+</tr>
+<tr>
+<td>Parameters: Properties of Type</td>
+<td>Parámetros de Tipo.</td>
+</tr>
+<tr>
+<td>Parameters: Properties of Instance</td>
+<td>Parámetros de Instancia.</td>
+</tr>
+<tr>
+<td>Parameters: Custom</td>
+<td>Si el parámetro no esta en los listados de instancia o tipo escribirlos parámetros separados con el caracter &quot;,&quot;.</td>
+</tr>
+<tr>
+<td>Delete Lost Records</td>
+<td>En caso de exportar a un archivo existente la app borrara las filas cuyo Id no se encuentren en el modelo(s).</td>
+</tr>
+<tr>
+<td>Export Only Visible</td>
+<td>Exporta solo los elementos presentes en la vista actual.</td>
+</tr>
+<tr>
+<td>Documents</td>
+<td>Listado de documentos rvt a exportar. Por default se enumera el documento actual y si este tuviese archivos enlazados (links) aparecerá su ruta.</td>
+</tr>
+<tr>
+<td>Add Documents</td>
+<td>Agregar un documento para exportar.</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+    </div>
+
+    <script src="./lib/jquery/dist/jquery.js"></script>
+    <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+</html>

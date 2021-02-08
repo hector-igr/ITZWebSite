@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using ForgeLibs.Models.Forge;
 using ForgeLibs.Data;
-using ForgeLibs.Models.Charts;
-using System.Diagnostics;
-using Newtonsoft.Json;
 
 namespace ForgeLibs.ViewModels
 {
-    public interface IForgeElementTableVM
+	public interface IForgeElementTableVM
 	{
         string Guid { get; }
         IEnumerable<ForgeElement> Elements { get; set; }

@@ -1,37 +1,52 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Wall Frames</h1>
+            <p>Coloca la columna seleccionada en las esquinas de cada muro, puerta, ventana o apertura seleccionada.</p>
+    </div>
+    <br />
     <div>
         
-<h3>Wall Columns</h3>
+    <h3 id="wall-columns">Wall Columns</h3>
 <p>Coloca la columna seleccionada en las esquinas de cada muro, puerta, ventana o apertura seleccionada.</p>
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/bj5o99b85087p1k/WallFrames.mp4?dl=1" autoplay=""></video></div><br />
-<div class='alert alert-warning'><h3>Notas</h3><div>
-    <ul>
-        <li>Solo funciona con muros básicos</li>
-        <li>No funciona con Stack Walls ni Curtain Walls</li>
-        <li>En los bordes de muro que no tienen conexión el plug-in resta la mitad del ancho de muro para la colocación del centro de columna.</li>
-        <li>La altura de las columnas es con de acuerdo a los parámetros de offset y niveles asociados, si se cambia el profile del muro seguirá respetando los parámetros mencionados</li>
-    </ul>
-</div></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/bj5o99b85087p1k/WallFrames.mp4?dl=1" controls="controls"></video></div><br />
+    
 
-<h3>Wall Beams</h3>
+    <div class='alert alert-warning'><h3>Notas</h3><div>
+        <ul>
+<li>Solo funciona con muros básicos.</li>
+<li>No funciona con Stack Walls ni Curtain Walls.</li>
+<li>En los bordes de muro que no tienen conexión el plug-in resta la mitad del ancho de muro para la colocación del centro de columna.</li>
+<li>La altura de las columnas es con de acuerdo a los parámetros de offset y niveles asociados, si se cambia el profile del muro seguirá respetando los parámetros mencionados.</li>
+</ul>
+
+    </div></div><br />
+    <h3 id="wall-beams">Wall Beams</h3>
 <p>Coloca trabes en la parte inferior y superior del muro, aperturas, ventanas o puertas. También soporta trabes intermedias con un máximo de altura</p>
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/injq2vwjexilhe3/WallFrames_2.mp4?dl=1" autoplay=""></video></div><br />
-<div class='alert alert-warning'><h3>Notas</h3><div>
-    <ol>
-        <li>Es indispensable que los apoyos estén colocados y su eje incida en el centro del muro</li>
-        <li>Los niveles y offset se mapean con respecto a los del muro seleccionado</li>
-        <li>Si existen ventanas o puertas en el mismo claro pero a diferentes alturas solo se procesa el objeto inferior</li>
-    </ol>
-</div></div><br />
+
+
+    <div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/injq2vwjexilhe3/WallFrames_2.mp4?dl=1" controls="controls"></video></div><br />
+    <div class='alert alert-warning'><h3>Notas</h3><div>
+        <ul>
+<li>Es indispensable que los apoyos estén colocados y su eje incida en el centro del muro.</li>
+<li>Los niveles y offset se mapean con respecto a los del muro seleccionado.</li>
+<li>Si existen ventanas o puertas en el mismo claro pero a diferentes alturas solo se procesa el objeto inferior.</li>
+</ul>
+
+    </div></div><br />
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

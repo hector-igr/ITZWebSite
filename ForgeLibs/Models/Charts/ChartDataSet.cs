@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
 namespace ForgeLibs.Models.Charts
 {
-    public class ChartDataSet
+	public class ChartDataSet
     {
         public string Name { get; set; }
         public List<IEnumerable<int>> RelatedObjectsIds { get; set; } = new List<IEnumerable<int>>();

@@ -1,44 +1,61 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Rebar Interpolation</h1>
+            <p>Herramienta que interpola el número de rebars indicado dentro de dos rebars seleccionados de forma linear.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/4047cf3iwuc11lp/RU_RebarInterpolation.mp4?dl=1" autoplay=""></video></div><br />
+<div class='embed-responsive embed-responsive-16by9'><video src="https://www.dropbox.com/s/4047cf3iwuc11lp/RU_RebarInterpolation.mp4?dl=1" controls="controls"></video></div><br />
 <h3>Procedimiento</h3><div>
     <ul>
-        <li><b>Pick Surface To Project. </b>Seleccionar Superficie 3d.</li>
-        <li><b>Pick Rebars. </b> Seleccionar varillas.</li>
-        <li><b>Direction. </b>Seleccionar direccion "arriba o abajo" para la proyeccion.</li>
-    </ul>
-</div>
-<img src="https://www.dropbox.com/s/gppijoy575izp32/RebarInterpolation001.jpg?dl=1" />
-<p><b>Linear Interpolation.</b>Número de rebars interpolados dentro de dos rebars seleccionados.</p>
-<p><b>Linear Interpolation.</b>Número de rebars interpolados dentro de dos rebars seleccionados.</p>
-<img class="temp" src="https://www.dropbox.com/s/ok9cu4f9op4i1g5/RebarInterpolation002.jpg?dl=1" />
-<img class="temp" src="https://www.dropbox.com/s/1szh9r9jvpgmj4q/RebarInterpolation003.jpg?dl=1" />
-<div class='alert alert-warning'><h3>Notas</h3><div>
-    <ol>
-        <li><b>Reverse Last Rebar.</b>Corrige interpolaciones inesperadas debido a la orientación del sketch con el cual fue trazado el último rebar seleccionado.</li>
-        <li>El host de cada rebar se encuentra ligado al host del primer rebar seleccionado.</li>
-        <li>La herramienta está pensada solo en varillas con segmentos rectos.</li>
-        <li>El addin busca embonar cada rebar con un shape dentro de la librería de rebar shapes existentes, si no encuentra uno que satisfaga las condiciones geométricas indicadas por la interpolación el addin genera un nuevo shape.</li>
-        <li>
-            Si alguno de los rebars no pudo ser completado el addin procede a generar con Model Lines los segmentos del rebar junto con su normal para visualizar donde pudo haber estado la falla de interpolación.
-        </li>
-        <li>
-            <img src="https://www.dropbox.com/s/sg5gf5998x8evfk/RebarInterpolation004.jpg?dl=1" />
-        </li>
+<li><strong>Pick Surface To Project.</strong> Seleccionar Superficie 3d.</li>
+<li><strong>Pick Rebars.</strong> Seleccionar varillas.</li>
+<li><strong>Direction.</strong> Seleccionar dirección &quot;arriba o abajo&quot; para la proyección.</li>
+</ul>
+<p>
+    <img src="https://www.dropbox.com/s/gppijoy575izp32/RebarInterpolation001.jpg?dl=1" />
+</p>
+<ul>
+<li><strong>Linear Interpolation.</strong> Número de rebars interpolados dentro de dos rebars seleccionados.</li>
+<li><strong>Linear Interpolation.</strong> Número de rebars interpolados dentro de dos rebars seleccionados.</li>
+</ul>
+<p>
+    <img src="https://www.dropbox.com/s/ok9cu4f9op4i1g5/RebarInterpolation002.jpg?dl=1" />
+    <img src="https://www.dropbox.com/s/1szh9r9jvpgmj4q/RebarInterpolation003.jpg?dl=1" />
+</p>
 
-    </ol>
+</div>
+
+
+<div class='alert alert-warning'><h3>Notas</h3><div>
+    <ul>
+<li><strong>Reverse Last Rebar.</strong> Corrige interpolaciones inesperadas debido a la orientación del sketch con el cual fue trazado el último rebar seleccionado.</li>
+<li>El host de cada rebar se encuentra ligado al host del primer rebar seleccionado.</li>
+<li>La herramienta está pensada solo en varillas con segmentos rectos.</li>
+<li>El addin busca embonar cada rebar con un shape dentro de la librería de rebar shapes existentes, si no encuentra uno que satisfaga las condiciones geométricas indicadas por la interpolación el addin genera un nuevo shape.</li>
+<li>Si alguno de los rebars no pudo ser completado el addin procede a generar con Model Lines los segmentos del rebar junto con su normal para visualizar donde pudo haber estado la falla de interpolación.</li>
+</ul>
+<img src="https://www.dropbox.com/s/sg5gf5998x8evfk/RebarInterpolation004.jpg?dl=1" />
+        
+    
+
 </div></div><br />
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

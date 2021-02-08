@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ForgeLibs.Models.Forge
+﻿namespace ForgeLibs.Models.Forge
 {
 	//public class ForgeViewsMetadata
 	//{

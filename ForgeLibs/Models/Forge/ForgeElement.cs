@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using ForgeLibs.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.IO;
-using System.Threading;
 using ForgeLibs.ViewModels;
-using System.Threading.Tasks;
 
 namespace ForgeLibs.Models.Forge
 {
-    public class ForgeElementMin
+	public class ForgeElementMin
 	{
         public int RevitId { get; set; }
         public string OriginalCategory { get; set; }

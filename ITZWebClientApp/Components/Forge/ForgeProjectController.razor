@@ -5,9 +5,10 @@
 @using Newtonsoft.Json;
 @using Newtonsoft.Json.Linq;
 @using ITZWebClientApp.Interop;
+@using System.IO; 
 @using Console = ITZWebClientApp.Interop.Debug.ConsoleITZ;
 
-
+@inject HttpClient client; 
 @inject IItzRepository repo;
 @inject IJSRuntime js;
 
@@ -86,7 +87,7 @@
             new Task(async () =>
             {
                 await OnModelChanged.InvokeAsync(SelectedModel);
-                await LoadViews(SelectedModel.ObjectId);
+                await LoadViews(SelectedModel);
 
             }).Start();
         }
@@ -127,11 +128,26 @@
         }
 
     }
-    public async Task LoadViews(string urn)
+    public async Task LoadViews(ForgeModel forgeModel)
     {
         Console.OpenGroup($"{nameof(LoadViews)}");
-        dynamic viewData = await ForgeUtils.GetForgeViews(AccessToken, urn);
-        ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x => x.Role == "3d").OrderBy(x => x.Name).ToArray();
+
+        string key = Path.GetFileNameWithoutExtension(forgeModel.ObjectKey);
+        HttpResponseMessage message =  await client.GetAsync($"models_metadata/{forgeModel.BucketKey}/{key}_views.json");
+        if(message.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Load views from app");
+            string json = await message.Content.ReadAsStringAsync();
+            dynamic viewData = JsonConvert.DeserializeObject<dynamic>(json);
+            ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x => x.Role == "3d").OrderBy(x => x.Name).ToArray();
+        }
+        else
+        {
+            Console.WriteLine("Load from forge server");
+            dynamic viewData = await ForgeUtils.GetForgeViews(AccessToken, forgeModel.ObjectId);
+            ModelViews = ((JArray)viewData.data.metadata).ToObject<ForgeView[]>().Where(x => x.Role == "3d").OrderBy(x => x.Name).ToArray();
+        }
+
         Console.WriteLine("modelviews ... ");
         Console.WriteLine(ModelViews);
         SelectDropDownInterop.EnableDropdown(js, "viewSelector");

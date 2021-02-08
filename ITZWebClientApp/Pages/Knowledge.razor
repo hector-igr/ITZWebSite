@@ -1,11 +1,15 @@
 ﻿@page "/knowledge"
 @inject IJSRuntime js;
 @inject HttpClient http;
+@inject ITZ_WebConfig config;
+
+
+@using Microsoft.Extensions.Options;
 @using System.Drawing;
 @using System.Globalization;
 @using ForgeLibs.Models.Charts;
 @using ITZWebClientApp.Components.Charts;
-@using System.Diagnostics; 
+@using System.Diagnostics;
 
 <div class="container">
 
@@ -45,7 +49,12 @@
         Interop.ChartJsInterop chartJs = new Interop.ChartJsInterop(js);
         if (_barChart != null)
         {
-            string json = await http.GetStringAsync("db/software.json");
+            //string json = await http.GetStringAsync(config["DbFiles:SOFTWAREEXPERIENCE"]);
+            string json = await http.GetStringAsync(config.SoftwareExperience);
+            Console.WriteLine(config.SoftwareExperience);
+            //Console.WriteLine(options.Value.SoftwareExperience);
+            //string json = await http.GetStringAsync(options.Value.SoftwareExperience);
+
             dynamic[] dataset = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic[]>(json);
             var data = dataset.ToDictionary(x => (string)x.label, y => (double)y.value);
             double min = data.Values.OrderBy(x => x).First();
@@ -68,7 +77,11 @@
 
         if (_barChart2 != null)
         {
-            string json = await http.GetStringAsync("db/codingHours.json");
+            //string json = await http.GetStringAsync(config["DbFiles:CODINGHOURS"]);
+            //Console.WriteLine($" CODING HTRS {config.CodingHours}");
+            string json = await http.GetStringAsync(config.CodingHours);
+            //string json = await http.GetStringAsync(options.Value.CodingHours);
+
             dynamic[] dataset = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic[]>(json);
             var data = dataset.ToDictionary(x => (string)x.CodingExperience, y => (double)y.Hours);
             double min = data.Values.OrderBy(x => x).First();

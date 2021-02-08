@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ForgeLibs.Models.Forge
+﻿namespace ForgeLibs.Models.Forge
 {
-    public class ForgeObjects
+	public class ForgeObjects
     {
         public _Items[] Items { get; set; }
 

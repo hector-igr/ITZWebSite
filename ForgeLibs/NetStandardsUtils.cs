@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 
 namespace ForgeLibs
 {
-    public class NetStandardsUtils
+	public class NetStandardsUtils
     {
         public static string RandomWord()
         {

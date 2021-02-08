@@ -1,47 +1,61 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Add Bars to Segment</h1>
+            <p>Genera varillas a lo largo del segmento del estribo seleccionado.</p>
+    </div>
+    <br />
     <div>
         
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/498442965?title=0&amp;byline=0&amp;portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/rgs2czwrcazdfz1/AddBarAlongSegment.mp4?dl=1" autoplay=""></video></div><br />
 <h3>Procedimiento</h3><div>
-<table class="table table-md">
-    <tbody>
-        <tr>
-            <td><b>Method</b></td>
-            <td><b>Distance or Offset</b></td>
-        </tr>
-        <tr>
-            <td>Ends of Set</td>
-            <td>La varilla es colocada con respecto a longitud total del set mas el offset indicado.</td>
-        </tr>
-        <tr>
-            <td>Solid Projection</td>
-            <td>La varilla es colocada con respecto a la proyecion del solido que hospeda el estribo mas el offset indicado.</td>
-        </tr>
-        <tr>
-            <td>Length and Midpoint</td>
-            <td>La varilla es colocada con respecto a el midpoint del set mas la longitud indicada</td>
-        </tr>
-    </tbody>
-<colgroup><col width="200"/></colgroup></table>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Distance or Offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ends of Set</td>
+<td>La varilla es colocada con respecto a longitud total del set mas el offset indicado.</td>
+</tr>
+<tr>
+<td>Solid Projection</td>
+<td>La varilla es colocada con respecto a la proyección del solido que hospeda el estribo mas el offset indicado.</td>
+</tr>
+<tr>
+<td>Length and Midpoint</td>
+<td>La varilla es colocada con respecto a el midpoint del set mas la longitud indicada.</td>
+</tr>
+</tbody>
+</table>
+
 </div>
 
 <div class='alert alert-warning'><h3>Notas</h3><div>
     <ul>
-        <li>Al seleccionar un segmento curvo solo coloca una varilla</li>
-        <li>La utlidad esta pensada para colocar rapidamente varillas longitudinales, para cambiar la orientacion o el numero de varillas utilzar las herramientas de revit normales.</li>
-    </ul>
+<li>Al seleccionar un segmento curvo solo coloca una varilla</li>
+<li>La utilidad esta pensada para colocar rápidamente varillas longitudinales, para cambiar la orientación o el numero de varillas utilizar las herramientas de revit normales.</li>
+</ul>
+
 </div></div><br />
 
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

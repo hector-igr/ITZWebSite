@@ -1,89 +1,97 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Bridge Apps</h1>
+            <p>Trazo de puentes es un grupo de aplicaciones que funcionan en conjunto con familias preparadas que son colocadas por las diversas acciones que contiene el app.</p>
+            <p>Para que funcionen correctamente se necesitan tener los requisitos  mencionados en la tabla ademas de tener la configuración correctamente configurada</p>
+    </div>
+    <br />
     <div>
         
-    <h3>Requisitos</h3><div>
-        <div class="table-responsive">
-            <table class="table table-condensed">
-                <colgroup>
-                    <col width="150" />
-                </colgroup>
-                <tr>
-                    <td>3d View</td>
-                    <td>Seleccionar la vista 3d en el cual necesita estar visibles la malla que describe la rasante , cabezales y trabes</td>
-                </tr>
-                <tr>
-                    <td>Eje de Proyecto</td>
-                    <td>
-                        Seleccionar un model line que representa el eje de proyecto
-                        <b>
-                            de preferencia que el sentido de creación de la linea
-                            corresponda con el sentido del aligeramiento
-                        </b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Rasante</td>
-                    <td>
-                        La rasante puede ser cualquier malla o superficie generada desde otro programa (ej Civil 3d), importada adentro de una familia
-                        o directamente en el proyecto
-                    </td>
-                </tr>
-                <tr>
-                    <td>Espesor</td>
-                    <td>El espesor u offset con el cual las trabes serán colocadas en Z</td>
-                </tr>
-                <tr>
-                    <td>Divisiones</td>
-                    <td>
-                        Son el numero de divisiones intermedias a lo largo de la trabe. En la cual cada punto es medido verticalmente a la rasante y
-                        si la distancia es mayor a la especificada en espesor usara dicha distancia para el espesor final
-                    </td>
-                </tr>
-                <tr>
-                    <td>Cabezales</td>
-                    <td>Seleccionar los cabezales que serán utilizados para el calculo de bancos para trabes</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <h3>Configuración</h3><div>
-        <div class="table-responsive">
-            <table class="table table-condensed">
-                <tr>
-                    <td>Axy</td>
-                    <td>Familia con la forma de un Axy necesaria para la proyección de puntos. La proyección se hace en dirección X</td>
-                </tr>
-                <tr>
-                    <td>Eje de Apoyo</td>
-                    <td>Eje que se encuentra en el eje central del apoyo o cabezal</td>
-                </tr>
-                <tr>
-                    <td>Eje de Bancos</td>
-                    <td>Eje de descanso de las trabes. donde esta el eje central del neopreno en apoyos</td>
-                </tr>
-                <tr>
-                    <td>Eje de Diafragma</td>
-                    <td>Ejes de diafragmas intermedio en el claro. En caso de los diafragmas en extremos el eje de bancos sera utilizado</td>
-                </tr>
-                <tr>
-                    <td>Eje de trabes</td>
-                    <td>Eje central de trabes</td>
-                </tr>
+<h3>Requisitos</h3><div>
+    <table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3d View</td>
+<td>Seleccionar la vista 3d en el cual necesita estar visibles la malla que describe la rasante , cabezales y trabes</td>
+</tr>
+<tr>
+<td>Eje de Proyecto</td>
+<td>Seleccionar un model line que representa el eje de proyecto <strong>de preferencia que el sentido de creación de la linea corresponda con el sentido del aligeramiento</strong></td>
+</tr>
+<tr>
+<td>Rasante</td>
+<td>La rasante puede ser cualquier malla o superficie generada desde otro programa (ej Civil 3d), importada adentro de una familia o directamente en el proyecto.</td>
+</tr>
+<tr>
+<td>Espesor</td>
+<td>El espesor u offset con el cual las trabes serán colocadas en Z.</td>
+</tr>
+<tr>
+<td>Divisiones</td>
+<td>Son el numero de divisiones intermedias a lo largo de la trabe. En la cual cada punto es medido verticalmente a la rasante y si la distancia es mayor a la especificada en espesor usara dicha distancia para el espesor final</td>
+</tr>
+<tr>
+<td>Cabezales</td>
+<td>Seleccionar los cabezales que serán utilizados para el calculo de bancos para trabes.</td>
+</tr>
+</tbody>
+</table>
 
+</div>
+<h3>Configuración</h3><div>
+    <table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Axy</td>
+<td>Familia con la forma de un Axy necesaria para la proyección de puntos. La proyección se hace en dirección X.</td>
+</tr>
+<tr>
+<td>Eje de Apoyo</td>
+<td>Eje que se encuentra en el eje central del apoyo o cabezal.</td>
+</tr>
+<tr>
+<td>Eje de Bancos</td>
+<td>Eje de descanso de las trabes. donde esta el eje central del neopreno en apoyos.</td>
+</tr>
+<tr>
+<td>Eje de Diafragma</td>
+<td>Ejes de diafragmas intermedio en el claro. En caso de los diafragmas en extremos el eje de bancos sera utilizado.</td>
+</tr>
+<tr>
+<td>Eje de trabes</td>
+<td>Eje central de trabes.</td>
+</tr>
+</tbody>
+</table>
 
-            </table>
-        </div>
-    </div>
+</div>
 
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

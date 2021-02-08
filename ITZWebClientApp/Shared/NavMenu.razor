@@ -79,7 +79,8 @@
                     color: white;
                 }
 
-        .sidebar .collapse {
+                /*collapse1 por que choca con bootstrap*/
+        .sidebar .collapse1 {
             /* Never collapse the sidebar for wide screens */
             display: block;
             /*        margin-top: 60px;*/
@@ -225,7 +226,7 @@
     //Add App and Project Links using the repository on Navbar
 
     private bool collapseNavMenu = true;
-    private string navMenuCssClass => collapseNavMenu ? "collapse" : "dontCollapse";
+    private string navMenuCssClass => collapseNavMenu ? "collapse1" : "dontCollapse";
     private bool showProjects = false;
     private bool showApps = false;
     private IEnumerable<Project> _projects = Enumerable.Empty<Project>();

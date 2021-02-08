@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Link Adaptive Components</h1>
+            <p>Coloca a partir de una hoja de cálculo las familias adaptativas indicadas con los puntos indicados y escribe dentro de la misma hoja el GUI de cada elemento colocado.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/l62vl2x6kl5ckyk/AU_LinkAdaptiveComponents.mp4?dl=1" autoplay=""></video></div><br />
-<p> Al finalizar la colocación en la hoja de cálculo se anexara como primera columna el encabezado GUID el cual contendrá el id único de cada elemento correctamente colocado, si hubiese un renglón en el cual  no existiese la familia dentro del documento el app colocara un “null” como valor.</p>
-<p>Si queremos actualizar la posición de cualquiera de los elementos o colocar nuevos solo se anexan los renglones necesarios con la información corregida o aumentada, la aplicación corregirá los elementos que hayan sufrido una transformación y anexara un GUID por cada nuevo elemento colocado.</p>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/498443011?title=0&amp;byline=0&amp;portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+<ul>
+<li>Al finalizar la colocación en la hoja de cálculo se anexara como primera columna el encabezado GUID el cual contendrá el id único de cada elemento correctamente colocado, si hubiese un renglón en el cual  no existiese la familia dentro del documento el app colocara un “null” como valor.</li>
+<li>Si queremos actualizar la posición de cualquiera de los elementos o colocar nuevos solo se anexan los renglones necesarios con la información corregida o aumentada, la aplicación corregirá los elementos que hayan sufrido una transformación y anexara un GUID por cada nuevo elemento colocado.</li>
+</ul>
+
+
 <h3>Requisitos</h3><div>
-    <ol>
-        <li>El archivo de Excel tiene que estar cerrado antes de ejecutar la aplicación.</li>
-        <li>El archivo tiene que contener una columna con FamilyName y FamiliType, los puntos tienen que contener como encabezado pt1, pt2, pt3, pt4, etc. Cada campo de coordenadas tiene que estar delimitado por los caracteres “[]”.</li>
-    </ol>
+    <ul>
+<li>El archivo de Excel tiene que estar cerrado antes de ejecutar la aplicación.</li>
+<li>El archivo tiene que contener una columna con FamilyName y FamiliType, los puntos tienen que contener como encabezado pt1, pt2, pt3, pt4, etc. Cada campo de coordenadas tiene que estar delimitado por los caracteres “[]”.
+<img src="https://www.dropbox.com/s/8935osy6u3uk62m/LinkAdaptiveComponents002.jpg?dl=1" /></li>
+</ul>
+
 </div>
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

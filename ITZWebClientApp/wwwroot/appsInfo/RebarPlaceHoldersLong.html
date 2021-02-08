@@ -1,59 +1,69 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Acero Longitudinal Automatico</h1>
+            <p>Permite la colocación de acero longitudinal utilizando familias como plantillas.</p>
+    </div>
+    <br />
     <div>
         
 
-<div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/zxq0ew2cifypdp7/RebarPlaceHolders_Long.mp4?dl=1" autoplay=""></video></div><br />
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/502362948?title=0&amp;byline=0&amp;portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
 <div class="Requerimientos">
-    <p>
-        La aplicación utiliza familias compuestas o anidadas para controlar las familias nombradas
-        <b>Rebar Points</b> que a continuación se explica.
-    </p>
-    <p></p>
-    <br />
-    <h4>Rebar Points</h4>
-    <p>
-        Familia que indica la posición de las varillas utilizando todos los circulo en la subcategory
-        <b>Rebar Point</b>.
-    </p>
-    <ul>
-        <li>
-            <p>La familia debe de contener los siguientes parámetros:</p>
-            <table class="table table-striped">
-                <colgroup>
-                    <col class="w-25" />
-                    <col class="w-25" />
-                    <col class="w-100" />
-                </colgroup>
-                <tr>
-                    <td>Cover</td>
-                    <td>Length</td>
-                    <td>Recubrimiento en cada extremo de la varilla.</td>
-                </tr>
-                <tr>
-                    <td>Function_Long</td>
-                    <td>Text</td>
-                    <td>Función para etiquetar automáticamente la varilla.</td>
-                </tr>
-                <tr>
-                    <td>Rebar_Shape</td>
-                    <td>Text</td>
-                    <td>Nombre del Rebar Shape que se dese utilizar al momento de crear la varilla.</td>
-                </tr>
-            </table>
-        </li>
-        <li>El diámetro de la varilla dependerá del diámetro del circulo. La aplicación buscara el type con el diámetro mas cercano al circulo</li>
-        <li>Los círculos deben de estar dentro del solido en donde se hospeda.</li>
-    </ul>
+    <p>La aplicación utiliza familias compuestas o anidadas para controlar las familias nombradas <strong>Rebar Points</strong> que a continuación se explica.</p>
+<br />
+<h4 id="rebar-points">Rebar Points</h4>
+<p>Familia que indica la posición de las varillas utilizando todos los circulo en la subcategory
+<strong>Rebar Point</strong>.</p>
+<ul>
+<li><p>La familia debe de contener los siguientes parámetros:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cover</td>
+<td>Length</td>
+<td>Recubrimiento en cada extremo de la varilla.</td>
+</tr>
+<tr>
+<td>Function_Long</td>
+<td>Text</td>
+<td>Función para etiquetar automáticamente la varilla.</td>
+</tr>
+<tr>
+<td>Rebar_Shape</td>
+<td>Text</td>
+<td>Nombre del Rebar Shape que se dese utilizar al momento de crear la varilla.</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>El diámetro de la varilla dependerá del diámetro del circulo. La aplicación buscara el type con el diámetro mas cercano al circulo.</p>
+</li>
+<li><p>Los círculos deben de estar dentro del solido en donde se hospeda.</p>
+</li>
+</ul>
+
 </div>
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

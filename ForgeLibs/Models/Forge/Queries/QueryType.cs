@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ForgeLibs.Models.Forge.Queries
+﻿namespace ForgeLibs.Models.Forge.Queries
 {
-    public enum QueryType
+	public enum QueryType
     {
         None = -1,
         ByCategory = 0,

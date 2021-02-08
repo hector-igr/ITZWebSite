@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 using System.Threading;
 
 namespace ForgeLibs.Models.Charts
 {
-    public class ChartUtils
+	public class ChartUtils
     {
         public static Color RandomColor(Color color1, Color color2, int trans = 255)
         {

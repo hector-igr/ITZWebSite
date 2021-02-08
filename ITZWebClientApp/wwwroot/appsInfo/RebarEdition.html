@@ -1,69 +1,88 @@
 <!DOCTYPE html>
 
+
 <html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="./lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+    <link href="./css/itzapps.css" rel="stylesheet" />
+</head>
 
 <body>
     
-<main class="container">
-    
+    <div class="page-header">
+        <h1>Edición de Varillas</h1>
+            <p>Rutinas para colocado de <b>Area Reinforcement</b>.</p>
+    </div>
+    <br />
     <div>
         
+<section id="RebarContainer">
+    <h2 id="contenedores-de-varilla">Contenedores de Varilla</h2>
+<p>Crea un grupo de varillas que a diferencia de Rebar Set puede contener formas con diferentes dimensiones.</p>
+<p>El principal beneficio de convertir a un contenedor es tener una base de datos mas ligera ya que por cada varilla sencilla se genera un registro, el contenedor puede tener un gran numero de varillas con solo un registro.</p>
+<p>La aplicación separa las varillas seleccionadas en formas y diámetros antes de agruparlos.Los parámetros que son iguales en todas las varillas del contenedor quedan igual, en el caso de que hubiera variaciones se queda el valor vacío.</p>
+<p>Parámetros de interés:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Quantity</td>
+<td>Total de varillas.</td>
+</tr>
+<tr>
+<td>Total Bar Length</td>
+<td>La sumatoria de Bar Length de todos los estribos.</td>
+</tr>
+<tr>
+<td>Reinforcement Volume</td>
+<td>Volumetria aproximada de todos los estribos.</td>
+</tr>
+</tbody>
+</table>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/502362858?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+    
 
-    <section id="RebarContainer">
-        <h2>Contenedores de Varilla</h2>
-        <p>Crea un grupo de varillas que a diferencia de Rebar Set puede contener formas con diferentes dimensiones. </p>
-        <p>
-            El principal beneficio de convertir a un contenedor es tener una base de datos mas ligera ya que por cada varilla sencilla
-            se genera un registro, el contenedor puede tener un gran numero de varillas con solo un registro
-        </p>
-        <p>
-            La aplicación separa las varillas seleccionadas en formas y diámetros antes de agruparlos.Los parámetros que son iguales en todas
-            las varillas del contenedor quedan igual, en el caso de que hubiera variaciones se queda el valor vacío
-        </p>
-        <div class="table table-responsive">
-            <p>Parámetros de interés:</p>
-            <table class="table table-condensed">
-                <tr>
-                    <td>Quantity</td>
-                    <td>Total de varillas</td>
-                </tr>
-                <tr>
-                    <td>Total Bar Length</td>
-                    <td>La sumatoria de Bar Length de todos los estribos</td>
-                </tr>
-                <tr>
-                    <td>Reinforcement Volume</td>
-                    <td>Volumetria aproximada de todos los estribos</td>
-                </tr>
-            </table>
-        </div>
-        <div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/u3mnoyiw9rublg3/RebarContainer.mp4?dl=1" autoplay=""></video></div><br />
-    </section>
-
+</section>
 
 <section id="RebarStretch">
-    <h2>Alargar Estribos <span class="label label-danger">Beta</span> </h2>
-    <p>Alarga o disminuye estribos en una dirección</p>
-    <div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/dgqt5k05wg0llkm/RebarStretch.mp4?dl=1" autoplay=""></video></div><br />
-    <div class="alert alert-warning">
-        <p>La opción mas estable es la <b>Horizontal</b>. Falta desarrollo para las demás opciones.</p>
-    </div>
+    <h2 id="alargar-estribos-beta">Alargar Estribos <span class="label label-danger">Beta</span></h2>
+<p>Alarga o disminuye estribos en una dirección.</p>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/503505843?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+<div class="alert alert-warning">
+    <p>La opción mas estable es la <b>Horizontal</b>. Falta desarrollo para las demás opciones.</p>
+</div>
+    
+
 </section>
 
 <section id="RebarExplode">
-    <h2>Explotar Set</h2>
-    <p>Genera varillas individuales de un <b>RebarSet</b> o <b>RebarContainer</b></p>
-    <div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/orbuw3y8a84lxkm/RebarExplode.mp4?dl=1" autoplay=""></video></div><br />
+    <h2 id="explotar-set">Explotar Set</h2>
+<p>Genera varillas individuales de un <b>RebarSet</b> o <b>RebarContainer</b></p>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/502362910?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+    
+
     <br />
 </section>
 
 <section id="RebarSetEdition">
-    <h2>Editar Set</h2>
-    <p>Permite cambiar el Type, el gancho inicial-final y invertir ganchos en <b>Rebar Container</b></p>
-    <div class='embed-responsive embed-responsive-16by9'><video controls src="https://www.dropbox.com/s/kvimmxh3dfzyivu/RebarSetEdition.mp4?dl=1" autoplay=""></video></div><br />
+    <h2 id="editar-set">Editar Set</h2>
+<p>Permite cambiar el Type, el gancho inicial-final y invertir ganchos en <strong>Rebar Container</strong></p>
+<div style='padding:62.5% 0 0 0; position: relative; '><iframe src="https://player.vimeo.com/video/502362959?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen=""></iframe></div><br />
+    
+
 </section>
+
+
+
     </div>
-</main>
+
     <script src="./lib/jquery/dist/jquery.js"></script>
     <script src="./lib/bootstrap/dist/js/bootstrap.js"></script>
 </body>

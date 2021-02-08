@@ -1,14 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 
 namespace ForgeLibs.Models.Charts
 {
-    public class BarChartData
+	public class BarChartData
     {
         public string Title { get; set; }
 
